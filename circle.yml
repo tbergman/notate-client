@@ -12,6 +12,8 @@ dependencies:
     - yarn install
 test:
   override:
+    - yarn lint
+    - yarn flow
     - yarn test -- --coverage
   post:
     - bash <(curl -s https://codecov.io/bash)
