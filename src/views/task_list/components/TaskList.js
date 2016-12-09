@@ -1,33 +1,36 @@
+// @flow
+
+import type { AppState, Task, TasksState } from 'Types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { deleteTask } from '../../../modules/tasks/actions'
+import { deleteTask } from 'modules/tasks/actions'
+import { tasksSelector } from 'modules/tasks'
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppState) => {
   return {
-    tasks: state.tasks
+    tasks: tasksSelector(state)
   }
 };
 
-const mapDispatchToProps = ( dispatch ) => {
-  return {
-    onDelete: ( task ) => {
-      return dispatch(deleteTask(task));
-    }
-  }
-};
+type Props = {
+  deleteTask: Function,
+  tasks: TasksState,
+}
 
 export class TaskList extends Component {
 
-  render() {
+  props: Props
 
-    const { tasks, onDelete } = this.props;
+  onDelete = ( task: Task ) => this.props.deleteTask(task)
 
+  render(): React.Element<any> {
 
+    const { tasks } = this.props;
 
     return (
       <div>
         {tasks.map(task =>
-          <div key={task.id} className='task'>Task ID: {task.id} [<a onClick={() => onDelete(task)}>DELETE</a>]</div>
+          <div key={task.id} className='task'>Task ID: {task.id} [<a onClick={() => this.onDelete(task)}>DELETE</a>]</div>
         )}
       </div>
     )
@@ -35,4 +38,4 @@ export class TaskList extends Component {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaskList);
+export default connect(mapStateToProps, { deleteTask })(TaskList);

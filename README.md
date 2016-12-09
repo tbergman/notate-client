@@ -10,3 +10,7 @@ Project folder organization follows a pattern described at [https://medium.com/l
 [SETUP]
 `yarn install`
 (if you don't have yarn, `brew install yarn`)
+
+[DESIGN PARAMETERS]
+[[Note Positioning]]
+Horizontal note positioning should be done with flex layout. Each child of the flex container should express a duration in some smallest desired quantization (e.g. somewhere from quarter notes to 128th notes), though barlines should be flexible enough to adapt for measures with too many notes (a potential, and allowable, wrong measure).

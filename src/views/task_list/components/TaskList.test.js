@@ -1,18 +1,24 @@
+// @flow
+
 import React from 'react';
-import { shallow } from 'enzyme'
+import { shallow, ShallowWrapper } from 'enzyme'
 import { TaskList } from './TaskList';
 
-function setup() {
+type Setup = {
+  props: Object,
+  enzymeWrapper: ShallowWrapper
+}
+function setup(): Setup {
   const props = {
     tasks: [{
-      id: 1
+      id: '1'
     },{
-      id: 2
+      id: '2'
     }],
-    onDelete: function() {}
+    deleteTask: jest.fn()
   };
 
-  const enzymeWrapper = shallow(<TaskList {...props} />);
+  const enzymeWrapper: ShallowWrapper = shallow(<TaskList {...props} />);
 
   return {
     props,

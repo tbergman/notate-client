@@ -1,14 +1,14 @@
 // @flow
 
 import React, { Component } from 'react';
-import TaskButtons from './views/task_list/components/TaskButtons'
-import TaskList from './views/task_list/components/TaskList'
+import TaskButtons from 'views/task_list/components/TaskButtons'
+import TaskList from 'views/task_list/components/TaskList'
 
-import logo from './logo.svg';
-import './App.css';
+import logo from './logo.svg'
+import './App.css'
 
 class App extends Component {
-  static render() {
+  render(): React.Element<any> {
     return (
       <div className="App">
         <div className="App-header">
@@ -25,4 +25,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default App

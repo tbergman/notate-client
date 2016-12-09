@@ -1,4 +1,6 @@
-import {combineReducers} from 'redux';
+// @flow
+
+import { combineReducers } from 'redux-immutable';
 import tasks from './tasks/reducers'
 
 const root = combineReducers({

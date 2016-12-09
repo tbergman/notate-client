@@ -1,6 +1,10 @@
-import { ADD_TASK, ADD_ASYNC_TASK_PENDING, ADD_ASYNC_TASK_FULFILLED, ADD_ASYNC_TASK_REJECTED, DELETE_TASK } from '../actions/types';
+// @flow
 
-export default (state = [], action) => {
+import { ADD_TASK, ADD_ASYNC_TASK_PENDING, ADD_ASYNC_TASK_FULFILLED, ADD_ASYNC_TASK_REJECTED, DELETE_TASK } from '../actions/types';
+import type { TasksState } from 'Types'
+import type { TaskActions } from '../actions'
+
+export default (state: TasksState = [], action: TaskActions) => {
   switch (action.type) {
     case ADD_TASK:
       return [...state, Object.assign({}, action.task)];

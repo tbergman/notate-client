@@ -1,10 +1,12 @@
+// @flow
+
 import tasks from './index'
 import { ADD_TASK, DELETE_TASK } from '../actions/types'
 
 describe('Reducer::Tasks', () => {
 
   let myDummyTask = {
-    id: 123
+    id: '123'
   };
 
   it('is an empty array by default', () => {
