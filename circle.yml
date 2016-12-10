@@ -3,6 +3,8 @@ machine:
     - mkdir ~/.yarn-cache
   node:
     version: stable
+  environment:
+    NODE_PATH: ./src
 dependencies:
   pre:
     - curl -o- -L https://yarnpkg.com/install.sh | bash
