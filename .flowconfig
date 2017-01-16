@@ -1,5 +1,6 @@
 [ignore]
 <PROJECT_ROOT>/node_modules/fbjs/.*
+<PROJECT_ROOT>/node_modules/flow-runtime/.*
 
 [libs]
 ./node_modules/fbjs/flow/lib
