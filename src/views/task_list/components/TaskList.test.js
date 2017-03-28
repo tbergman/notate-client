@@ -3,6 +3,7 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme'
 import { TaskList } from './TaskList';
+import { List } from 'immutable'
 
 type Setup = {
   props: Object,
@@ -10,11 +11,11 @@ type Setup = {
 }
 function setup(): Setup {
   const props = {
-    tasks: [{
+    tasks: new List([{
       id: '1'
     },{
       id: '2'
-    }],
+    }]),
     deleteTask: jest.fn()
   };
 

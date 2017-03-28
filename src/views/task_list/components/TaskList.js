@@ -1,21 +1,22 @@
 // @flow
 
-import type { AppState, Task, TasksState } from 'Types'
+import type { AppState } from 'modules/reducers'
+import type { Task } from 'Types'
+import type { List } from 'immutable'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { deleteTask } from 'modules/tasks/actions'
-import { tasksSelector } from 'modules/tasks'
+import { selectTaskList } from 'modules/tasks/selectors'
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    tasks: tasksSelector(state)
-  }
-};
-
-type Props = {
-  deleteTask: Function,
-  tasks: TasksState,
+type StateProps = {
+  tasks: List<Task>,
 }
+
+type DispatchProps = {
+  deleteTask: Function,
+}
+
+type Props = StateProps & DispatchProps
 
 export class TaskList extends Component {
 
@@ -26,6 +27,7 @@ export class TaskList extends Component {
   render(): React.Element<any> {
 
     const { tasks } = this.props;
+    console.info('tasks', tasks)
 
     return (
       <div>
@@ -37,5 +39,9 @@ export class TaskList extends Component {
   }
 
 }
+
+const mapStateToProps = (state: AppState) => ({
+  tasks: selectTaskList(state)
+});
 
 export default connect(mapStateToProps, { deleteTask })(TaskList);
