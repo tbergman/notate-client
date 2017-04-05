@@ -1,0 +1,13 @@
+.note{
+    background-color: #000000;
+    flex: 1 1 auto;
+}
+
+.noNote{
+    flex: 1 1 auto;
+}
+
+.chordContainer{
+    display: flex;
+    flex-flow: column nowrap;
+}

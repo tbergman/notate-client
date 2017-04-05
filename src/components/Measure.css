@@ -1,0 +1,6 @@
+.MeasureContainer{
+    display: flex;
+    flex-flow: row nowrap;
+    height: 100%;
+    border-right: solid #000000;
+}
