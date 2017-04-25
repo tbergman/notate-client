@@ -1,10 +1,18 @@
 [ignore]
 <PROJECT_ROOT>/node_modules/fbjs/.*
 <PROJECT_ROOT>/node_modules/flow-runtime/.*
+.*/redux-saga-test-plan/.*
+.*/styled-components/src/.*
+.*/styled-components/lib/models/StyleSheet.js.flow
 
 [libs]
 ./node_modules/fbjs/flow/lib
 ./flow-typed
+node_modules/styled-components/flow-typed/danger_v0.x.x.js
+node_modules/styled-components/flow-typed/fbjs_vx.x.x.js
+node_modules/styled-components/flow-typed/inline-style-prefixer_vx.x.x.js
+node_modules/styled-components/flow-typed/lodash_v4.x.x.js
+node_modules/styled-components/flow-typed/react-native.js
 
 [options]
 esproposal.class_static_fields=enable
