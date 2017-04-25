@@ -30,7 +30,7 @@
     "build": "cross-env NODE_PATH=./src react-scripts build",
     "test": "cross-env NODE_PATH=./src react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "NODE_PATH=./src eslint src"
+    "lint": "cross-env NODE_PATH=./src eslint src"
   },
   "jest": {
     "collectCoverageFrom": [

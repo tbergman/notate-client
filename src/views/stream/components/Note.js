@@ -1,17 +1,17 @@
 // @flow
 
 class Note{
-    pitch : string;
-    accidentals : number;
-    index : number;
-    kern : string;
+    pitch: string;
+    accidentals: number;
+    index: number;
+    kern: string;
     /*
      * General outline for a single note object.
      * Constructor expects the following:
      * a string based on the kern formatting.
      * TODO Create another constructor in case we don't want to create notes based on a kern string?
      * */
-    constructor(kernString : string){
+    constructor(kernString: string){
         this.kern = kernString;
         this.kernToPitch(kernString);
         this.index = this.getIndex();
@@ -26,7 +26,7 @@ class Note{
     * For now, it returns nothing, but sets the current note's pitch and accidentals
     * to the result of the kern conversion
     * */
-    kernToPitch(kern : string){
+    kernToPitch(kern: string){
         var letter = kern.toLowerCase().charAt(0);
         var octave;
         var letterCount = 1;
@@ -64,7 +64,7 @@ class Note{
     //ascii code for 0 is 48
     //gives the index based on the ascii pitch name with e4 == 0
     //TODO this will need to be modified for different clefs and ledger lines
-    getIndex() : number{
+    getIndex(): number{
         var index = 0;
         var letterCode = this.pitch.charCodeAt(0);
 
