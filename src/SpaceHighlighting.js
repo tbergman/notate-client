@@ -1,24 +1,17 @@
 import Vex from 'vexflow';
 import { Flow } from 'vexflow';
-var {
-  GhostNote
-} = Flow;
+var { GhostNote } = Flow;
 
-console.log(Vex);
-console.log(Flow);
-
-// [VexFlow](http://vexflow.com) - Copyright (c) Mohit Muthanna 2010.
-//
-// ## Description
+import SvgDrawing from './SvgDrawing';
 
 export default class SpaceHighlighting extends GhostNote {
-  isRest() { return true; }
-
   drawRect() {
-    console.log(this);
-    var rect = this.context.rect(this.tickContext.x, 40, 40, 60);
-    this.context.stroke('red')
+    var rect = new SvgDrawing(this.context)
+      .rect(this.tickContext.x, 40, 40, 60);
 
+    rect.addEventListener("click", function(e) {
+      console.log('clicked')
+    })
   }
 
   draw() {
@@ -32,11 +25,19 @@ export default class SpaceHighlighting extends GhostNote {
       throw new Vex.RERR('NoYValues', "Can't draw note without Y values.");
     }
 
-    this.setAttribute('el', this.context.openGroup('highlighting', this.getAttribute('id')));
+    var group = this.context.openGroup('highlighting', this.getAttribute('id'));
+    this.setAttribute('el', group);
+
     this.drawRect();
+    // grect.mouseover(function(e) {
+    //     rect.attr('fill', 'red');
+    // }).mouseout(function(e) {
+    //     rect.attr('fill', 'white');
+    // }).mouseup(function(e) {
+    //     alert("clicked");
+    // });
+
     this.context.closeGroup();
     this.setRendered();
-
-    console.log('draw')
   }
 }

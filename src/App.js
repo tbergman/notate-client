@@ -23,7 +23,7 @@ class App extends Component {
 
     // Create a stave of width 10000 at position 10, 40 on the canvas.
     var stave = new VF.Stave(10, 10, 10000)
-    .addClef('treble');
+    .addClef('treble')
 
     // Connect it to the rendering context and draw!
     stave.setContext(context).draw();
