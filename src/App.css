@@ -1,3 +1,19 @@
+.layer-answers {
+  stroke: red;
+  fill: red;
+}
+
+.layer-question {
+  stroke: green;
+  fill: green;
+}
+
+.layer-question:hover {
+    stroke: blue;
+    fill: blue;
+}
+
+
 .App {
   text-align: center;
 }
