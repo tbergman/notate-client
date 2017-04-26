@@ -12,7 +12,7 @@ import './index.css';
 //NOTE: can add initial state and make this more abstracted
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-export const store = createStore(root, {}, composeEnhancers(
+export const store = createStore(root, { tasks: {} }, composeEnhancers(
   applyMiddleware()
 ))
 
