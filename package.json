@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "cross-env": "^4.0.0",
     "enzyme": "^2.8.2",
     "eslint": "^3.19.0",
     "flow-bin": "^0.44.2",
@@ -27,12 +28,12 @@
     "styled-components": "^1.4.5"
   },
   "scripts": {
-    "start": "NODE_PATH=./src react-scripts start",
-    "build": "NODE_PATH=./src react-scripts build",
-    "test": "NODE_PATH=./src react-scripts test --env=jsdom",
+    "start": "cross-env NODE_PATH=./src react-scripts start",
+    "build": "cross-env NODE_PATH=./src react-scripts build",
+    "test": "cross-env NODE_PATH=./src react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "NODE_PATH=./src eslint src",
-    "flow": "NODE_PATH=./src flow"
+    "lint": "cross-env NODE_PATH=./src eslint src",
+    "flow": "cross-env NODE_PATH=./src flow"
   },
   "jest": {
     "collectCoverageFrom": [
