@@ -13,6 +13,14 @@
     fill: blue;
 }
 
+.layer-highlight rect {
+  fill: transparent;
+  stroke: transparent;
+}
+
+.layer-highlight rect:hover {
+  fill: rgba(12,12,12, 0.2);
+}
 
 .App {
   text-align: center;
