@@ -45,7 +45,7 @@ class App extends Component {
       new SpaceHighlighting({ duration: '4' }),
       new SpaceHighlighting({ duration: '4' }),
       new SpaceHighlighting({ duration: '4' }),
-      new SpaceHighlighting({ duration: '4' }),
+      new AnswerOptions({ duration: '4' }),
       new AnswerOptions({ duration: '4' })
     ];
 
@@ -113,6 +113,8 @@ class App extends Component {
     highlight[5].draw();
     context.closeGroup();
     highlightLayer.classList.add('layer-highlight');
+
+    highlight[4].remove();
   }
 
   render(): React.Element<any> {

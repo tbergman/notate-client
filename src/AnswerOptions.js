@@ -23,6 +23,10 @@ export default class AnswerOptions extends GhostNote {
 
     this.context.closeGroup();
     this.setRendered();
+
+    this.group = group;
+    console.log('group', group.id);
+    console.log('parent', group.parent);
   }
 
   drawNote(pitch) {
@@ -37,5 +41,9 @@ export default class AnswerOptions extends GhostNote {
     optionGroup.classList.add('option-question-tempo-4-duration-4-note-C');
     optionGroup.classList.add('option-question');
     optionGroup.addEventListener('click', () => { console.log('clicked on ', pitch) })
+  }
+
+  remove() {
+    this.group.remove()
   }
 }
