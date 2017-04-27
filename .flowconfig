@@ -21,6 +21,7 @@ esproposal.class_instance_fields=enable
 module.name_mapper='^\(.*\)\.css$' -> 'react-scripts/config/jest/CSSStub'
 module.name_mapper='^\(.*\)\.\(jpg\|png\|gif\|eot\|svg\|ttf\|woff\|woff2\|mp4\|webm\)$' -> 'react-scripts/config/jest/FileStub'
 
+module.name_mapper='^App' -> '<PROJECT_ROOT>/src/App.js'
 module.name_mapper='^Types$' -> '<PROJECT_ROOT>/src/Types.js.flow'
 module.name_mapper='^modules\/\(.*\)$' -> '<PROJECT_ROOT>/src/modules/\1'
 module.name_mapper='^modules$' -> '<PROJECT_ROOT>/src/modules'

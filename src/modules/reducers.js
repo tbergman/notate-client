@@ -1,7 +1,7 @@
 // @flow
 
 import { combineReducers } from 'redux';
-import tasks from './tasks/reducers'
+import { default as tasks, initialState as tasksInitialState } from './tasks/reducers'
 import type { State as TasksState } from './tasks/reducers'
 
 export type AppState = {
@@ -11,6 +11,10 @@ export type AppState = {
 const root = combineReducers({
   tasks
 });
+
+export const initialState = {
+  tasks: tasksInitialState,
+}
 
 export default root;
 

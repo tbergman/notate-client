@@ -8,7 +8,7 @@ export type State = {
   list: List<Task>
 }
 
-const initialState: State = {
+export const initialState: State = {
   list: new List()
 }
 

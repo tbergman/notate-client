@@ -1,7 +1,8 @@
 // @flow
 import type { Task } from 'Types'
 
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import cuid from 'cuid'
 import { addTask } from 'modules/tasks/actions'
