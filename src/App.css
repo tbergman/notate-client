@@ -22,6 +22,16 @@
   fill: rgba(12,12,12, 0.2);
 }
 
+.option-question {
+  fill: transparent;
+  stroke: transparent;
+}
+
+.option-question:hover {
+  fill: rgba(0,0,0,0.5);
+  stroke: rgba(0,0,0,0.5);
+}
+
 .App {
   text-align: center;
 }

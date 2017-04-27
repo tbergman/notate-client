@@ -9,6 +9,7 @@ import './App.css'
 
 import Vex from 'vexflow';
 import SpaceHighlighting from './SpaceHighlighting';
+import AnswerOptions from './AnswerOptions';
 
 class App extends Component {
   componentDidMount() {
@@ -45,7 +46,7 @@ class App extends Component {
       new SpaceHighlighting({ duration: '4' }),
       new SpaceHighlighting({ duration: '4' }),
       new SpaceHighlighting({ duration: '4' }),
-      new SpaceHighlighting({ duration: '4' }),
+      new AnswerOptions({ duration: '4' })
     ];
 
     // Connect it to the rendering context and draw!
