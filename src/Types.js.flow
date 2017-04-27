@@ -6,4 +6,9 @@ export type AppState = Map<string, any>
 export type Task = {
   id: string
 }
+
+export type Toolbox = {
+    selectedDuration: number,
+    selectedAccidental: number,
+}
 export type TasksState = Array<Task>
