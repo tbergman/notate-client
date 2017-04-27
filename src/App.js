@@ -15,6 +15,9 @@ class App extends Component {
   componentDidMount() {
     var VF = Vex.Flow;
 
+    var start, end;
+    start = +new Date();
+
     // Create an SVG renderer and attach it to the DIV element named "boo".
     var div = document.getElementById("music")
     var renderer = new VF.Renderer(div, VF.Renderer.Backends.SVG);
@@ -41,12 +44,16 @@ class App extends Component {
     ];
 
     var highlight = [
-      new SpaceHighlighting({ duration: '4' }),
-      new SpaceHighlighting({ duration: '4' }),
-      new SpaceHighlighting({ duration: '4' }),
-      new SpaceHighlighting({ duration: '4' }),
       new AnswerOptions({ duration: '4' }),
-      new AnswerOptions({ duration: '4' })
+      new AnswerOptions({ duration: '4' }),
+      new AnswerOptions({ duration: '4' }),
+      new AnswerOptions({ duration: '4' }),
+      new AnswerOptions({ duration: '4' }),
+      new AnswerOptions({ duration: '4' }),
+      new AnswerOptions({ duration: '4' }),
+      new AnswerOptions({ duration: '4' }),
+      new AnswerOptions({ duration: '4' }),
+      new AnswerOptions({ duration: '4' }),
     ];
 
     // Connect it to the rendering context and draw!
@@ -64,6 +71,10 @@ class App extends Component {
     tickContext.addTickable(highlight[3])
     tickContext.addTickable(highlight[4])
     tickContext.addTickable(highlight[5])
+    tickContext.addTickable(highlight[6])
+    tickContext.addTickable(highlight[7])
+    tickContext.addTickable(highlight[8])
+    tickContext.addTickable(highlight[9])
     question[0].setContext(context).setStave(stave)
     question[1].setContext(context).setStave(stave)
     answer[0].setContext(context).setStave(stave)
@@ -77,6 +88,10 @@ class App extends Component {
     highlight[3].setContext(context).setStave(stave)
     highlight[4].setContext(context).setStave(stave)
     highlight[5].setContext(context).setStave(stave)
+    highlight[6].setContext(context).setStave(stave)
+    highlight[7].setContext(context).setStave(stave)
+    highlight[8].setContext(context).setStave(stave)
+    highlight[9].setContext(context).setStave(stave)
 
     const visibleNoteGroups = [];
 
@@ -111,10 +126,22 @@ class App extends Component {
     highlight[4].draw();
     tickContext.preFormat().setX(240);
     highlight[5].draw();
+    tickContext.preFormat().setX(280);
+    highlight[6].draw();
+    tickContext.preFormat().setX(320);
+    highlight[7].draw();
+    tickContext.preFormat().setX(360);
+    highlight[8].draw();
+    tickContext.preFormat().setX(400);
+    highlight[9].draw();
     context.closeGroup();
     highlightLayer.classList.add('layer-highlight');
 
     highlight[4].remove();
+
+    end = +new Date();
+    var diff = end - start;
+    console.log(diff);
   }
 
   render(): React.Element<any> {
