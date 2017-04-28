@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import TaskButtons from 'views/task_list/components/TaskButtons'
 import TaskList from 'views/task_list/components/TaskList'
+import Stave from 'views/music/components/Stave'
 
 import logo from './logo.svg'
 import './App.css'
@@ -18,8 +19,9 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <TaskButtons />
-        <TaskList />
+        <Stave>
+          <div>rendering children</div>
+        </Stave>
       </div>
     );
   }

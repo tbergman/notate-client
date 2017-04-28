@@ -1,13 +1,7 @@
 // @flow
 
-import {
-  ADD_TASK,
-  DELETE_TASK,
-} from './actionTypes'
-import type {
-  AddTask,
-  DeleteTask,
-} from './actionTypes'
+import { ADD_TASK, DELETE_TASK } from './actionTypes'
+import type { AddTask, DeleteTask } from './actionTypes'
 import type { Task } from 'Types'
 
 export type AddTaskAction = AddTask & { payload: Task }

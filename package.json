@@ -26,7 +26,8 @@
     "redux-saga": "^0.14.8",
     "redux-saga-test-plan": "^2.4.3",
     "reselect": "^3.0.0",
-    "styled-components": "^1.4.5"
+    "styled-components": "^1.4.5",
+    "vexflow": "^1.2.83"
   },
   "scripts": {
     "start": "cross-env react-app-rewired start",

@@ -8,14 +8,12 @@ export type AppState = {
   tasks: TasksState,
 }
 
-const root = combineReducers({
-  tasks
-});
-
 export const initialState = {
   tasks: tasksInitialState,
 }
 
-export default root;
+export default combineReducers({
+  tasks
+});
 
 export const selectTasks:(state: AppState) => TasksState = (state) => state.tasks
