@@ -40,6 +40,12 @@ class ToolboxStub extends PureComponent {
           <a href='#' onClick={() => this.handleDurationClick(4)}>Set duration to "4"</a>
         </p>
         <p>My selected accidental is {selectedAccidental}</p>
+        <ToolGroup name="accidentals" clickHandler="{this.props.setAccidental}">
+          <Tool></Tool>
+        </ToolGroup>
+        <ToolGroup name="durations" clickHandler="{this.props.setDuration}">
+          <Tool></Tool>
+        </ToolGroup>
       </div>
     )
   }
