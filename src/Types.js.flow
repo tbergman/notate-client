@@ -7,7 +7,7 @@ export type Task = {
   id: string
 }
 
-export type Toolbox = {
+export type Tools = {
     selectedDuration: number,
     selectedAccidental: number,
 }

@@ -9,19 +9,18 @@ import type {
     SelectAccidental,
 } from './actionTypes'
 
-import type { Toolbox } from 'Types'
 
 export type SelectDurationAction = SelectDuration & { payload: number }
-export const selectDuration: (toolbox: Toolbox) => SelectDurationAction = (toolbox) => ({
+export const selectDuration: (newDuration: number) => SelectDurationAction = (newDuration) => ({
   type: SELECT_DURATION,
-  payload: toolbox.selectedDuration
+  payload: newDuration
 })
 
 export type SelectAccidentalAction = SelectAccidental & { payload: number }
-export const selectAccidental: (toolbox: Toolbox) => SelectAccidentalAction = (toolbox) => {
+export const selectAccidental: (newAccidental: number) => SelectAccidentalAction = (newAccidental) => {
   return {
     type: SELECT_ACCIDENTAL,
-    payload: toolbox.selectedAccidental
+    payload: newAccidental
   };
 };
 

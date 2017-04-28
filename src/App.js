@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import TaskButtons from 'views/task_list/components/TaskButtons'
 import TaskList from 'views/task_list/components/TaskList'
+import Toolbox from 'modules/toolbox/components/Toolbox'
 
 import logo from './logo.svg'
 import './App.css'
@@ -20,6 +21,7 @@ class App extends Component {
         </p>
         <TaskButtons />
         <TaskList />
+          <Toolbox/>
       </div>
     );
   }
