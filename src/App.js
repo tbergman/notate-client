@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import TaskButtons from 'views/task_list/components/TaskButtons'
 import TaskList from 'views/task_list/components/TaskList'
 import Stave from 'views/music/components/Stave'
+import Note from 'views/music/components/Note'
 
 import logo from './logo.svg'
 import './App.css'
@@ -20,7 +21,9 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <Stave>
-          <div>rendering children</div>
+          <Note duration={4} pitch={'g/4'} />
+          <Note duration={4} pitch={'f/4'} />
+          <Note duration={4} pitch={'e/4'} />
         </Stave>
       </div>
     );
