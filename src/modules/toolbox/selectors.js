@@ -3,7 +3,7 @@
 import { createSelector } from 'reselect'
 import { selectToolbox } from '../reducers'
 
-export const selectToolboxes = createSelector(
+export const selectSelectedAccidental = createSelector(
   selectToolbox,
-  toolbox => toolbox
+  toolbox => toolbox.selectedAccidental
 )

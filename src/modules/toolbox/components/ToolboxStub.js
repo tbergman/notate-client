@@ -7,7 +7,11 @@ type DispatchProps = {
   setDuration: Function,
 }
 
-type Props = DispatchProps
+type StateProps = {
+  selectedAccidental: number,
+}
+
+type Props = DispatchProps & StateProps
 
 class ToolboxStub extends PureComponent {
 
@@ -18,10 +22,11 @@ class ToolboxStub extends PureComponent {
   }
 
   handleDurationClick = (duration: number) => {
-    this.props.setAccidental(duration)
+    this.props.setDuration(duration)
   }
 
   render(): React.Element<any> {
+    const { selectedAccidental } = this.props
     return (
       <div>
         <p>
@@ -34,6 +39,7 @@ class ToolboxStub extends PureComponent {
           <br />
           <a href='#' onClick={() => this.handleDurationClick(4)}>Set duration to "4"</a>
         </p>
+        <p>My selected accidental is {selectedAccidental}</p>
       </div>
     )
   }
