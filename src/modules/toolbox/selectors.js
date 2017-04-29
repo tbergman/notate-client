@@ -7,3 +7,9 @@ export const selectSelectedAccidental = createSelector(
   selectToolbox,
   toolbox => toolbox.selectedAccidental
 )
+
+export const selectSelectedDuration = createSelector(
+    selectToolbox,
+    toolbox => toolbox.selectedDuration
+)
+

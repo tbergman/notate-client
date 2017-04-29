@@ -4,16 +4,16 @@ import type { AppState } from 'modules/reducers'
 import type { Tools } from 'Types'
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { selectDuration, selectAccidental } from 'modules/toolbox/actions'
-import { selectToolboxes } from 'modules/toolbox/selectors'
+import { setDuration, setAccidental } from 'modules/toolbox/actions'
+import { selectSelectedAccidental, selectSelectedDuration } from 'modules/toolbox/selectors'
 import AccidentalBox from './AccidentalBox'
 type StateProps = {
     toolbox: Tools,
 }
 
 type DispatchProps = {
-    selectDuration: Function,
-    selectAccidental: Function,
+    setDuration: Function,
+    setAccidental: Function,
 }
 
 type Props = StateProps & DispatchProps
@@ -21,8 +21,8 @@ type Props = StateProps & DispatchProps
 
 export class Toolbox extends PureComponent{
     props: Props
-    onSelectDuration = ( newDuration: number ) => this.props.selectDuration(newDuration);
-    onSelectAccidental = ( newAccidental: number ) => this.props.selectAccidental(newAccidental);
+    onSelectDuration = ( newDuration: number ) => this.props.setDuration(newDuration);
+    onSelectAccidental = ( newAccidental: number ) => this.props.setAccidental(newAccidental);
 
     render(): React.Element<any> {
         const { toolbox } = this.props;
@@ -43,7 +43,8 @@ export class Toolbox extends PureComponent{
 
 
 const mapStateToProps = (state: AppState) => ({
-    toolbox: selectToolboxes(state)
+    selectedAccidental: selectSelectedAccidental(state),
+    selectedDuration: selectSelectedDuration(state)
 });
 
-export default connect(mapStateToProps, { selectDuration, selectAccidental })(Toolbox);
+export default connect(mapStateToProps, { setDuration, setAccidental })(Toolbox);

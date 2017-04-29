@@ -1,29 +1,31 @@
 // @flow
 
 import {
-    SELECT_DURATION,
-    SELECT_ACCIDENTAL,
+    SET_DURATION,
+    SET_ACCIDENTAL,
 } from './actionTypes'
 import type {
-    SelectDuration,
-    SelectAccidental,
+    SetDuration,
+    SetAccidental,
 } from './actionTypes'
 
+import type {AccidentalType, DurationType} from './constants'
 
-export type SelectDurationAction = SelectDuration & { payload: number }
-export const selectDuration: (newDuration: number) => SelectDurationAction = (newDuration) => ({
-  type: SELECT_DURATION,
+
+export type SetDurationAction = SetDuration & { payload: number }
+export const setDuration: (newDuration: DurationType) => SetDurationAction = (newDuration) => ({
+  type: SET_DURATION,
   payload: newDuration
 })
 
-export type SelectAccidentalAction = SelectAccidental & { payload: number }
-export const selectAccidental: (newAccidental: number) => SelectAccidentalAction = (newAccidental) => {
+export type SetAccidentalAction = SetAccidental & { payload: number }
+export const setAccidental: (newAccidental: AccidentalType) => SetAccidentalAction = (newAccidental) => {
   return {
-    type: SELECT_ACCIDENTAL,
+    type: SET_ACCIDENTAL,
     payload: newAccidental
   };
 };
 
 export type ToolboxActions =
-  | SelectDurationAction
-  | SelectAccidentalAction
+  | SetDurationAction
+  | SetAccidentalAction

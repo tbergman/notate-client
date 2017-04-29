@@ -1,4 +1,4 @@
-// @ flow
+// @flow
 
 import React, {PureComponent} from 'react'
 import styled from 'styled-components';
@@ -45,14 +45,14 @@ class AccidentalBox extends PureComponent{
             var accidental = this.props.allowedAccidentals[i];
             if(accidental === this.props.selected){
                 divs.push(
-                    <Selected key={accidental} onClick={() => this.props.onSelectAccidental(accidental).bind(this)}>
+                    <Selected key={accidental} onClick={() => this.props.onSelectAccidental(0).bind(this)}>
                         {accidental}
                     </Selected>
                 );
             }
             else{
                 divs.push(
-                    <div key={accidental} onClick={() => this.props.onSelectAccidental(accidental).bind(this)}>
+                    <div key={accidental} onClick={() => this.props.onSelectAccidental(0).bind(this)}>
                         {accidental}
                     </div>
                 );
