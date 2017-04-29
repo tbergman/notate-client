@@ -14,7 +14,7 @@ export type State = {
 
 export const initialState: State = {
     selectedDuration: DURATION.QUARTER,
-    selectedAccidental: ACCIDENTAL.SHARP,
+    selectedAccidental: ACCIDENTAL.NATURAL,
 }
 
 export default (state: State = initialState, action: ToolboxActions) => {

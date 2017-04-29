@@ -12,13 +12,13 @@ import type {
 import type {AccidentalType, DurationType} from './constants'
 
 
-export type SetDurationAction = SetDuration & { payload: number }
+export type SetDurationAction = SetDuration & { payload: DurationType }
 export const setDuration: (newDuration: DurationType) => SetDurationAction = (newDuration) => ({
   type: SET_DURATION,
   payload: newDuration
 })
 
-export type SetAccidentalAction = SetAccidental & { payload: number }
+export type SetAccidentalAction = SetAccidental & { payload: AccidentalType }
 export const setAccidental: (newAccidental: AccidentalType) => SetAccidentalAction = (newAccidental) => {
   return {
     type: SET_ACCIDENTAL,

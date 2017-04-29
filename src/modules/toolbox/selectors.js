@@ -1,7 +1,7 @@
 // @flow
 
 import { createSelector } from 'reselect'
-import { selectToolbox } from '../reducers'
+import { selectToolbox } from 'modules/reducers'
 
 export const selectSelectedAccidental = createSelector(
   selectToolbox,
@@ -12,4 +12,3 @@ export const selectSelectedDuration = createSelector(
     selectToolbox,
     toolbox => toolbox.selectedDuration
 )
-

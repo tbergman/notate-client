@@ -1,23 +1,23 @@
 // @flow
 
 import { combineReducers } from 'redux';
-import { default as tasks, initialState as tasksInitialState } from './tasks/reducers'
-import { default as toolbox, initialState as toolboxInitialState} from './toolbox/reducers'
-import type { State as TasksState } from './tasks/reducers'
-import type { State as ToolboxState } from './tasks/reducers'
+import { default as tasks, initialState as tasksInitialState } from 'modules/tasks/reducers'
+import { default as toolbox, initialState as toolboxInitialState} from 'modules/toolbox/reducers'
+import type { State as TasksState } from 'modules/tasks/reducers'
+import type { State as ToolboxState } from 'modules/tasks/reducers'
 
 export type AppState = {
-  tasks: TasksState,
+    tasks: TasksState,
     toolbox: ToolboxState,
 }
 
 const root = combineReducers({
-  tasks,
-  toolbox,
+    tasks,
+    toolbox,
 });
 
 export const initialState = {
-  tasks: tasksInitialState,
+    tasks: tasksInitialState,
     toolbox: toolboxInitialState,
 }
 
