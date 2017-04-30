@@ -1,8 +1,6 @@
 // @flow
 
 import React, { Component } from 'react';
-import TaskButtons from 'views/task_list/components/TaskButtons'
-import TaskList from 'views/task_list/components/TaskList'
 import Stave from 'views/music/components/Stave'
 import Note from 'views/music/components/Note'
 

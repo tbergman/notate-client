@@ -1,26 +1,28 @@
 // @flow
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Vex, { Flow } from 'vexflow'
-import cuid from 'cuid'
+import { Flow } from 'vexflow'
+
+type Props = {
+  pitch: string,
+  duration: number,
+  stave?: Flow.Stave,
+  context?: Flow.SvgContext,
+  tickContext?: Flow.TickContext,
+}
 
 class Note extends Component {
   note: Flow.StemmableNote;
-
-  static propTypes = {
-    pitch: PropTypes.string,
-    duration: PropTypes.number,
-    stave: PropTypes.object,
-    context: PropTypes.object,
-    tickContext: PropTypes.object,
-  }
+  props: Props
 
   componentDidUpdate() {
-    if (!this.props.tickContext || !this.props.stave) {
+    if (!this.props.tickContext || !this.props.stave || !this.props.context) {
       return
     }
+
+    const tickContext = this.props.tickContext
+    const context = this.props.context
+    const stave = this.props.stave
 
     const note = new Flow.StaveNote({
       keys: [this.props.pitch],
@@ -28,12 +30,11 @@ class Note extends Component {
       duration: this.props.duration.toString(),
     })
 
-    console.log(this.props.tickContext);
-    this.props.tickContext.addTickable(note)
-    note.setContext(this.props.context).setStave(this.props.stave)
+    tickContext.addTickable(note)
+    note.setContext(context).setStave(stave)
     note.x_shift = 1
     note.draw();
-    this.props.tickContext.preFormat().setX(this.props.tickContext.x + 40)
+    tickContext.preFormat().setX(tickContext.x + 40)
   }
 
   render(): React.Element<any> {

@@ -1,22 +1,22 @@
 // @flow
 
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import Vex, { Flow } from 'vexflow'
+import { Flow } from 'vexflow'
 import cuid from 'cuid'
 
-class Stave extends Component {
-  context: Flow.SvgContext;
-  tickContext: Flow.TickContext;
-  stave: Flow.Stave;
-  staveContainer: React.Element<any>;
+type Props = {
+  width?: number,
+  height?: number,
+  children?: React.Element<any>
+}
 
-  static propTypes = {
-    width: PropTypes.number,
-    height: PropTypes.number,
-    childrenWithProps: PropTypes.array
-  }
+class Stave extends Component {
+  context: Flow.SvgContext
+  tickContext: Flow.TickContext
+  stave: Flow.Stave
+  staveContainer: React.Element<any>
+
+  props: Props
 
   state = {}
 
@@ -35,7 +35,7 @@ class Stave extends Component {
     this.setState({ context, tickContext, stave })
   }
 
-  childrenWithProps(children) {
+  childrenWithProps(children?: React.Element<any>): React.Element<any> {
     return React.Children.map(children,
       (child) => {
         return React.cloneElement(child, {

@@ -1,10 +1,10 @@
 // @flow
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, ShallowWrapper } from 'enzyme'
 import Stave from './Stave'
 
-function setup() {
+function setup(): ShallowWrapper {
   return shallow(<Stave/>)
 }
 
