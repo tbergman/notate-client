@@ -15,8 +15,8 @@ export const deleteTask: (task: Task) => DeleteTaskAction = (task) => {
   return {
     type: DELETE_TASK,
     payload: task
-  };
-};
+  }
+}
 
 export type TaskActions =
   | AddTaskAction

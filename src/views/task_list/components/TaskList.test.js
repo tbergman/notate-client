@@ -19,7 +19,7 @@ function setup(): Setup {
     deleteTask: jest.fn()
   };
 
-  const enzymeWrapper: ShallowWrapper = shallow(<TaskList {...props} />);
+  const enzymeWrapper: ShallowWrapper = shallow(<TaskList {...props} />)
 
   return {
     props,
@@ -28,10 +28,13 @@ function setup(): Setup {
 }
 
 it('renders without crashing', () => {
-  const { enzymeWrapper } = setup();
-  expect(enzymeWrapper.find('div')).toBeDefined();
-});
+  const { enzymeWrapper } = setup()
+
+  expect(enzymeWrapper.find('div')).toBeDefined()
+})
+
 it('renders all tasks from props', () => {
-  const { enzymeWrapper } = setup();
+  const { enzymeWrapper } = setup()
+
   expect(enzymeWrapper.find('div.task').length).toEqual(2)
-});
+})

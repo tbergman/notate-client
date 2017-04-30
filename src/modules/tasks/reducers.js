@@ -1,16 +1,16 @@
 // @flow
 
-import { List } from 'immutable';
-import { ADD_TASK, DELETE_TASK } from './actionTypes';
-import type { TaskActions } from './actions';
-import type { Task } from 'Types';
+import { List } from 'immutable'
+import { ADD_TASK, DELETE_TASK } from './actionTypes'
+import type { TaskActions } from './actions'
+import type { Task } from 'Types'
 export type State = {
   list: List<Task>
-};
+}
 
 export const initialState: State = {
   list: new List()
-};
+}
 
 export default (state: State = initialState, action: TaskActions) => {
   switch (action.type) {
@@ -29,7 +29,8 @@ export default (state: State = initialState, action: TaskActions) => {
       }
     }
 
-    default:
-      return state;
+    default: {
+      return state
+    }
   }
-};
+}

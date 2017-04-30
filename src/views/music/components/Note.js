@@ -28,9 +28,12 @@ class Note extends Component {
       duration: this.props.duration.toString(),
     })
 
+    console.log(this.props.tickContext);
     this.props.tickContext.addTickable(note)
     note.setContext(this.props.context).setStave(this.props.stave)
+    note.x_shift = 1
     note.draw();
+    this.props.tickContext.preFormat().setX(this.props.tickContext.x + 40)
   }
 
   render(): React.Element<any> {
