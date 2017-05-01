@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react'
 import { Flow } from 'vexflow'
-import cuid from 'cuid'
 
 type Props = {
   width?: number,
@@ -49,7 +48,7 @@ class Stave extends Component {
 
   render(): React.Element<any> {
     return (
-      <div id={cuid()} className="stave" ref={(div) => { this.staveContainer = div }}>
+      <div className="stave" ref={(div) => { this.staveContainer = div }}>
         {this.childrenWithProps(this.props.children)}
       </div>
     )

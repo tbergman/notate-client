@@ -1,11 +1,25 @@
 // @flow
 
 import React from 'react'
-import { shallow, ShallowWrapper } from 'enzyme'
+import { mount, ReactWrapper } from 'enzyme'
 import Stave from './Stave'
 
-function setup(): ShallowWrapper {
-  return shallow(<Stave/>)
+function setup(): ReactWrapper {
+  const jsdom = require('jsdom').JSDOM
+
+  const exposedProperties = ['window', 'navigator', 'document']
+  global.window = new jsdom('<!DOCTYPE html><div id="root"/>').window
+  global.document = global.window.document
+  global.navigator = { userAgent: 'node.js' }
+
+  Object.keys(global.document.defaultView).forEach((property) => {
+    if (typeof global[property] === 'undefined') {
+      exposedProperties.push(property)
+      global[property] = global.document.defaultView[property]
+    }
+  })
+
+  return mount(<Stave/>)
 }
 
 it('renders without crashing', () => {
@@ -20,8 +34,9 @@ it('sets the component class', () => {
   expect(component.hasClass('stave')).toBe(true)
 })
 
-it('sets the component id', () => {
+it('render the stave svg', () => {
   const component = setup()
+  const element = component.getDOMNode()
 
-  expect(component.props('id')).toBeDefined()
+  expect(element.querySelector('svg')).toBeDefined()
 })
