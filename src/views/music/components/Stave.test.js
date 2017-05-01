@@ -8,21 +8,23 @@ function setup(): ReactWrapper {
   return mount(<Stave/>)
 }
 
-it('renders without crashing', () => {
-  const component = setup()
+describe('stave component', () => {
+  it('renders without crashing', () => {
+    const component = setup()
 
-  expect(component).toBeDefined()
-})
+    expect(component).toBeDefined()
+  })
 
-it('sets the component class', () => {
-  const component = setup()
+  it('sets the component class', () => {
+    const component = setup()
 
-  expect(component.hasClass('stave')).toBe(true)
-})
+    expect(component.hasClass('stave')).toBe(true)
+  })
 
-it('render the stave svg', () => {
-  const component = setup()
-  const element = component.getDOMNode()
+  it('render the stave svg', () => {
+    const component = setup()
+    const element = component.getDOMNode()
 
-  expect(element.querySelector('svg')).toBeDefined()
+    expect(element.querySelector('svg')).toBeDefined()
+  })
 })
