@@ -16,10 +16,7 @@ class App extends Component {
           <h2>Welcome to React</h2>
         </div>
 
-        <Stave>
-          <Note duration={4} pitch={'g/4'} />
-          <Note duration={4} pitch={'f/4'} />
-          <Note duration={4} pitch={'e/4'} />
+        <Stave clef={"treble"}>
         </Stave>
       </div>
     );
