@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { mount, ReactWrapper } from 'enzyme'
+import { Flow } from 'vexflow'
 import Stave from './Stave'
 
 describe('stave component', () => {
@@ -24,7 +25,7 @@ describe('stave component', () => {
     expect(element.querySelector('svg')).toBeDefined()
   })
 
-  it('should default height and width to 500', () => {
+  it('defaults height and width to 500', () => {
     const component = mount(<Stave/>)
     const element = component.getDOMNode()
     const attrs = element.querySelector('svg').attributes
@@ -47,5 +48,21 @@ describe('stave component', () => {
     const attrs = element.querySelector('svg').attributes
 
     expect(attrs['width'].value).toEqual('100')
+  })
+
+  it('defaults clef type to treble', () => {
+    const addClef = spyOn(Flow.Stave.prototype, 'addClef').and.callThrough()
+    const component = mount(<Stave/>)
+    const element = component.getDOMNode()
+
+    expect(addClef).toHaveBeenCalledWith('treble')
+  })
+
+  it('sets the svg height', () => {
+    const addClef = spyOn(Flow.Stave.prototype, 'addClef').and.callThrough()
+    const component = mount(<Stave clef={'bass'}/>)
+    const element = component.getDOMNode()
+
+    expect(addClef).toHaveBeenCalledWith('bass')
   })
 })

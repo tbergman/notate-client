@@ -6,6 +6,7 @@ import { Flow } from 'vexflow'
 type Props = {
   width?: number,
   height?: number,
+  clef?: string,
   children?: React.Element<any>
 }
 
@@ -22,6 +23,7 @@ class Stave extends Component {
   componentDidMount() {
     const width = this.props.width || 500
     const height = this.props.height || 500
+    const clef = this.props.clef || 'treble'
 
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
     renderer.resize(width, height)
@@ -29,7 +31,7 @@ class Stave extends Component {
     const context = renderer.getContext()
     const tickContext = new Flow.TickContext()
     const staveSvgWidth = 10000;
-    const stave = new Flow.Stave(0, 0, staveSvgWidth).addClef('treble')
+    const stave = new Flow.Stave(0, 0, staveSvgWidth).addClef(clef)
     stave.setContext(context).draw()
 
     this.setState({ context, tickContext, stave })
