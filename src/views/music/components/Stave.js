@@ -28,7 +28,8 @@ class Stave extends Component {
 
     const context = renderer.getContext()
     const tickContext = new Flow.TickContext()
-    const stave = new Flow.Stave(10, 10, 10000).addClef('treble')
+    const staveSvgWidth = 10000;
+    const stave = new Flow.Stave(0, 0, staveSvgWidth).addClef('treble')
     stave.setContext(context).draw()
 
     this.setState({ context, tickContext, stave })
