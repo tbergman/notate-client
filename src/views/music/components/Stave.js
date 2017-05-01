@@ -11,48 +11,37 @@ type Props = {
   width?: number,
   height?: number,
   clef?: string,
-  children?: React.Element<any>
+  description: string,
+  notation: string
 }
 
 class Stave extends Component {
-  context: Flow.SvgContext
-  tickContext: Flow.TickContext
-  stave: Flow.Stave
   staveContainer: React.Element<any>
-
   props: Props
-
-  state = {}
 
   componentDidMount() {
     const { width = 500, height = 500, clef = 'treble' } = this.props
+    const artist = new Artist(10, 10, 600, {scale: 0.8});
+    const vextab = new VexTab(artist);
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
     renderer.resize(width, height)
 
-    // Initialize VexTab artist and parser.
-    let artist = new Artist(10, 10, 600, {scale: 0.8});
-    let vextab = new VexTab(artist);
-    try {
-      let notation = `
-        stave notation=true tablature=false key=C time=4/4
-        voice
-          notes Cn-D-E/4 F#/5
-        voice
-          notes Dn-E-F/4 G#/5
-      `
-      vextab.reset();
-      artist.reset();
-      vextab.parse(notation);
-      artist.render(renderer);
-    } catch (e) {
-      console.log(e);
-    }
+    vextab.reset();
+    artist.reset();
+    vextab.parse(this.props.notation);
+    artist.render(renderer);
   }
 
   render(): React.Element<any> {
     return (
-      <div className="stave" ref={(div) => { this.staveContainer = div }}>
+      <div>
+        <div className="description">
+          {this.props.description}
+        </div>
 
+        <div className="stave" ref={(div) => { this.staveContainer = div }}>
+
+        </div>
       </div>
     )
   }
