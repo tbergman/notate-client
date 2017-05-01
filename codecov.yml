@@ -24,3 +24,6 @@ parsers:
       method: false
   javascript:
     enable_partials: false
+ignore:
+  - "src/modules/music/notation/parser.js" # ignoring vextab files
+  - "src/modules/music/notation/vextab.js"
