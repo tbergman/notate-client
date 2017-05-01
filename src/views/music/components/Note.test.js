@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { mount, ReactWrapper } from 'enzyme'
+import { mount } from 'enzyme'
 import Note from './Note'
 import { Flow } from 'vexflow'
 

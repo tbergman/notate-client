@@ -5,6 +5,10 @@ module.exports = {
     'flowtype'
   ],
 
+  globals: {
+    spyOn: true
+  },
+
   rules: {
     'import/named': 'error',
 

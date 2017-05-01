@@ -21,9 +21,7 @@ class Stave extends Component {
   state = {}
 
   componentDidMount() {
-    const width = this.props.width || 500
-    const height = this.props.height || 500
-    const clef = this.props.clef || 'treble'
+    const { width = 500, height = 500, clef = 'treble' } = this.props
 
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
     renderer.resize(width, height)

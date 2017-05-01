@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react'
-import { mount, ReactWrapper } from 'enzyme'
+import { mount } from 'enzyme'
 import { Flow } from 'vexflow'
 import Stave from './Stave'
 
@@ -52,16 +52,14 @@ describe('stave component', () => {
 
   it('defaults clef type to treble', () => {
     const addClef = spyOn(Flow.Stave.prototype, 'addClef').and.callThrough()
-    const component = mount(<Stave/>)
-    const element = component.getDOMNode()
+    mount(<Stave/>)
 
     expect(addClef).toHaveBeenCalledWith('treble')
   })
 
   it('sets the svg height', () => {
     const addClef = spyOn(Flow.Stave.prototype, 'addClef').and.callThrough()
-    const component = mount(<Stave clef={'bass'}/>)
-    const element = component.getDOMNode()
+    mount(<Stave clef={'bass'}/>)
 
     expect(addClef).toHaveBeenCalledWith('bass')
   })
