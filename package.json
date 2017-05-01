@@ -37,15 +37,5 @@
     "eject": "react-scripts eject",
     "lint": "cross-env eslint src",
     "flow": "cross-env flow"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ],
-    "coverageDirectory": "./coverage/",
-    "moduleDirectories": [
-      "src",
-      "node_modules"
-    ]
   }
 }
