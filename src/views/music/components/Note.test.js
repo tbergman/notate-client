@@ -13,13 +13,13 @@ describe('note component', () => {
   })
 
   it('sets the pitch', () => {
-    const component = mount(<Note pitch={'g/4'}/>)
+    const component = mount(<Note pitch={'g/4'} duration={4}/>)
 
     expect(component.props().pitch).toEqual('g/4')
   })
 
   it('sets the duration', () => {
-    const component = mount(<Note duration={4}/>)
+    const component = mount(<Note pitch={'g/4'} duration={4}/>)
 
     expect(component.props().duration).toEqual(4)
   })
