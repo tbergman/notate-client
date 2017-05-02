@@ -10,6 +10,7 @@ import Vex from 'vexflow';
 import _ from 'lodash';
 
 import ArtistAnnotations from './artist.annotations'
+import ArtistTuplets from './artist.tuplets'
 
 let parseBool = str => str === "true";
 let makeDuration = (time, dot) => time + (dot ? "d" : "")
@@ -39,7 +40,8 @@ export default class Artist {
       _.extend(this.options, options)
     }
 
-    this.annotations = new ArtistAnnotations(this.options, this)
+    this.annotations = new ArtistAnnotations(this, this.options)
+    this.tuplets = new ArtistTuplets(this)
 
     this.reset()
   }
@@ -450,25 +452,6 @@ export default class Artist {
     let bar_note = new Vex.Flow.BarNote().setType(type);
     stave.tab_notes.push(bar_note);
     if (stave.note != null) { return stave.note_notes.push(bar_note); }
-  }
-
-  makeTuplets(tuplets, notes) {
-    if (notes == null) { notes = tuplets; }
-    if (!_.last(this.staves).note) { return; }
-    let stave_notes = _.last(this.staves).note_notes;
-    let { tab_notes } = _.last(this.staves);
-
-    if (stave_notes.length < notes) { throw new Vex.RERR("ArtistError", "Not enough notes for tuplet"); }
-    let modifier = new Vex.Flow.Tuplet(stave_notes.slice(stave_notes.length - notes), {num_notes: tuplets});
-    this.stave_articulations.push(modifier);
-
-    // Creating a Vex.Flow.Tuplet corrects the ticks for the notes, so it needs to
-    // be created whether or not it gets rendered. Below, if tab stems are not required
-    // the created tuplet is simply thrown away.
-    let tab_modifier = new Vex.Flow.Tuplet(tab_notes.slice(tab_notes.length - notes), {num_notes: tuplets});
-    if (this.customizations["tab-stems"] === "true") {
-      return this.tab_articulations.push(tab_modifier);
-    }
   }
 
   makeScoreArticulation(text) {

@@ -4,7 +4,7 @@ import Vex from 'vexflow';
 import _ from 'lodash';
 
 export default class ArtistAnnotation {
-  constructor(options, artist) {
+  constructor(artist, options) {
     this.artist = artist
 
     this.options = {

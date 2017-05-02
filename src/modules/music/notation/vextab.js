@@ -40,7 +40,7 @@ export default class VexTab extends VexTabMods {
     }
 
     if (element.command === "tuplet") {
-      this.artist.makeTuplets(element.params.tuplet, element.params.notes)
+      this.artist.tuplets.makeTuplets(element.params.tuplet, element.params.notes)
     }
 
     if (element.command === "annotations") {
