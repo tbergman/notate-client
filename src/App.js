@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import TaskButtons from 'views/task_list/components/TaskButtons'
 import TaskList from 'views/task_list/components/TaskList'
-import Toolbox from 'views/main/containers/Toolbox'
 
 import logo from './logo.svg'
 import './App.css'
