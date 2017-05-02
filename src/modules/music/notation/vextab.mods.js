@@ -92,7 +92,7 @@ export default class VexTabMods {
 
   parseStaveText(textLine) {
     if (!_.isEmpty(textLine)) {
-      this.artist.addTextVoice()
+      this.artist.annotations.addTextVoice()
     }
 
     let position = 0
@@ -100,7 +100,7 @@ export default class VexTabMods {
     let smooth = true
     let font = null
 
-    let bartext = () => this.artist.addTextNote('', 0, justification, false, true)
+    let bartext = () => this.artist.annotations.addTextNote('', 0, justification, false, true)
 
     let createNote = text => {
       let ignoreTicks = false
@@ -110,7 +110,7 @@ export default class VexTabMods {
       }
 
       try {
-        return this.artist.addTextNote(text, position, justification, smooth, ignoreTicks)
+        return this.artist.annotations.addTextNote(text, position, justification, smooth, ignoreTicks)
       } catch (e) {
         throw newError(`Bad text or duration. Did you forget a comma?${e}`)
       }
@@ -124,7 +124,7 @@ export default class VexTabMods {
 
         if (text.match(/\.font=.*/)) {
           font = text.slice(6)
-          result.push(this.artist.setTextFont(font))
+          result.push(this.artist.annotations.setTextFont(font))
         } else if (text[0] === ':') {
           result.push(this.artist.setDuration(text))
         } else if (text[0] === '.') {
@@ -161,7 +161,7 @@ export default class VexTabMods {
         } else if (text === '|') {
           result.push(bartext())
         } else if (text.slice(0, 2) === '++') {
-          result.push(this.artist.addTextVoice())
+          result.push(this.artist.annotations.addTextVoice())
         } else {
           result.push(createNote(text))
         }

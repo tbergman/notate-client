@@ -9,6 +9,8 @@
 import Vex from 'vexflow';
 import _ from 'lodash';
 
+import ArtistAnnotations from './artist.annotations'
+
 let parseBool = str => str === "true";
 let makeDuration = (time, dot) => time + (dot ? "d" : "")
 let getScoreArticulationParts = text => text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./)
@@ -19,9 +21,10 @@ const __guard__ = (value, transform) => {
 
 export default class Artist {
   constructor(x, y, width, options) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
+    this.x = x
+    this.y = y
+    this.width = width
+
     this.options = {
       font_face: "Arial",
       font_size: 10,
@@ -30,9 +33,15 @@ export default class Artist {
       tab_stave_lower_spacing: 10,
       note_stave_lower_spacing: 0,
       scale: 1.0
-    };
-    if (options != null) { _.extend(this.options, options); }
-    this.reset();
+    }
+
+    if (options != null) {
+      _.extend(this.options, options)
+    }
+
+    this.annotations = new ArtistAnnotations(this.options, this)
+
+    this.reset()
   }
 
   formatAndRender(ctx, tab, score, text_notes, customizations, options) {
@@ -207,19 +216,23 @@ export default class Artist {
   }
 
   setOptions(options) {
-    // Set @customizations
+    this.annotations.setOptions(options)
+
     let valid_options = _.keys(this.customizations);
     for (let k in options) {
-      let v = options[k];
+      let v = options[k]
       if (Array.from(valid_options).includes(k)) {
-        this.customizations[k] = v;
+        this.customizations[k] = v
       } else {
         throw new Vex.RERR("ArtistError", `Invalid option '${k}'`);
       }
     }
 
-    this.last_y += parseInt(this.customizations.space, 10);
-    if (this.customizations.player === "true") { return this.last_y += 15; }
+    this.last_y += parseInt(this.customizations.space, 10)
+
+    if (this.customizations.player === "true") {
+      return this.last_y += 15
+    }
   }
 
   getPlayerData() {
@@ -355,6 +368,7 @@ export default class Artist {
     };
 
     _.extend(params, note_params);
+
     let stave_notes = _.last(this.staves).note_notes;
     let stave_note = new Vex.Flow.StaveNote({
       keys: params.spec,
@@ -362,6 +376,7 @@ export default class Artist {
       clef: params.is_rest ? "treble" : this.current_clef,
       auto_stem: params.is_rest ? false : true
     });
+
     for (let index = 0; index < params.accidentals.length; index++) {
       let acc = params.accidentals[index];
       if (acc != null) {
@@ -399,6 +414,7 @@ export default class Artist {
       return new_tab_note.addDot();
     }
   }
+
   setDuration(time, dot) {
     if (dot == null) {
       dot = false
@@ -465,101 +481,6 @@ export default class Artist {
       let pos = position === "t" ? POSTYPE.ABOVE : POSTYPE.BELOW;
       return new Vex.Flow.Articulation(type).setPosition(pos);
     } else { return null; }
-  }
-
-  makeAnnotation(text) {
-    let font_face = this.customizations["font-face"];
-    let font_size = this.customizations["font-size"];
-    let font_style = this.customizations["font-style"];
-    let aposition = this.customizations["annotation-position"];
-
-    let VJUST = Vex.Flow.Annotation.VerticalJustify;
-    let default_vjust = aposition === "top" ? VJUST.TOP : VJUST.BOTTOM;
-
-    let makeIt = function(text, just) {
-      if (just == null) { just = default_vjust; }
-      return new Vex.Flow.Annotation(text).
-        setFont(font_face, font_size, font_style).
-        setVerticalJustification(just);
-    };
-
-    let parts = text.match(/^\.([^-]*)-([^-]*)-([^.]*)\.(.*)/);
-    if (parts != null) {
-      font_face = parts[1];
-      font_size = parts[2];
-      font_style = parts[3];
-      text = parts[4];
-      return text ? makeIt(text) : null;
-    }
-
-    parts = text.match(/^\.([^.]*)\.(.*)/);
-    if (parts != null) {
-      let just = default_vjust;
-      text = parts[2];
-      switch (parts[1]) {
-        case "big":
-          font_style = "bold";
-          font_size = "14";
-          break;
-        case "italic": case "italics":
-          font_face = "Times";
-          font_style = "italic";
-          break;
-        case "medium":
-          font_size = "12";
-          break;
-        case "top":
-          just = VJUST.TOP;
-          this.customizations["annotation-position"] = "top";
-          break;
-        case "bottom":
-          just = VJUST.BOTTOM;
-          this.customizations["annotation-position"] = "bottom";
-          break;
-      }
-      return text ? makeIt(text, just) : null;
-    }
-
-    return makeIt(text);
-  }
-
-  addAnnotations(annotations) {
-    let annotation, i, note, score_articulation
-    let stave = _.last(this.staves)
-    let stave_notes = stave.note_notes
-
-    // Add text annotations
-    let iterable1 = stave_notes.slice(stave_notes.length - annotations.length)
-    for (i = 0; i < iterable1.length; i++) {
-      note = iterable1[i]
-      if (!getScoreArticulationParts(annotations[i])) {
-        annotation = this.makeAnnotation(annotations[i])
-        if (annotation) {
-          note.addAnnotation(0, this.makeAnnotation(annotations[i]))
-        }
-      }
-    }
-
-    // Add glyph articulations, strokes on score
-    if (stave.note) {
-      return (() => {
-        let result = [];
-        let iterable2 = stave_notes.slice(stave_notes.length - annotations.length);
-        for (i = 0; i < iterable2.length; i++) {
-          note = iterable2[i]
-          let item
-
-          score_articulation = this.makeScoreArticulation(annotations[i])
-
-          if (score_articulation != null) {
-            note.addArticulation(0, score_articulation)
-          }
-
-          result.push(item)
-        }
-        return result
-      })();
-    }
   }
 
   addStaveArticulation(type, first_note, last_note, first_indices, last_indices) {
@@ -827,11 +748,22 @@ export default class Artist {
     for (let i = 0; i < specs.length; i++) {
       let spec = specs[i]
       let saved_duration = this.current_duration
-      if (durations[i] != null) { this.setDuration(durations[i].time, durations[i].dot); }
-      this.addTabNote(tab_specs[i], play_notes[i]);
-      if (stave.note != null) { this.addStaveNote({spec, accidentals: accidentals[i], play_note: play_notes[i]}); }
+
+      if (durations[i] != null) {
+        this.setDuration(durations[i].time, durations[i].dot)
+      }
+
+      this.addTabNote(tab_specs[i], play_notes[i])
+
+      if (stave.note != null) {
+        this.addStaveNote({spec, accidentals: accidentals[i], play_note: play_notes[i]})
+      }
+
       this.addArticulations(articulations[i])
-      if (decorators[i] != null) { this.addDecorator(decorators[i]); }
+
+      if (decorators[i] != null) {
+        this.addDecorator(decorators[i])
+      }
     }
 
     if (chord_articulation != null) {
@@ -851,72 +783,6 @@ export default class Artist {
     return this.addChord([note]);
   }
 
-  addTextVoice() {
-    return _.last(this.staves).text_voices.push([]);
-  }
-
-  setTextFont(font) {
-    if (font != null) {
-      let parts = font.match(/([^-]*)-([^-]*)-([^.]*)/);
-      if (parts != null) {
-        this.customizations["font-face"] = parts[1];
-        this.customizations["font-size"] = parseInt(parts[2], 10)
-        return this.customizations["font-style"] = parts[3]
-      }
-    }
-  }
-
-  addTextNote(text, position, justification, smooth, ignoreTicks) {
-    if (position == null) { position = 0; }
-    if (justification == null) { justification = "center"; }
-    if (smooth == null) { smooth = true; }
-    if (ignoreTicks == null) { ignoreTicks = false; }
-
-    let voices = _.last(this.staves).text_voices
-
-    if (_.isEmpty(voices)) {
-      throw new Vex.RERR("ArtistError", "Can't add text note without text voice")
-    }
-
-    let font_face = this.customizations["font-face"]
-    let font_size = this.customizations["font-size"]
-    let font_style = this.customizations["font-style"]
-
-    let just = (() => { switch (justification) {
-      case "center":
-        return Vex.Flow.TextNote.Justification.CENTER
-      case "left":
-        return Vex.Flow.TextNote.Justification.LEFT
-      case "right":
-        return Vex.Flow.TextNote.Justification.RIGHT
-      default:
-        return Vex.Flow.TextNote.Justification.CENTER
-    } })()
-
-    let duration = ignoreTicks ? "b" : this.current_duration
-
-    let struct = {
-      text,
-      duration,
-      smooth,
-      ignoreTicks,
-      font: {
-        family: font_face,
-        size: font_size,
-        weight: font_style
-      }
-    }
-
-    if (text[0] === "#") {
-      struct.glyph = text.slice(1)
-    }
-
-    let note = new Vex.Flow.TextNote(struct)
-      .setLine(position).setJustification(just)
-
-    return _.last(voices).push(note)
-  }
-
   addVoice(options) {
     let stave = _.last(this.staves)
     if (stave == null) { return this.addStave(options) }
@@ -934,11 +800,11 @@ export default class Artist {
 
   addStave(element, options) {
     let opts = {
-      tuning: "standard",
-      clef: "treble",
-      key: "C",
-      notation: element === "tabstave" ? "false" : "true",
-      tablature: element === "stave" ? "false" : "true",
+      tuning: 'standard',
+      clef: 'treble',
+      key: 'C',
+      notation: element === 'tabstave' ? 'false' : 'true',
+      tablature: element === 'stave' ? 'false' : 'true',
       strings: 6
     }
 

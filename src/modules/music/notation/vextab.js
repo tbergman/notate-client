@@ -44,7 +44,7 @@ export default class VexTab extends VexTabMods {
     }
 
     if (element.command === "annotations") {
-      this.artist.addAnnotations(element.params)
+      this.artist.annotations.addAnnotations(element.params)
     }
 
     if (element.command === "rest") {

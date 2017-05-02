@@ -27,15 +27,18 @@ class Stave extends Component {
       height = 500,
       clef = 'treble',
       keySignature = 'C',
-      time = '4/4'
+      time = '4/4',
+      annotations = '',
     } = this.props
 
+    const text = (annotations ? `text ${annotations}` : '')
     const notation = `
       stave notation=true tablature=false
         key=${keySignature.trim()}
         time=${time.trim()}
         clef=${clef.trim()}
       notes ${this.props.notes.trim()}
+      ${text}
     `
     const artist = new Artist(10, 10, 800, {scale: 0.8})
     const vextab = new VexTab(artist)

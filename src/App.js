@@ -90,6 +90,10 @@ class App extends Component {
         <Stave description={'Rhythm Notation'} notes={`
           :16S (A/4.A/5) (A/4.A/5)`
         }/>
+
+        <Stave description={'Annotations'} annotations={':w, C Major, G Major'} notes={`
+          C-E-G/4 ## | G-B/4 D/5 ##`
+        }/>
       </div>
     );
   }
