@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Vex.Flow.VexTab
 // Copyright 2012 Mohit Cheppudira <mohit@muthanna.com>
 //
@@ -16,13 +18,16 @@ var VexTab = (function() {
   VexTab = class VexTab {
     static initClass() {
       this.DEBUG = false;
-      L = function(...args) { if (VexTab.DEBUG) { return (typeof console !== 'undefined' && console !== null ? console.log("(Vex.Flow.VexTab)", ...Array.from(args)) : undefined); } };
+
+      L = function(...args) {
+        if (VexTab.DEBUG) {
+          return (typeof console !== 'undefined' && console !== null ? console.log("(Vex.Flow.VexTab)", ...Array.from(args)) : undefined);
+        }
+      }
 
       // Private methods
       newError = (object, msg) =>
-        new Vex.RERR("ParseError",
-                     `${msg} in line ${object._l} column ${object._c}`)
-      ;
+        new Vex.RERR("ParseError", `${msg} in line ${object._l} column ${object._c}`)
     }
 
     // Public methods

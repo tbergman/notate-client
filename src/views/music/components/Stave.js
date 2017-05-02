@@ -11,8 +11,10 @@ type Props = {
   width?: number,
   height?: number,
   clef?: string,
+  keySignature?: string,
+  time?: string,
   description: string,
-  notation: string
+  notes: string
 }
 
 class Stave extends Component {
@@ -20,15 +22,29 @@ class Stave extends Component {
   props: Props
 
   componentDidMount() {
-    const { width = 500, height = 500, clef = 'treble' } = this.props
+    const {
+      width = 500,
+      height = 500,
+      clef = 'treble',
+      keySignature = 'C',
+      time = '4/4'
+    } = this.props
+
     const artist = new Artist(10, 10, 600, {scale: 0.8});
     const vextab = new VexTab(artist);
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
     renderer.resize(width, height)
 
+    const notation = `
+      stave notation=true tablature=false
+        key=${keySignature.trim()}
+        time=${time.trim()}
+        clef=${clef.trim()}
+      notes ${this.props.notes.trim()}
+    `
     vextab.reset();
     artist.reset();
-    vextab.parse(this.props.notation);
+    vextab.parse(notation);
     artist.render(renderer);
   }
 

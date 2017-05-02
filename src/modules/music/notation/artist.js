@@ -1,3 +1,12 @@
+/* eslint-disable */
+
+// VexTab Artist
+// Copyright 2012 Mohit Cheppudira <mohit@muthanna.com>
+//
+// This class is responsible for rendering the elements
+// parsed by Vex.Flow.VexTab.
+
+
 import Vex from 'vexflow';
 import _ from 'lodash';
 
@@ -13,9 +22,12 @@ var Artist = (function() {
   Artist = class Artist {
     static initClass() {
       this.DEBUG = false;
-      L = function(...args) { if (Artist.DEBUG) { return (typeof console !== 'undefined' && console !== null ? console.log("(Vex.Flow.Artist)", ...Array.from(args)) : undefined); } };
 
-      this.NOLOGO = false;
+      L = (...args) => {
+        if (Artist.DEBUG) {
+          return (typeof console !== 'undefined' && console !== null ? console.log("(Vex.Flow.Artist)", ...Array.from(args)) : undefined)
+        }
+      };
 
       parseBool = str => str === "true";
 
@@ -174,7 +186,7 @@ var Artist = (function() {
         font_face: "Arial",
         font_size: 10,
         font_style: null,
-        bottom_spacing: 20 + (Artist.NOLOGO ? 0 : 10),
+        bottom_spacing: 20,
         tab_stave_lower_spacing: 10,
         note_stave_lower_spacing: 0,
         scale: 1.0
@@ -331,7 +343,6 @@ var Artist = (function() {
     // based on current guitar tuning and stave key. The accidentals may be different
     // for repeats of the same notes because they get set (or cancelled) by the Key
     // Manager.
-
     getNoteForFret(fret, string) {
       let spec = this.tuning.getNoteForFret(fret, string);
       let spec_props = Vex.Flow.keyProperties(spec);
