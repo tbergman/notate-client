@@ -37,7 +37,6 @@ export class TaskList extends Component {
       </div>
     )
   }
-
 }
 
 const mapStateToProps = (state: AppState) => ({

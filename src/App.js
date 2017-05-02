@@ -1,8 +1,8 @@
 // @flow
 
 import React, { Component } from 'react';
-import TaskButtons from 'views/task_list/components/TaskButtons'
-import TaskList from 'views/task_list/components/TaskList'
+import Stave from 'views/music/components/Stave'
+import Note from 'views/music/components/Note'
 
 import logo from './logo.svg'
 import './App.css'
@@ -15,11 +15,12 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <TaskButtons />
-        <TaskList />
+
+        <Stave>
+          <Note duration={4} pitch={'g/4'} />
+          <Note duration={4} pitch={'f/4'} />
+          <Note duration={4} pitch={'e/4'} />
+        </Stave>
       </div>
     );
   }
