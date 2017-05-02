@@ -16,8 +16,6 @@ let formatAndRender = undefined;
 let makeDuration = undefined;
 let makeBend = undefined;
 
-let getFingering = undefined;
-let getStrokeParts = undefined;
 let getScoreArticulationParts = undefined;
 
 const __guard__ = (value, transform) => {
@@ -166,10 +164,6 @@ var Artist = (function() {
 
         return {type: direction, text};
       };
-
-      getFingering = text => text.match(/^\.fingering\/([^.]+)\./);
-
-      getStrokeParts = text => text.match(/^\.stroke\/([^.]+)\./);
 
       getScoreArticulationParts = text => text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./);
     }
@@ -541,90 +535,7 @@ var Artist = (function() {
         return this.tab_articulations.push(tab_modifier);
       }
     }
-    makeFingering(text) {
-      let parts = getFingering(text);
-      let POS = Vex.Flow.Modifier.Position;
-      let fingers = [];
-      let fingering = [];
 
-      if (parts != null) {
-        fingers = (Array.from(parts[1].split(/-/)).map((p) => p.trim()));
-      } else {
-        return null;
-      }
-
-      let badFingering = () => new Vex.RERR("ArtistError", `Bad fingering: ${parts[1]}`);
-
-      for (let finger of Array.from(fingers)) {
-        let pieces = finger.match(/(\d+):([ablr]):([fs]):([^-.]+)/);
-        if (pieces == null) { throw badFingering(); }
-
-        let note_number = parseInt(pieces[1], 10) - 1;
-        let position = POS.RIGHT;
-        switch (pieces[2]) {
-          case "l":
-            position = POS.LEFT;
-            break;
-          case "r":
-            position = POS.RIGHT;
-            break;
-          case "a":
-            position = POS.ABOVE;
-            break;
-          case "b":
-            position = POS.BELOW;
-            break;
-        }
-
-        let modifier = null;
-        let number = pieces[4];
-        switch (pieces[3]) {
-          case "s":
-            modifier = new Vex.Flow.StringNumber(number).setPosition(position);
-            break;
-          case "f":
-            modifier = new Vex.Flow.FretHandFinger(number).setPosition(position);
-            break;
-        }
-
-        fingering.push({num: note_number, modifier});
-      }
-
-      return fingering;
-    }
-    makeStroke(text) {
-      let parts = getStrokeParts(text);
-      let TYPE = Vex.Flow.Stroke.Type;
-      let type = null;
-
-      if (parts != null) {
-        switch (parts[1]) {
-          case "bu":
-            type = TYPE.BRUSH_UP;
-            break;
-          case "bd":
-            type = TYPE.BRUSH_DOWN;
-            break;
-          case "ru":
-            type = TYPE.ROLL_UP;
-            break;
-          case "rd":
-            type = TYPE.ROLL_DOWN;
-            break;
-          case "qu":
-            type = TYPE.RASQUEDO_UP;
-            break;
-          case "qd":
-            type = TYPE.RASQUEDO_DOWN;
-            break;
-          default:
-            throw new Vex.RERR("ArtistError", `Invalid stroke type: ${parts[1]}`);
-        }
-        return new Vex.Flow.Stroke(type);
-      } else {
-        return null;
-      }
-    }
     makeScoreArticulation(text) {
       let parts = getScoreArticulationParts(text);
       if (parts != null) {
@@ -694,83 +605,59 @@ var Artist = (function() {
     }
 
     addAnnotations(annotations) {
-      let annotation, i, note, score_articulation, stroke;
-      let stave = _.last(this.staves);
-      let stave_notes = stave.note_notes;
-      let { tab_notes } = stave;
-
-      if (annotations.length > tab_notes.length) {
-        throw new Vex.RERR("ArtistError", "More annotations than note elements");
-      }
+      let annotation, i, note, score_articulation
+      let stave = _.last(this.staves)
+      let stave_notes = stave.note_notes
 
       // Add text annotations
-      if (stave.tab) {
-        let iterable = tab_notes.slice(tab_notes.length - annotations.length);
-        for (i = 0; i < iterable.length; i++) {
-          let tab_note = iterable[i];
-          if (getScoreArticulationParts(annotations[i])) {
-            score_articulation = this.makeScoreArticulation(annotations[i]);
-            tab_note.addModifier(score_articulation, 0);
-          } else if (getStrokeParts(annotations[i])) {
-            stroke = this.makeStroke(annotations[i]);
-            tab_note.addModifier(stroke, 0);
-          } else {
-            annotation = this.makeAnnotation(annotations[i]);
-            if (annotation) { tab_note.addModifier(this.makeAnnotation(annotations[i]), 0); }
-          }
-        }
-      } else {
-        let iterable1 = stave_notes.slice(stave_notes.length - annotations.length);
-        for (i = 0; i < iterable1.length; i++) {
-          note = iterable1[i];
-          if (!getScoreArticulationParts(annotations[i])) {
-            annotation = this.makeAnnotation(annotations[i]);
-            if (annotation) { note.addAnnotation(0, this.makeAnnotation(annotations[i])); }
+      let iterable1 = stave_notes.slice(stave_notes.length - annotations.length)
+      for (i = 0; i < iterable1.length; i++) {
+        note = iterable1[i]
+        if (!getScoreArticulationParts(annotations[i])) {
+          annotation = this.makeAnnotation(annotations[i])
+          if (annotation) {
+            note.addAnnotation(0, this.makeAnnotation(annotations[i]))
           }
         }
       }
 
-      // Add glyph articulations, strokes, or fingerings on score
+      // Add glyph articulations, strokes on score
       if (stave.note) {
         return (() => {
           let result = [];
           let iterable2 = stave_notes.slice(stave_notes.length - annotations.length);
           for (i = 0; i < iterable2.length; i++) {
-            note = iterable2[i];
-            let item;
-            score_articulation = this.makeScoreArticulation(annotations[i]);
-            if (score_articulation != null) { note.addArticulation(0, score_articulation); }
+            note = iterable2[i]
+            let item
 
-            stroke = this.makeStroke(annotations[i]);
-            if (stroke != null) { note.addStroke(0, stroke); }
+            score_articulation = this.makeScoreArticulation(annotations[i])
 
-            let fingerings = this.makeFingering(annotations[i]);
-            if (fingerings != null) {
-              try {
-                item = (Array.from(fingerings).map((fingering) => note.addModifier(fingering.num, fingering.modifier)));
-              } catch (e) {
-                throw new Vex.RERR("ArtistError", `Bad note number in fingering: ${annotations[i]}`);
-              }
+            if (score_articulation != null) {
+              note.addArticulation(0, score_articulation)
             }
-            result.push(item);
+
+            result.push(item)
           }
-          return result;
+          return result
         })();
       }
     }
 
     addStaveArticulation(type, first_note, last_note, first_indices, last_indices) {
-      let articulation = null;
+      let articulation = null
+
       if (["b", "s", "h", "p", "t", "T"].includes(type)) {
         articulation = new Vex.Flow.StaveTie({
           first_note,
           last_note,
           first_indices,
-          last_indices
-          });
+          last_indices,
+        })
       }
 
-      if (articulation != null) { return this.stave_articulations.push(articulation); }
+      if (articulation != null) {
+        return this.stave_articulations.push(articulation)
+      }
     }
 
     // This gets the previous (second-to-last) non-bar non-ghost note.
@@ -815,7 +702,6 @@ var Artist = (function() {
         return __guard__(_.last(score_notes), x => x.addArticulation(0, score_modifier))
       }
     }
-
 
     addArticulations(articulations) {
       let stave = _.last(this.staves);

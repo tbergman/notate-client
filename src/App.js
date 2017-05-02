@@ -40,7 +40,7 @@ class App extends Component {
         }/>
 
         <Stave description={'Ties'} notes={`
-          A/4 b A/4 b B/4 b C/4`
+          A/4 T A/4 T B/4 T C/4`
         }/>
 
         <Stave description={'Chords'} notes={`
