@@ -19,7 +19,7 @@ describe('modules/toolbox', () => {
             }
         })
         let action: SetAccidentalAction = { type: SET_ACCIDENTAL, payload: newAccidental };
-        it('should change the accidental from natural to sharp', () => {
+        it('should change the accidental to a different value', () => {
             let currentState = initialState;
             let newState = toolboxReducer(currentState, action);
             expect(newState.selectedAccidental).toEqual(newAccidental);
@@ -40,7 +40,7 @@ describe('modules/toolbox', () => {
             }
         })
         let action: SetDurationAction = { type: SET_DURATION, payload: newDuration };
-        it('should change the duration from quarter to eighth', () => {
+        it('should change the duration to a different value', () => {
             let currentState = initialState;
             let newState = toolboxReducer(currentState, action);
             expect(newState.selectedDuration).toEqual(newDuration);
