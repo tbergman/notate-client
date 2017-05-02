@@ -21,7 +21,6 @@ class App extends Component {
         </p>
         <TaskButtons />
         <TaskList />
-        <Toolbox />
       </div>
     );
   }
