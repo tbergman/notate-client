@@ -12,25 +12,6 @@ import _ from 'lodash';
 let parseBool = str => str === "true";
 let makeDuration = (time, dot) => time + (dot ? "d" : "")
 let getScoreArticulationParts = text => text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./)
-
-let makeBend = function(from_fret, to_fret) {
-  let direction = Vex.Flow.Bend.UP
-  let text = "";
-
-  if (parseInt(from_fret, 10) > parseInt(to_fret, 10)) {
-    direction = Vex.Flow.Bend.DOWN
-  } else {
-    text = (() => { switch (Math.abs(to_fret - from_fret)) {
-      case 1: return "1/2"
-      case 2: return "Full"
-      case 3: return "1 1/2"
-      default: return `Bend to ${to_fret}`
-    } })()
-  }
-
-  return { type: direction, text }
-}
-
 let formatAndRender = undefined
 
 const __guard__ = (value, transform) => {
@@ -254,7 +235,6 @@ var Artist = (function() {
     }
 
     render(renderer) {
-      this.closeBends();
       renderer.resize(this.customizations.width * this.customizations.scale,
           (this.last_y + this.options.bottom_spacing) * this.customizations.scale);
       let ctx = renderer.getContext();
@@ -434,7 +414,6 @@ var Artist = (function() {
     }
 
     addBar(type) {
-      this.closeBends()
       this.key_manager.reset();
       let stave = _.last(this.staves);
 
@@ -459,55 +438,6 @@ var Artist = (function() {
       let bar_note = new Vex.Flow.BarNote().setType(type);
       stave.tab_notes.push(bar_note);
       if (stave.note != null) { return stave.note_notes.push(bar_note); }
-    }
-
-    openBends(first_note, last_note, first_indices, last_indices) {
-      let from_fret, last_index, to_fret;
-      let { tab_notes } = _.last(this.staves);
-
-      let start_note = first_note;
-      let start_indices = first_indices;
-      if (_.isEmpty(this.current_bends)) {
-        this.bend_start_index = tab_notes.length - 2;
-        this.bend_start_strings = first_indices;
-      } else {
-        start_note = tab_notes[this.bend_start_index];
-        start_indices = this.bend_start_strings;
-      }
-
-      let first_frets = start_note.getPositions();
-      let last_frets = last_note.getPositions();
-      return Array.from(start_indices).map((index, i) =>
-        ((last_index = last_indices[i]),
-        (from_fret = first_note.getPositions()[first_indices[i]]),
-        (to_fret = last_frets[last_index]),
-        this.current_bends[index] != null ? this.current_bends[index] : (this.current_bends[index] = []),
-        this.current_bends[index].push(makeBend(from_fret.fret, to_fret.fret))));
-    }
-
-    // Close and apply all the bends to the last N notes.
-    closeBends(offset) {
-      if (offset == null) { offset = 1; }
-      if (this.bend_start_index == null) { return; }
-
-      let { tab_notes } = _.last(this.staves);
-      for (let k in this.current_bends) {
-        let v = this.current_bends[k];
-        let phrase = [];
-        for (let bend of Array.from(v)) {
-          phrase.push(bend);
-        }
-        tab_notes[this.bend_start_index].addModifier(
-          new Vex.Flow.Bend(null, null, phrase), k);
-      }
-
-      // Replace bent notes with ghosts (make them invisible)
-      for (let tab_note of Array.from(tab_notes.slice(this.bend_start_index+1, +((tab_notes.length - 2) + offset) + 1 || undefined))) {
-        tab_note.setGhost(true);
-      }
-
-      this.current_bends = {};
-      return this.bend_start_index = null;
     }
 
     makeTuplets(tuplets, notes) {
@@ -700,10 +630,6 @@ var Artist = (function() {
       let stave = _.last(this.staves);
       let { tab_notes } = stave;
       let stave_notes = stave.note_notes;
-      if (_.isEmpty(tab_notes) || _.isEmpty(articulations)) {
-        this.closeBends(0);
-        return;
-      }
 
       let current_tab_note = _.last(tab_notes);
 
@@ -789,13 +715,10 @@ var Artist = (function() {
             prev_indices, current_indices);
         }
       }
-
-      if (!has_bends) { return this.closeBends(0); }
     }
 
     addRest(params) {
       let position;
-      this.closeBends();
 
       if (params["position"] === 0) {
         this.addStaveNote({
@@ -999,8 +922,6 @@ var Artist = (function() {
     }
 
     addVoice(options) {
-      this.closeBends()
-
       let stave = _.last(this.staves)
       if (stave == null) { return this.addStave(options) }
 
@@ -1058,7 +979,6 @@ var Artist = (function() {
         this.last_y += tab_stave.getHeight() + this.options.tab_stave_lower_spacing
       }
 
-      this.closeBends()
       let beam_groups = Vex.Flow.Beam.getDefaultBeamGroups(opts.time)
       this.staves.push({
         tab: tab_stave,
