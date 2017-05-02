@@ -10,27 +10,23 @@
 import Vex from 'vexflow';
 import _ from 'lodash';
 
+let parseBool = str => str === "true";
+
+let formatAndRender = undefined;
+let makeDuration = undefined;
+let makeBend = undefined;
+
+let getFingering = undefined;
+let getStrokeParts = undefined;
+let getScoreArticulationParts = undefined;
+
+const __guard__ = (value, transform) => {
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
+}
+
 var Artist = (function() {
-  let L = undefined;
-  let parseBool = undefined;
-  let formatAndRender = undefined;
-  let makeDuration = undefined;
-  let makeBend = undefined;
-  let getFingering = undefined;
-  let getStrokeParts = undefined;
-  let getScoreArticulationParts = undefined;
   Artist = class Artist {
     static initClass() {
-      this.DEBUG = false;
-
-      L = (...args) => {
-        if (Artist.DEBUG) {
-          return (typeof console !== 'undefined' && console !== null ? console.log("(Vex.Flow.Artist)", ...Array.from(args)) : undefined)
-        }
-      };
-
-      parseBool = str => str === "true";
-
       formatAndRender = function(ctx, tab, score, text_notes, customizations, options) {
         let i, multi_voice, notes, score_stave, tab_stave, voice;
         if (tab != null) { tab_stave = tab.stave; }
@@ -247,7 +243,6 @@ var Artist = (function() {
     }
 
     setOptions(options) {
-      L("setOptions: ", options);
       // Set @customizations
       let valid_options = _.keys(this.customizations);
       for (let k in options) {
@@ -272,7 +267,6 @@ var Artist = (function() {
     }
 
     render(renderer) {
-      L("Render: ", this.options);
       this.closeBends();
       renderer.resize(this.customizations.width * this.customizations.scale,
           (this.last_y + this.options.bottom_spacing) * this.customizations.scale);
@@ -292,7 +286,6 @@ var Artist = (function() {
       };
 
       for (let stave of Array.from(this.staves)) {
-        L("Rendering staves.");
         // If the last note is a bar, then remove it and render it as a stave modifier.
         if (stave.tab != null) { setBar(stave.tab, stave.tab_notes); }
         if (stave.note != null) { setBar(stave.note, stave.note_notes); }
@@ -313,12 +306,10 @@ var Artist = (function() {
         this.player_voices.push(voices);
       }
 
-      L("Rendering tab articulations.");
       for (var articulation of Array.from(this.tab_articulations)) {
         articulation.setContext(ctx).draw();
       }
 
-      L("Rendering note articulations.");
       for (articulation of Array.from(this.stave_articulations)) {
         articulation.setContext(ctx).draw();
       }
@@ -446,15 +437,17 @@ var Artist = (function() {
       }
     }
     setDuration(time, dot) {
-      if (dot == null) { dot = false; }
-      let t = time.split(/\s+/);
-      L("setDuration: ", t[0], dot);
-      return this.current_duration = makeDuration(t[0], dot);
+      if (dot == null) {
+        dot = false
+      }
+
+      const t = time.split(/\s+/)
+
+      return this.current_duration = makeDuration(t[0], dot)
     }
 
     addBar(type) {
-      L("addBar: ", type);
-      this.closeBends();
+      this.closeBends()
       this.key_manager.reset();
       let stave = _.last(this.staves);
 
@@ -483,7 +476,6 @@ var Artist = (function() {
 
     openBends(first_note, last_note, first_indices, last_indices) {
       let from_fret, last_index, to_fret;
-      L("openBends", first_note, last_note, first_indices, last_indices);
       let { tab_notes } = _.last(this.staves);
 
       let start_note = first_note;
@@ -510,7 +502,7 @@ var Artist = (function() {
     closeBends(offset) {
       if (offset == null) { offset = 1; }
       if (this.bend_start_index == null) { return; }
-      L(`closeBends(${offset})`);
+
       let { tab_notes } = _.last(this.staves);
       for (let k in this.current_bends) {
         let v = this.current_bends[k];
@@ -532,7 +524,6 @@ var Artist = (function() {
     }
 
     makeTuplets(tuplets, notes) {
-      L("makeTuplets", tuplets, notes);
       if (notes == null) { notes = tuplets; }
       if (!_.last(this.staves).note) { return; }
       let stave_notes = _.last(this.staves).note_notes;
@@ -768,55 +759,7 @@ var Artist = (function() {
       }
     }
 
-    addTabArticulation(type, first_note, last_note, first_indices, last_indices) {
-      L("addTabArticulations: ", type, first_note, last_note, first_indices, last_indices);
-
-      if (type === "t") {
-        last_note.addModifier(
-          new Vex.Flow.Annotation("T").
-            setVerticalJustification(Vex.Flow.Annotation.VerticalJustify.BOTTOM));
-      }
-
-      if (_.isEmpty(first_indices) && _.isEmpty(last_indices)) { return; }
-
-      let articulation = null;
-
-      if (type === "s") {
-        articulation = new Vex.Flow.TabSlide({
-          first_note,
-          last_note,
-          first_indices,
-          last_indices
-          });
-      }
-
-      if (["h", "p"].includes(type)) {
-        articulation = new Vex.Flow.TabTie({
-          first_note,
-          last_note,
-          first_indices,
-          last_indices
-          }, type.toUpperCase());
-      }
-
-      if (["T", "t"].includes(type)) {
-        articulation = new Vex.Flow.TabTie({
-          first_note,
-          last_note,
-          first_indices,
-          last_indices
-          }, " ");
-      }
-
-      if (type === "b") {
-        this.openBends(first_note, last_note, first_indices, last_indices);
-      }
-
-      if (articulation != null) { return this.tab_articulations.push(articulation); }
-    }
-
     addStaveArticulation(type, first_note, last_note, first_indices, last_indices) {
-      L("addStaveArticulations: ", type, first_note, last_note, first_indices, last_indices);
       let articulation = null;
       if (["b", "s", "h", "p", "t", "T"].includes(type)) {
         articulation = new Vex.Flow.StaveTie({
@@ -844,7 +787,6 @@ var Artist = (function() {
     }
 
     addDecorator(decorator) {
-      L("addDecorator: ", decorator);
       if (decorator == null) { return; }
 
       let stave = _.last(this.staves);
@@ -869,12 +811,13 @@ var Artist = (function() {
       }
 
       if (modifier != null) { _.last(tab_notes).addModifier(modifier, 0); }
-      if (score_modifier != null) { return __guard__(_.last(score_notes), x => x.addArticulation(0, score_modifier)); }
+      if (score_modifier != null) {
+        return __guard__(_.last(score_notes), x => x.addArticulation(0, score_modifier))
+      }
     }
 
 
     addArticulations(articulations) {
-      L("addArticulations: ", articulations);
       let stave = _.last(this.staves);
       let { tab_notes } = stave;
       let stave_notes = stave.note_notes;
@@ -961,11 +904,6 @@ var Artist = (function() {
           })());
         }
 
-        if (stave.tab != null) {
-          this.addTabArticulation(valid_articulation,
-            prev_tab_note, current_tab_note, prev_indices, current_indices);
-        }
-
         if (stave.note != null) {
           this.addStaveArticulation(valid_articulation,
             stave_notes[prev_index], _.last(stave_notes),
@@ -978,7 +916,6 @@ var Artist = (function() {
 
     addRest(params) {
       let position;
-      L("addRest: ", params);
       this.closeBends();
 
       if (params["position"] === 0) {
@@ -1016,7 +953,7 @@ var Artist = (function() {
     addChord(chord, chord_articulation, chord_decorator) {
       let current_duration, play_note;
       if (_.isEmpty(chord)) { return; }
-      L("addChord: ", chord);
+
       let stave = _.last(this.staves);
 
       let specs = [];          // The stave note specs
@@ -1201,7 +1138,6 @@ var Artist = (function() {
       };
 
       _.extend(opts, options);
-      L("addStave: ", element, opts);
 
       let tab_stave = null;
       let note_stave = null;
@@ -1245,22 +1181,30 @@ var Artist = (function() {
         beam_groups
       });
 
-      this.tuning.setTuning(opts.tuning);
-      this.key_manager.setKey(opts.key);
-
+      this.tuning.setTuning(opts.tuning)
+      this.key_manager.setKey(opts.key)
     }
 
     runCommand(line, _l, _c) {
-      if (_l == null) { _l = 0; }
-      if (_c == null) { _c = 0; }
-      L("runCommand: ", line);
+      if (_l == null) {
+        _l = 0
+      }
+
+      if (_c == null) {
+        _c = 0
+      }
+
       let words = line.split(/\s+/);
+
       switch (words[0]) {
-        case "octave-shift":
-          this.current_octave_shift = parseInt(words[1], 10);
-          return L("Octave shift: ", this.current_octave_shift);
-        default:
-          throw new Vex.RERR("ArtistError", `Invalid command '${words[0]}' at line ${_l} column ${_c}`);
+        case "octave-shift": {
+          this.current_octave_shift = parseInt(words[1], 10)
+          return
+        }
+
+        default: {
+          throw new Vex.RERR("ArtistError", `Invalid command '${words[0]}' at line ${_l} column ${_c}`)
+        }
       }
     }
   };
@@ -1269,6 +1213,3 @@ var Artist = (function() {
 })();
 
 export default Artist;
-function __guard__(value, transform) {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
-}

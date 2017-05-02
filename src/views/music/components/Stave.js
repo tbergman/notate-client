@@ -37,7 +37,7 @@ class Stave extends Component {
         clef=${clef.trim()}
       notes ${this.props.notes.trim()}
     `
-    const artist = new Artist(10, 10, width, {scale: 0.8})
+    const artist = new Artist(10, 10, 800, {scale: 0.8})
     const vextab = new VexTab(artist)
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
     renderer.resize(width, height)
