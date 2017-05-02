@@ -92,79 +92,81 @@ export default class VexTabMods {
 
   parseStaveText(textLine) {
     if (!_.isEmpty(textLine)) {
-      this.artist.addTextVoice();
+      this.artist.addTextVoice()
     }
 
-    let position = 0;
-    let justification = 'center';
-    let smooth = true;
-    let font = null;
+    let position = 0
+    let justification = 'center'
+    let smooth = true
+    let font = null
 
-    let bartext = () => this.artist.addTextNote('', 0, justification, false, true);
+    let bartext = () => this.artist.addTextNote('', 0, justification, false, true)
 
     let createNote = text => {
-      let ignoreTicks = false;
+      let ignoreTicks = false
       if (text[0] === '|') {
-        ignoreTicks = true;
-        text = text.slice(1);
+        ignoreTicks = true
+        text = text.slice(1)
       }
 
       try {
-        return this.artist.addTextNote(text, position, justification, smooth, ignoreTicks);
+        return this.artist.addTextNote(text, position, justification, smooth, ignoreTicks)
       } catch (e) {
-        throw newError(`Bad text or duration. Did you forget a comma?${e}`);
+        throw newError(`Bad text or duration. Did you forget a comma?${e}`)
       }
-    };
+    }
 
     return (() => {
-      let result = [];
+      let result = []
+
       for (let str of Array.from(textLine)) {
-        let text = str.text.trim();
+        let text = str.text.trim()
+
         if (text.match(/\.font=.*/)) {
-          font = text.slice(6);
-          result.push(this.artist.setTextFont(font));
+          font = text.slice(6)
+          result.push(this.artist.setTextFont(font))
         } else if (text[0] === ':') {
-          result.push(this.artist.setDuration(text));
+          result.push(this.artist.setDuration(text))
         } else if (text[0] === '.') {
-          let command = text.slice(1);
+          let command = text.slice(1)
 
           switch (command) {
             case 'center':
             case 'left':
             case 'right': {
-              result.push(justification = command);
-              break;
+              result.push(justification = command)
+              break
             }
 
             case 'strict': {
-              result.push(smooth = false);
-              break;
+              result.push(smooth = false)
+              break
             }
 
             case 'smooth': {
-              result.push(smooth = true);
-              break;
+              result.push(smooth = true)
+              break
             }
 
             case 'bar':
             case '|': {
-              result.push(bartext());
-              break;
+              result.push(bartext())
+              break
             }
 
             default: {
-              result.push(position = parseInt(text.slice(1), 10));
+              result.push(position = parseInt(text.slice(1), 10))
             }
           }
         } else if (text === '|') {
-          result.push(bartext());
+          result.push(bartext())
         } else if (text.slice(0, 2) === '++') {
-          result.push(this.artist.addTextVoice());
+          result.push(this.artist.addTextVoice())
         } else {
-          result.push(createNote(text));
+          result.push(createNote(text))
         }
       }
-      return result;
+      return result
     })();
   }
 };

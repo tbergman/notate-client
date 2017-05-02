@@ -30,11 +30,6 @@ class Stave extends Component {
       time = '4/4'
     } = this.props
 
-    const artist = new Artist(10, 10, 600, {scale: 0.8});
-    const vextab = new VexTab(artist);
-    const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
-    renderer.resize(width, height)
-
     const notation = `
       stave notation=true tablature=false
         key=${keySignature.trim()}
@@ -42,10 +37,12 @@ class Stave extends Component {
         clef=${clef.trim()}
       notes ${this.props.notes.trim()}
     `
-    vextab.reset();
-    artist.reset();
-    vextab.parse(notation);
-    artist.render(renderer);
+    const artist = new Artist(10, 10, width, {scale: 0.8})
+    const vextab = new VexTab(artist)
+    const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
+    renderer.resize(width, height)
+    vextab.parse(notation)
+    artist.render(renderer)
   }
 
   render(): React.Element<any> {
