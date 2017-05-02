@@ -6,17 +6,32 @@
 // This class is responsible for rendering the elements
 // parsed by Vex.Flow.VexTab.
 
-
 import Vex from 'vexflow';
 import _ from 'lodash';
 
 let parseBool = str => str === "true";
+let makeDuration = (time, dot) => time + (dot ? "d" : "")
+let getScoreArticulationParts = text => text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./)
 
-let formatAndRender = undefined;
-let makeDuration = undefined;
-let makeBend = undefined;
+let makeBend = function(from_fret, to_fret) {
+  let direction = Vex.Flow.Bend.UP
+  let text = "";
 
-let getScoreArticulationParts = undefined;
+  if (parseInt(from_fret, 10) > parseInt(to_fret, 10)) {
+    direction = Vex.Flow.Bend.DOWN
+  } else {
+    text = (() => { switch (Math.abs(to_fret - from_fret)) {
+      case 1: return "1/2"
+      case 2: return "Full"
+      case 3: return "1 1/2"
+      default: return `Bend to ${to_fret}`
+    } })()
+  }
+
+  return { type: direction, text }
+}
+
+let formatAndRender = undefined
 
 const __guard__ = (value, transform) => {
   return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
@@ -144,28 +159,6 @@ var Artist = (function() {
           if (score != null) { return score_voices; } else { return tab_voices; }
         }
       };
-
-      makeDuration = (time, dot) => time + (dot ? "d" : "");
-
-      makeBend = function(from_fret, to_fret) {
-        let direction = Vex.Flow.Bend.UP;
-        let text = "";
-
-        if (parseInt(from_fret, 10) > parseInt(to_fret, 10)) {
-          direction = Vex.Flow.Bend.DOWN;
-        } else {
-          text = (() => { switch (Math.abs(to_fret - from_fret)) {
-            case 1: return "1/2";
-            case 2: return "Full";
-            case 3: return "1 1/2";
-            default: return `Bend to ${to_fret}`;
-          } })();
-        }
-
-        return {type: direction, text};
-      };
-
-      getScoreArticulationParts = text => text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./);
     }
 
     constructor(x, y, width, options) {
@@ -900,35 +893,39 @@ var Artist = (function() {
 
         let play_octave = parseInt(new_octave, 10) + this.current_octave_shift;
 
-        current_duration = (note.time != null) ? {time: note.time, dot: note.dot} : null;
-        specs[current_position].push(`${new_note}/${new_octave}`);
-        play_notes[current_position].push(`${play_note}/${play_octave}`);
-        accidentals[current_position].push(accidental);
-        tab_specs[current_position].push({fret: note.fret, str: note.string});
-        if (note.articulation != null) { articulations[current_position].push(note.articulation); }
-        durations[current_position] = current_duration;
-        if (note.decorator != null) { decorators[current_position] = note.decorator; }
+        current_duration = (note.time != null) ? {time: note.time, dot: note.dot} : null
+        specs[current_position].push(`${new_note}/${new_octave}`)
+        play_notes[current_position].push(`${play_note}/${play_octave}`)
+        accidentals[current_position].push(accidental)
+        tab_specs[current_position].push({fret: note.fret, str: note.string})
+        if (note.articulation != null) { articulations[current_position].push(note.articulation) }
+        durations[current_position] = current_duration
+        if (note.decorator != null) { decorators[current_position] = note.decorator }
 
-        current_position++;
+        current_position++
       }
 
       for (let i = 0; i < specs.length; i++) {
-        let spec = specs[i];
-        let saved_duration = this.current_duration;
+        let spec = specs[i]
+        let saved_duration = this.current_duration
         if (durations[i] != null) { this.setDuration(durations[i].time, durations[i].dot); }
         this.addTabNote(tab_specs[i], play_notes[i]);
         if (stave.note != null) { this.addStaveNote({spec, accidentals: accidentals[i], play_note: play_notes[i]}); }
-        this.addArticulations(articulations[i]);
+        this.addArticulations(articulations[i])
         if (decorators[i] != null) { this.addDecorator(decorators[i]); }
       }
 
       if (chord_articulation != null) {
-        let art = [];
-        for (let num = 1, end = num_notes, asc = 1 <= end; asc ? num <= end : num >= end; asc ? num++ : num--) { art.push(chord_articulation); }
+        let art = []
+        for (let num = 1, end = num_notes, asc = 1 <= end; asc ? num <= end : num >= end; asc ? num++ : num--) {
+          art.push(chord_articulation)
+        }
         this.addArticulations(art);
       }
 
-      if (chord_decorator != null) { return this.addDecorator(chord_decorator); }
+      if (chord_decorator != null) {
+        return this.addDecorator(chord_decorator)
+      }
     }
 
     addNote(note) {
@@ -944,72 +941,77 @@ var Artist = (function() {
         let parts = font.match(/([^-]*)-([^-]*)-([^.]*)/);
         if (parts != null) {
           this.customizations["font-face"] = parts[1];
-          this.customizations["font-size"] = parseInt(parts[2], 10);
-          return this.customizations["font-style"] = parts[3];
+          this.customizations["font-size"] = parseInt(parts[2], 10)
+          return this.customizations["font-style"] = parts[3]
         }
       }
     }
 
-    addTextNote(text, position, justification, smooth, ignore_ticks) {
+    addTextNote(text, position, justification, smooth, ignoreTicks) {
       if (position == null) { position = 0; }
       if (justification == null) { justification = "center"; }
       if (smooth == null) { smooth = true; }
-      if (ignore_ticks == null) { ignore_ticks = false; }
-      let voices = _.last(this.staves).text_voices;
-      if (_.isEmpty(voices)) { throw new Vex.RERR("ArtistError", "Can't add text note without text voice"); }
+      if (ignoreTicks == null) { ignoreTicks = false; }
 
-      let font_face = this.customizations["font-face"];
-      let font_size = this.customizations["font-size"];
-      let font_style = this.customizations["font-style"];
+      let voices = _.last(this.staves).text_voices
+
+      if (_.isEmpty(voices)) {
+        throw new Vex.RERR("ArtistError", "Can't add text note without text voice")
+      }
+
+      let font_face = this.customizations["font-face"]
+      let font_size = this.customizations["font-size"]
+      let font_style = this.customizations["font-style"]
 
       let just = (() => { switch (justification) {
         case "center":
-          return Vex.Flow.TextNote.Justification.CENTER;
+          return Vex.Flow.TextNote.Justification.CENTER
         case "left":
-          return Vex.Flow.TextNote.Justification.LEFT;
+          return Vex.Flow.TextNote.Justification.LEFT
         case "right":
-          return Vex.Flow.TextNote.Justification.RIGHT;
+          return Vex.Flow.TextNote.Justification.RIGHT
         default:
-          return Vex.Flow.TextNote.Justification.CENTER;
-      } })();
+          return Vex.Flow.TextNote.Justification.CENTER
+      } })()
 
-      let duration = ignore_ticks ? "b" : this.current_duration;
+      let duration = ignoreTicks ? "b" : this.current_duration
 
       let struct = {
         text,
         duration,
         smooth,
-        ignore_ticks,
+        ignoreTicks,
         font: {
           family: font_face,
           size: font_size,
           weight: font_style
         }
-      };
-
-      if (text[0] === "#") {
-        struct.glyph = text.slice(1);
       }
 
-      let note = new Vex.Flow.TextNote(struct).
-        setLine(position).setJustification(just);
+      if (text[0] === "#") {
+        struct.glyph = text.slice(1)
+      }
 
-      return _.last(voices).push(note);
+      let note = new Vex.Flow.TextNote(struct)
+        .setLine(position).setJustification(just)
+
+      return _.last(voices).push(note)
     }
 
     addVoice(options) {
-      this.closeBends();
-      let stave = _.last(this.staves);
-      if (stave == null) { return this.addStave(options); }
+      this.closeBends()
+
+      let stave = _.last(this.staves)
+      if (stave == null) { return this.addStave(options) }
 
       if (!_.isEmpty(stave.tab_notes)) {
-        stave.tab_voices.push(stave.tab_notes);
-        stave.tab_notes = [];
+        stave.tab_voices.push(stave.tab_notes)
+        stave.tab_notes = []
       }
 
       if (!_.isEmpty(stave.note_notes)) {
-        stave.note_voices.push(stave.note_notes);
-        return stave.note_notes = [];
+        stave.note_voices.push(stave.note_notes)
+        return stave.note_notes = []
       }
     }
 
@@ -1021,41 +1023,43 @@ var Artist = (function() {
         notation: element === "tabstave" ? "false" : "true",
         tablature: element === "stave" ? "false" : "true",
         strings: 6
-      };
+      }
 
-      _.extend(opts, options);
+      _.extend(opts, options)
 
-      let tab_stave = null;
-      let note_stave = null;
+      let tab_stave = null
+      let note_stave = null
 
       // This is used to line up tablature and notation.
-      let start_x = this.x + this.customizations["connector-space"];
-      let tabstave_start_x = 40;
+      let start_x = this.x + this.customizations["connector-space"]
+      let tabstave_start_x = 40
 
       if (opts.notation === "true") {
         note_stave = new Vex.Flow.Stave(start_x, this.last_y, this.customizations.width - 20,
-          {left_bar: false});
-        if (opts.clef !== "none") { note_stave.addClef(opts.clef); }
-        note_stave.addKeySignature(opts.key);
-        if (opts.time != null) { note_stave.addTimeSignature(opts.time); }
+          {left_bar: false})
+        if (opts.clef !== "none") { note_stave.addClef(opts.clef) }
+        note_stave.addKeySignature(opts.key)
+        if (opts.time != null) { note_stave.addTimeSignature(opts.time) }
 
         this.last_y += note_stave.getHeight() +
-                   this.options.note_stave_lower_spacing +
-                   parseInt(this.customizations["stave-distance"], 10);
-        tabstave_start_x = note_stave.getNoteStartX();
-        this.current_clef = opts.clef === "none" ? "treble" : opts.clef;
+          this.options.note_stave_lower_spacing +
+          parseInt(this.customizations["stave-distance"], 10)
+
+        tabstave_start_x = note_stave.getNoteStartX()
+        this.current_clef = opts.clef === "none" ? "treble" : opts.clef
       }
 
       if (opts.tablature === "true") {
         tab_stave = new Vex.Flow.TabStave(start_x, this.last_y, this.customizations.width - 20,
-          {left_bar: false}).setNumLines(opts.strings);
-        if (opts.clef !== "none") { tab_stave.addTabGlyph(); }
-        tab_stave.setNoteStartX(tabstave_start_x);
-        this.last_y += tab_stave.getHeight() + this.options.tab_stave_lower_spacing;
+          {left_bar: false}).setNumLines(opts.strings)
+
+        if (opts.clef !== "none") { tab_stave.addTabGlyph() }
+        tab_stave.setNoteStartX(tabstave_start_x)
+        this.last_y += tab_stave.getHeight() + this.options.tab_stave_lower_spacing
       }
 
-      this.closeBends();
-      let beam_groups = Vex.Flow.Beam.getDefaultBeamGroups(opts.time);
+      this.closeBends()
+      let beam_groups = Vex.Flow.Beam.getDefaultBeamGroups(opts.time)
       this.staves.push({
         tab: tab_stave,
         note: note_stave,
@@ -1065,7 +1069,7 @@ var Artist = (function() {
         note_notes: [],
         text_voices: [],
         beam_groups
-      });
+      })
 
       this.tuning.setTuning(opts.tuning)
       this.key_manager.setKey(opts.key)
@@ -1094,6 +1098,7 @@ var Artist = (function() {
       }
     }
   };
+
   Artist.initClass();
   return Artist;
 })();
