@@ -214,10 +214,6 @@ export default class Artist {
     return this.renderer_context = null;
   }
 
-  attachPlayer(player) {
-    return this.player = player;
-  }
-
   setOptions(options) {
     this.annotations.setOptions(options)
 
@@ -236,14 +232,6 @@ export default class Artist {
     if (this.customizations.player === "true") {
       return this.last_y += 15
     }
-  }
-
-  getPlayerData() {
-    return {
-      voices: this.player_voices,
-      context: this.renderer_context,
-      scale: this.customizations.scale
-    };
   }
 
   render(renderer) {
