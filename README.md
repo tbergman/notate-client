@@ -11,6 +11,10 @@ Project folder organization follows a pattern described at [https://medium.com/l
 `yarn install`
 (if you don't have yarn, `brew install yarn`)
 
+to enable a pre commit hook to run on your your local environment:
+`cp ./pre-commit .git/hooks/pre-commit`
+`chmod +x .git/hooks/pre-commit`
+
 [DESIGN PARAMETERS]
 [[Note Positioning]]
 Horizontal note positioning should be done with flex layout. Each child of the flex container should express a duration in some smallest desired quantization (e.g. somewhere from quarter notes to 128th notes), though barlines should be flexible enough to adapt for measures with too many notes (a potential, and allowable, wrong measure).
@@ -55,7 +59,7 @@ a measure with a whole note G4. The user is asked to add another note a major th
 - A multiple-stop in a `Spine` (which we can call a chord), determines the vertical positioning of notes using flexbox
 - In any measure that's part of a question, there will be extra space at the end of the measure to add more notes,
   and, in this POC, we will not enforce a given time-signature, in order to allow students to enter _incorrect_ answers
-  
+
 _Achieving Task #1_
 Build an appropriate Redux representation of a notation state. `initialState` can include
 a representative `Question`, and a few buttons on the page can switch the notes in the state.
