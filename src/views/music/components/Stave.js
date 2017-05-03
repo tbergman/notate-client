@@ -13,7 +13,8 @@ type Props = {
   clef?: string,
   keySignature?: string,
   time?: string,
-  description: string,
+  description?: string,
+  annotations?: string,
   notes: string
 }
 
@@ -24,11 +25,11 @@ class Stave extends Component {
   componentDidMount() {
     const {
       width = 500,
-      height = 500,
       clef = 'treble',
       keySignature = 'C',
       time = '4/4',
       annotations = '',
+      notes = '',
     } = this.props
 
     const text = (annotations ? `text ${annotations}` : '')
@@ -37,13 +38,12 @@ class Stave extends Component {
         key=${keySignature.trim()}
         time=${time.trim()}
         clef=${clef.trim()}
-      notes ${this.props.notes.trim()}
+      notes ${notes.trim()}
       ${text}
     `
-    const artist = new Artist(10, 10, 800, {scale: 0.8})
+    const artist = new Artist(10, 10, width, { scale: 1 })
     const vextab = new VexTab(artist)
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
-    renderer.resize(width, height)
     vextab.parse(notation)
     artist.render(renderer)
   }
@@ -54,10 +54,7 @@ class Stave extends Component {
         <div className="description">
           {this.props.description}
         </div>
-
-        <div className="stave" ref={(div) => { this.staveContainer = div }}>
-
-        </div>
+        <div className="stave" ref={(div) => { this.staveContainer = div }} />
       </div>
     )
   }

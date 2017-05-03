@@ -24,7 +24,7 @@ class App extends Component {
         }/>
 
         <Stave description={'Accidentals'} notes={`
-          A#3_4/5 C##-D@@-E/5 Fn/5 C@/4`
+          A#/3 C##-D@@-E/5 Fn/5 C@/4`
         }/>
 
         <Stave description={'Bar Line'} notes={`
