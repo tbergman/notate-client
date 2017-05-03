@@ -36,7 +36,7 @@ export default class VexTab extends VexTabMods {
 
   parseCommand(element) {
     if (element.command === "bar") {
-      this.artist.addBar(element.type)
+      this.artist.bars.addBar(element.type)
     }
 
     if (element.command === "tuplet") {

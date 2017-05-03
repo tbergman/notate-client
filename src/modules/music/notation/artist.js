@@ -6,18 +6,19 @@
 // This class is responsible for rendering the elements
 // parsed by Vex.Flow.VexTab.
 
-import Vex from 'vexflow';
-import _ from 'lodash';
+import Vex from 'vexflow'
+import _ from 'lodash'
 
 import ArtistAnnotations from './artist.annotations'
 import ArtistTuplets from './artist.tuplets'
+import ArtistBars from './artist.bars'
 
-let parseBool = str => str === "true";
-let makeDuration = (time, dot) => time + (dot ? "d" : "")
+let parseBool = str => str === "true"
+let makeDuration = (time, dot) => time + (dot ? 'd' : '')
 let getScoreArticulationParts = text => text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./)
 
 const __guard__ = (value, transform) => {
-  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined;
+  return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
 }
 
 export default class Artist {
@@ -27,9 +28,6 @@ export default class Artist {
     this.width = width
 
     this.options = {
-      font_face: "Arial",
-      font_size: 10,
-      font_style: null,
       bottom_spacing: 20,
       tab_stave_lower_spacing: 10,
       note_stave_lower_spacing: 0,
@@ -42,6 +40,7 @@ export default class Artist {
 
     this.annotations = new ArtistAnnotations(this, this.options)
     this.tuplets = new ArtistTuplets(this)
+    this.bars = new ArtistBars(this)
 
     this.reset()
   }
@@ -425,33 +424,6 @@ export default class Artist {
     const t = time.split(/\s+/)
 
     return this.current_duration = makeDuration(t[0], dot)
-  }
-
-  addBar(type) {
-    this.key_manager.reset();
-    let stave = _.last(this.staves);
-
-    let TYPE = Vex.Flow.Barline.type;
-    type = (() => { switch (type) {
-      case "single":
-        return TYPE.SINGLE;
-      case "double":
-        return TYPE.DOUBLE;
-      case "end":
-        return TYPE.END;
-      case "repeat-begin":
-        return TYPE.REPEAT_BEGIN;
-      case "repeat-end":
-        return TYPE.REPEAT_END;
-      case "repeat-both":
-        return TYPE.REPEAT_BOTH;
-      default:
-        return TYPE.SINGLE;
-    } })();
-
-    let bar_note = new Vex.Flow.BarNote().setType(type);
-    stave.tab_notes.push(bar_note);
-    if (stave.note != null) { return stave.note_notes.push(bar_note); }
   }
 
   makeScoreArticulation(text) {
