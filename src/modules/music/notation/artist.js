@@ -66,33 +66,6 @@ export default class Artist {
       groups: options.beam_groups
     };
 
-    if (tab != null) {
-      multi_voice = (tab.voices.length > 1) ? true : false;
-      for (i = 0; i < tab.voices.length; i++) {
-        notes = tab.voices[i];
-        if (_.isEmpty(notes)) { continue; }
-        _.each(notes, note => note.setStave(tab_stave));
-        voice = new Vex.Flow.Voice(Vex.Flow.TIME4_4).
-          setMode(Vex.Flow.Voice.Mode.SOFT);
-        voice.addTickables(notes);
-        tab_voices.push(voice);
-
-        if (customizations["tab-stems"] === "true") {
-          if (multi_voice) {
-            beam_config.stem_direction = i === 0 ? 1 : -1;
-          } else {
-            beam_config.stem_direction = customizations["tab-stem-direction"] === "down" ? -1 : 1;
-          }
-
-          beam_config.beam_rests = false;
-          beams = beams.concat(Vex.Flow.Beam.generateBeams(voice.getTickables(), beam_config));
-        }
-      }
-
-      format_stave = tab_stave;
-      text_stave = tab_stave;
-    }
-
     beam_config.beam_rests = parseBool(customizations["beam-rests"]);
 
     if (score != null) {
@@ -134,11 +107,6 @@ export default class Artist {
       let formatter = new Vex.Flow.Formatter();
       let align_rests = false;
 
-      if (tab != null) {
-        if (!_.isEmpty(tab_voices)) { formatter.joinVoices(tab_voices); }
-        format_voices = tab_voices;
-      }
-
       if (score != null) {
         if (!_.isEmpty(score_voices)) { formatter.joinVoices(score_voices); }
         format_voices = format_voices.concat(score_voices);
@@ -146,24 +114,29 @@ export default class Artist {
       }
 
       if (!_.isEmpty(text_notes) && !_.isEmpty(text_voices)) {
-        formatter.joinVoices(text_voices);
-        format_voices = format_voices.concat(text_voices);
+        formatter.joinVoices(text_voices)
+        format_voices = format_voices.concat(text_voices)
       }
 
-      if (!_.isEmpty(format_voices)) { formatter.formatToStave(format_voices, format_stave, {align_rests}); }
-
-      if (tab != null) { _.each(tab_voices, voice => voice.draw(ctx, tab_stave)); }
-      if (score != null) { _.each(score_voices, voice => voice.draw(ctx, score_stave)); }
-      _.each(beams, beam => beam.setContext(ctx).draw());
-      if (!_.isEmpty(text_notes)) { _.each(text_voices, voice => voice.draw(ctx, text_stave)); }
-
-      if ((tab != null) && (score != null)) {
-        (new Vex.Flow.StaveConnector(score.stave, tab.stave))
-          .setType(Vex.Flow.StaveConnector.type.BRACKET)
-          .setContext(ctx).draw();
+      if (!_.isEmpty(format_voices)) {
+        formatter.formatToStave(format_voices, format_stave, {align_rests})
       }
 
-      if (score != null) { return score_voices; } else { return tab_voices; }
+      if (score != null) {
+        _.each(score_voices, voice => voice.draw(ctx, score_stave))
+      }
+
+      _.each(beams, beam => beam.setContext(ctx).draw())
+
+      if (!_.isEmpty(text_notes)) {
+        _.each(text_voices, voice => voice.draw(ctx, text_stave))
+      }
+
+      if (score != null) {
+        return score_voices
+      } else {
+        return tab_voices
+      }
     }
   }
 
@@ -281,68 +254,12 @@ export default class Artist {
       articulation.setContext(ctx).draw();
     }
 
-    if (this.player != null) {
-      if (this.customizations.player === "true") {
-        this.player.setTempo(parseInt(this.customizations.tempo, 10));
-        this.player.setInstrument(this.customizations.instrument);
-        this.player.render();
-      } else {
-        this.player.removeControls();
-      }
-    }
     this.rendered = true;
   }
 
   isRendered() { return this.rendered; }
 
   draw(renderer) { return this.render(renderer); }
-
-  // Given a fret/string pair, returns a note, octave, and required accidentals
-  // based on current guitar tuning and stave key. The accidentals may be different
-  // for repeats of the same notes because they get set (or cancelled) by the Key
-  // Manager.
-  getNoteForFret(fret, string) {
-    let spec = this.tuning.getNoteForFret(fret, string);
-    let spec_props = Vex.Flow.keyProperties(spec);
-
-    let selected_note = this.key_manager.selectNote(spec_props.key);
-    let accidental = null;
-
-    // Do we need to specify an explicit accidental?
-    switch (this.customizations.accidentals) {
-      case "standard":
-        if (selected_note.change) {
-          accidental = (selected_note.accidental != null) ? selected_note.accidental : "n";
-        }
-        break;
-      case "cautionary":
-        if (selected_note.change) {
-          accidental = (selected_note.accidental != null) ? selected_note.accidental : "n";
-        } else {
-          accidental = (selected_note.accidental != null) ? selected_note.accidental + "_c" : undefined;
-        }
-        break;
-      default:
-        throw new Vex.RERR("ArtistError", `Invalid value for option 'accidentals': ${this.customizations.accidentals}`);
-    }
-
-    let new_note = selected_note.note;
-    let new_octave = spec_props.octave;
-
-    // TODO(0xfe): This logic should probably be in the KeyManager code
-    let old_root = this.music_api.getNoteParts(spec_props.key).root;
-    let new_root = this.music_api.getNoteParts(selected_note.note).root;
-
-    // Figure out if there's an octave shift based on what the Key
-    // Manager just told us about the note.
-    if ((new_root === "b") && (old_root === "c")) {
-      new_octave--;
-    } else if ((new_root === "c") && (old_root === "b")) {
-      new_octave++;
-    }
-
-    return [new_note, new_octave, accidental];
-  }
 
   getNoteForABC(abc, string) {
     let { key } = abc;
@@ -419,72 +336,66 @@ export default class Artist {
   }
 
   addDecorator(decorator) {
-    if (decorator == null) { return; }
-
-    let stave = _.last(this.staves);
-    let { tab_notes } = stave;
-    let score_notes = stave.note_notes;
-    let modifier = null;
-    let score_modifier = null;
-
-    if (decorator === "v") {
-      modifier = new Vex.Flow.Vibrato();
+    if (decorator == null) {
+      return
     }
-    if (decorator === "V") {
-      modifier = new Vex.Flow.Vibrato().setHarsh(true);
-    }
+
+    let stave = _.last(this.staves)
+    let { tab_notes } = stave
+    let score_notes = stave.note_notes
+    let score_modifier = null
+
     if (decorator === "u") {
-      modifier = new Vex.Flow.Articulation("a|").setPosition(Vex.Flow.Modifier.Position.BOTTOM);
-      score_modifier = new Vex.Flow.Articulation("a|").setPosition(Vex.Flow.Modifier.Position.BOTTOM);
+      score_modifier = new Vex.Flow.Articulation("a|").setPosition(Vex.Flow.Modifier.Position.BOTTOM)
     }
     if (decorator === "d") {
-      modifier = new Vex.Flow.Articulation("am").setPosition(Vex.Flow.Modifier.Position.BOTTOM);
-      score_modifier = new Vex.Flow.Articulation("am").setPosition(Vex.Flow.Modifier.Position.BOTTOM);
+      score_modifier = new Vex.Flow.Articulation("am").setPosition(Vex.Flow.Modifier.Position.BOTTOM)
     }
 
-    if (modifier != null) { _.last(tab_notes).addModifier(modifier, 0); }
     if (score_modifier != null) {
-      return __guard__(_.last(score_notes), x => x.articulations.addArticulation(0, score_modifier))
+      return __guard__(_.last(score_notes), x => x.addArticulation(0, score_modifier))
     }
   }
 
   addChord(chord, chord_articulation, chord_decorator) {
-    let current_duration, play_note;
-    if (_.isEmpty(chord)) { return; }
+    let current_duration, play_note
+    if (_.isEmpty(chord)) {
+      return
+    }
 
-    let stave = _.last(this.staves);
+    let stave = _.last(this.staves)
 
-    let specs = [];          // The stave note specs
-    let play_notes = [];     // Notes to be played by audio players
-    let accidentals = [];    // The stave accidentals
-    let articulations = [];  // Articulations (ties, bends, taps)
-    let decorators = [];     // Decorators (vibratos, harmonics)
-    let tab_specs = [];      // The tab notes
-    let durations = [];      // The duration of each position
-    let num_notes = 0;
+    let specs = []          // The stave note specs
+    let play_notes = []     // Notes to be played by audio players
+    let accidentals = []    // The stave accidentals
+    let articulations = []  // Articulations (ties, bends, taps)
+    let decorators = []     // Decorators (vibratos, harmonics)
+    let tab_specs = []      // The tab notes
+    let durations = []      // The duration of each position
+    let num_notes = 0
 
     // Chords are complicated, because they can contain little
     // lines one each string. We need to keep track of the motion
     // of each line so we know which tick they belong in.
-    let current_string = _.first(chord).string;
-    let current_position = 0;
+    let current_string = _.first(chord).string
+    let current_position = 0
 
     for (let note of Array.from(chord)) {
-      num_notes++;
+      num_notes++
       if ((note.abc != null) || (note.string !== current_string)) {
-        current_position = 0;
-        current_string = note.string;
+        current_position = 0
+        current_string = note.string
       }
 
       if (specs[current_position] == null) {
         // New position. Create new element arrays for this
         // position.
-        specs[current_position] = [];
-        play_notes[current_position] = [];
-        accidentals[current_position] = [];
-        tab_specs[current_position] = [];
-        articulations[current_position] = [];
-        decorators[current_position] = [];
+        specs[current_position] = []
+        play_notes[current_position] = []
+        accidentals[current_position] = []
+        tab_specs[current_position] = []
+        articulations[current_position] = []
+        decorators[current_position] = []
       }
 
       let [new_note, new_octave, accidental] = Array.from([null, null, null]);
@@ -503,10 +414,7 @@ export default class Artist {
 
         play_note = `${new_note}${acc}`;
         if (note.fret == null) { note.fret = 'X'; }
-      } else if (note.fret != null) {
-        [new_note, new_octave, accidental] = Array.from(this.getNoteForFret(note.fret, note.string));
-        play_note = this.tuning.getNoteForFret(note.fret, note.string).split("/")[0];
-      } else {
+      } else if (note.fret == null) {
         throw new Vex.RERR("ArtistError", "No note specified");
       }
 
@@ -611,15 +519,6 @@ export default class Artist {
       this.current_clef = opts.clef === "none" ? "treble" : opts.clef
     }
 
-    if (opts.tablature === "true") {
-      tab_stave = new Vex.Flow.TabStave(start_x, this.last_y, this.customizations.width - 20,
-        {left_bar: false}).setNumLines(opts.strings)
-
-      if (opts.clef !== "none") { tab_stave.addTabGlyph() }
-      tab_stave.setNoteStartX(tabstave_start_x)
-      this.last_y += tab_stave.getHeight() + this.options.tab_stave_lower_spacing
-    }
-
     let beam_groups = Vex.Flow.Beam.getDefaultBeamGroups(opts.time)
     this.staves.push({
       tab: tab_stave,
@@ -634,28 +533,5 @@ export default class Artist {
 
     this.tuning.setTuning(opts.tuning)
     this.key_manager.setKey(opts.key)
-  }
-
-  runCommand(line, _l, _c) {
-    if (_l == null) {
-      _l = 0
-    }
-
-    if (_c == null) {
-      _c = 0
-    }
-
-    let words = line.split(/\s+/);
-
-    switch (words[0]) {
-      case "octave-shift": {
-        this.current_octave_shift = parseInt(words[1], 10)
-        return
-      }
-
-      default: {
-        throw new Vex.RERR("ArtistError", `Invalid command '${words[0]}' at line ${_l} column ${_c}`)
-      }
-    }
   }
 };

@@ -50,10 +50,6 @@ export default class VexTab extends VexTabMods {
     if (element.command === "rest") {
       this.artist.rests.addRest(element.params)
     }
-
-    if (element.command === "command") {
-      return this.artist.runCommand(element.params, element._l, element._c)
-    }
   }
 
   parseChord(element) {
@@ -62,19 +58,6 @@ export default class VexTab extends VexTabMods {
         note => _.pick(note, 'time', 'dot', 'fret', 'abc', 'octave', 'string', 'articulation', 'decorator')
       ),
       element.articulation, element.decorator)
-  }
-
-  parseFret(note) {
-    const parsedNote = _.pick(note,
-      'time',
-      'dot',
-      'fret',
-      'string',
-      'articulation',
-      'decorator'
-    )
-
-    return this.artist.addNote()
   }
 
   parseABC(note) {
@@ -113,7 +96,7 @@ export default class VexTab extends VexTabMods {
         if (element.abc) {
           item = this.parseABC(element)
         } else if (element.fret) {
-          item = this.parseFret(element)
+          // side effect
         }
 
         result.push(item)

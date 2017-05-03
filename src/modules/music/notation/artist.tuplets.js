@@ -22,7 +22,7 @@ export default class ArtistTuplets {
     }
 
     if (staveNotes.length < notes) {
-      throw new Vex.RERR('ArtistError', 'Not enough notes for tuplet')
+      // not enough notes
     }
 
     const modifier = new Vex.Flow.Tuplet(staveNotes.slice(staveNotes.length - notes), { num_notes: tuplets })

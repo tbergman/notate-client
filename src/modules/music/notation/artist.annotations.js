@@ -175,7 +175,7 @@ export default class ArtistAnnotation {
     }
   }
 
-  addTextNote(text, position = 0, justification = 'center', smooth = true, ignoreTicks = false) {
+  addTextNote(text, position = 0, smooth = true, ignoreTicks = false) {
     let voices = _.last(this.artist.staves).text_voices
 
     if (_.isEmpty(voices)) {
@@ -185,24 +185,6 @@ export default class ArtistAnnotation {
     let font_face = this.customizations['font-face']
     let font_size = this.customizations['font-size']
     let font_style = this.customizations['font-style']
-
-    let just = (() => { switch (justification) {
-      case 'center': {
-        return Vex.Flow.TextNote.Justification.CENTER
-      }
-
-      case 'left': {
-        return Vex.Flow.TextNote.Justification.LEFT
-      }
-
-      case 'right': {
-        return Vex.Flow.TextNote.Justification.RIGHT
-      }
-
-      default: {
-        return Vex.Flow.TextNote.Justification.CENTER
-      }
-    } })()
 
     let duration = ignoreTicks ? 'b' : this.artist.current_duration
 
@@ -224,18 +206,17 @@ export default class ArtistAnnotation {
 
     let note = new Vex.Flow.TextNote(struct)
       .setLine(position)
-      .setJustification(just)
+      .setJustification(Vex.Flow.TextNote.Justification.CENTER)
 
     return _.last(voices).push(note)
   }
 
   makeScoreArticulation(text) {
-    const getScoreArticulationParts = text => text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./)
-    const parts = getScoreArticulationParts(text)
+    const articulationParts = text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./)
 
-    if (parts != null) {
-      let type = parts[1]
-      let position = parts[2]
+    if (articulationParts != null) {
+      let type = articulationParts[1]
+      let position = articulationParts[2]
 
       let POSTYPE = Vex.Flow.Modifier.Position
       let pos = position === "t" ? POSTYPE.ABOVE : POSTYPE.BELOW

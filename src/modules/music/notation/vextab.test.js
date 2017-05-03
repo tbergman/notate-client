@@ -49,7 +49,7 @@ describe('notation parser', () => {
   it('bar line', () => {
     const code = `
       tabstave notation=true tablature=false time=4/4
-      notes C-D-E-F/4 | G-A-B/4 C/5
+      notes C-D-E-F/4 | G-A-B/4 C/5 =||
     `
     assertVextabParsesCode(code)
   })
@@ -195,6 +195,42 @@ describe('notation parser', () => {
       tabstave notation=true tablature=false time=4/4
       notes C-E-G/4 ## | G-B/4 D/5 ##
       text :w, C Major, G Major
+    `
+    assertVextabParsesCode(code)
+  })
+
+  it('annotation options', () => {
+    const code = `
+      options font-face=courier font-style=bold
+      tabstave notation=true tablature=false time=4/4
+      notes C-E-G/4 ## | G-B/4 D/5 ##
+      text :w, C Major, G Major
+    `
+    assertVextabParsesCode(code)
+  })
+
+  it('annotation inline styles', () => {
+    const code = `
+      options font-face=courier font-style=bold
+      tabstave notation=true tablature=false time=4/4
+      notes C-E-G/4 ## | G-B/4 D/5 ##
+      text :w, C Major, .font=Arial-14-bold, G Major
+    `
+    assertVextabParsesCode(code)
+  })
+
+  it('note annotations', () => {
+    const code = `
+      tabstave notation=true tablature=false time=4/4
+      notes C/4 $C$ E/4 $E$ G/4 $G$ ##
+    `
+    assertVextabParsesCode(code)
+  })
+
+  it('note annotations styles', () => {
+    const code = `
+      tabstave notation=true tablature=false time=4/4
+      notes C/4 $.italic.C$ E/4 $.big.E$ G/4 $.medium.G$ B/4 $.top.B$ C/5 $.bottom.C$
     `
     assertVextabParsesCode(code)
   })

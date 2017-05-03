@@ -62,21 +62,6 @@ export default class VexTabMods {
           break;
         }
 
-        case 'tuning':
-          try {
-            new Vex.Flow.Tuning(option.value);
-          } catch (error2) {
-            e = error2;
-            throw error(`Invalid tuning: '${option.value}'`);
-          }
-          break;
-
-        case 'strings': {
-          let num_strings = parseInt(option.value);
-          if ((num_strings < 4) || (num_strings > 8)) { throw error(`Invalid number of strings: ${num_strings}`); }
-          break;
-        }
-
         default: {
           throw error(`Invalid option '${option.key}'`);
         }
@@ -96,11 +81,10 @@ export default class VexTabMods {
     }
 
     let position = 0
-    let justification = 'center'
     let smooth = true
     let font = null
 
-    let bartext = () => this.artist.annotations.addTextNote('', 0, justification, false, true)
+    let bartext = () => this.artist.annotations.addTextNote('', 0, false, true)
 
     let createNote = text => {
       let ignoreTicks = false
@@ -110,7 +94,7 @@ export default class VexTabMods {
       }
 
       try {
-        return this.artist.annotations.addTextNote(text, position, justification, smooth, ignoreTicks)
+        return this.artist.annotations.addTextNote(text, position, smooth, ignoreTicks)
       } catch (e) {
         throw newError(`Bad text or duration. Did you forget a comma?${e}`)
       }
@@ -131,13 +115,6 @@ export default class VexTabMods {
           let command = text.slice(1)
 
           switch (command) {
-            case 'center':
-            case 'left':
-            case 'right': {
-              result.push(justification = command)
-              break
-            }
-
             case 'strict': {
               result.push(smooth = false)
               break

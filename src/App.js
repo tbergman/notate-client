@@ -28,7 +28,7 @@ class App extends Component {
         }/>
 
         <Stave description={'Bar Line'} notes={`
-          C-D-E-F/4 | G-A-B/4 C/5`
+          C-D-E-F/4 | G-A-B/4 C/5 =||`
         }/>
 
         <Stave description={'Fancy Bar Lines'} notes={`
@@ -89,6 +89,14 @@ class App extends Component {
 
         <Stave description={'Rhythm Notation'} notes={`
           :16S (A/4.A/5) (A/4.A/5)`
+        }/>
+
+        <Stave description={'Note Annotations'} notes={`
+          C/4 $.italics.C$ E/4 $E$ G/4 $G$ ##`
+        }/>
+
+        <Stave description={'Note Annotation Styles'} notes={`
+          C/4 $.italic.C$ E/4 $.big.E$ G/4 $.medium.G$ B/4 $.top.B$`
         }/>
 
         <Stave description={'Annotations'} annotations={':w, C Major, G Major'} notes={`

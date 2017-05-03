@@ -20,7 +20,7 @@ export default class ArtistRests {
     } else {
       position = this.artist.tuning.getNoteForFret((parseInt(params["position"], 10) + 5) * 2, 6)
 
-      this.artist. addStaveNote({
+      this.artist.addStaveNote({
         spec: [position],
         accidentals: [],
         is_rest: true
@@ -31,21 +31,6 @@ export default class ArtistRests {
 
     const currentDuration = this.artist.current_duration
 
-    if (this.artist.customizations["tab-stems"] === "true") {
-      let tab_note = new Vex.Flow.StaveNote({
-        keys: [position || "r/4"],
-        duration: currentDuration + "r",
-        clef: "treble",
-        auto_stem: false
-      })
-
-      if (_.last(currentDuration) === "d") {
-        tab_note.addDot(0)
-      }
-
-      return tab_notes.push(tab_note)
-    } else {
-      return tab_notes.push(new Vex.Flow.GhostNote(currentDuration))
-    }
+    return tab_notes.push(new Vex.Flow.GhostNote(currentDuration))
   }
 };
