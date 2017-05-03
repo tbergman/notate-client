@@ -48,7 +48,7 @@ export default class VexTab extends VexTabMods {
     }
 
     if (element.command === "rest") {
-      this.artist.addRest(element.params)
+      this.artist.rests.addRest(element.params)
     }
 
     if (element.command === "command") {

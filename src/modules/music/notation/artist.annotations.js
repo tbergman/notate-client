@@ -145,7 +145,7 @@ export default class ArtistAnnotation {
           note = iterable2[i]
           let item
 
-          score_articulation = this.artist.makeScoreArticulation(annotations[i])
+          score_articulation = this.makeScoreArticulation(annotations[i])
 
           if (score_articulation != null) {
             note.addArticulation(0, score_articulation)
@@ -227,5 +227,21 @@ export default class ArtistAnnotation {
       .setJustification(just)
 
     return _.last(voices).push(note)
+  }
+
+  makeScoreArticulation(text) {
+    const getScoreArticulationParts = text => text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./)
+    const parts = getScoreArticulationParts(text)
+
+    if (parts != null) {
+      let type = parts[1]
+      let position = parts[2]
+
+      let POSTYPE = Vex.Flow.Modifier.Position
+      let pos = position === "t" ? POSTYPE.ABOVE : POSTYPE.BELOW
+      return new Vex.Flow.Articulation(type).setPosition(pos)
+    } else {
+      return null
+    }
   }
 };

@@ -12,10 +12,10 @@ import _ from 'lodash'
 import ArtistAnnotations from './artist.annotations'
 import ArtistTuplets from './artist.tuplets'
 import ArtistBars from './artist.bars'
+import ArtistRests from './artist.rests'
+import ArtistArticulations from './artist.articulations'
 
 let parseBool = str => str === "true"
-let makeDuration = (time, dot) => time + (dot ? 'd' : '')
-let getScoreArticulationParts = text => text.match(/^\.(a[^\/]*)\/(t|b)[^.]*\./)
 
 const __guard__ = (value, transform) => {
   return (typeof value !== 'undefined' && value !== null) ? transform(value) : undefined
@@ -41,6 +41,8 @@ export default class Artist {
     this.annotations = new ArtistAnnotations(this, this.options)
     this.tuplets = new ArtistTuplets(this)
     this.bars = new ArtistBars(this)
+    this.rests = new ArtistRests(this)
+    this.articulations = new ArtistArticulations(this)
 
     this.reset()
   }
@@ -423,49 +425,9 @@ export default class Artist {
 
     const t = time.split(/\s+/)
 
+    const makeDuration = (time, dot) => time + (dot ? 'd' : '')
+
     return this.current_duration = makeDuration(t[0], dot)
-  }
-
-  makeScoreArticulation(text) {
-    let parts = getScoreArticulationParts(text);
-    if (parts != null) {
-      let type = parts[1];
-      let position = parts[2];
-
-      let POSTYPE = Vex.Flow.Modifier.Position;
-      let pos = position === "t" ? POSTYPE.ABOVE : POSTYPE.BELOW;
-      return new Vex.Flow.Articulation(type).setPosition(pos);
-    } else { return null; }
-  }
-
-  addStaveArticulation(type, first_note, last_note, first_indices, last_indices) {
-    let articulation = null
-
-    if (["b", "s", "h", "p", "t", "T"].includes(type)) {
-      articulation = new Vex.Flow.StaveTie({
-        first_note,
-        last_note,
-        first_indices,
-        last_indices,
-      })
-    }
-
-    if (articulation != null) {
-      return this.stave_articulations.push(articulation)
-    }
-  }
-
-  // This gets the previous (second-to-last) non-bar non-ghost note.
-  getPreviousNoteIndex() {
-    let { tab_notes } = _.last(this.staves);
-    let index = 2;
-    while (index <= tab_notes.length) {
-      let note = tab_notes[tab_notes.length - index];
-      if (note instanceof Vex.Flow.TabNote) { return (tab_notes.length - index); }
-      index++;
-    }
-
-    return -1;
   }
 
   addDecorator(decorator) {
@@ -494,133 +456,7 @@ export default class Artist {
 
     if (modifier != null) { _.last(tab_notes).addModifier(modifier, 0); }
     if (score_modifier != null) {
-      return __guard__(_.last(score_notes), x => x.addArticulation(0, score_modifier))
-    }
-  }
-
-  addArticulations(articulations) {
-    let stave = _.last(this.staves);
-    let { tab_notes } = stave;
-    let stave_notes = stave.note_notes;
-
-    let current_tab_note = _.last(tab_notes);
-
-    let has_bends = false;
-    for (var valid_articulation of ["b", "s", "h", "p", "t", "T", "v", "V"]) {
-      var current_indices, i, prev_indices, prev_tab_note;
-      var indices = ((() => {
-        let result = [];
-        for (i = 0; i < articulations.length; i++) {
-          let art = articulations[i];
-          if ((art != null) && (art === valid_articulation)) {
-            result.push(i);
-          }
-        }
-        return result;
-      })());
-      if (_.isEmpty(indices)) { continue; }
-
-      if (valid_articulation === "b") { has_bends = true; }
-      let prev_index = this.getPreviousNoteIndex();
-      if (prev_index === -1) {
-        prev_tab_note = null;
-        prev_indices = null;
-      } else {
-        var n;
-        prev_tab_note = tab_notes[prev_index];
-        // Figure out which strings the articulations are on
-        var this_strings = ((() => {
-          let result1 = [];
-          let iterable = current_tab_note.getPositions();
-          for (i = 0; i < iterable.length; i++) {
-            n = iterable[i];
-            if (Array.from(indices).includes(i)) {
-              result1.push(n.str);
-            }
-          }
-          return result1;
-        })());
-
-        // Only allows articulations where both notes are on the same strings
-        var valid_strings = ((() => {
-          let result2 = [];
-          let iterable1 = prev_tab_note.getPositions();
-          for (i = 0; i < iterable1.length; i++) {
-            let pos = iterable1[i];
-            if (Array.from(this_strings).includes(pos.str)) {
-              result2.push(pos.str);
-            }
-          }
-          return result2;
-        })());
-
-        // Get indices of articulated notes on previous chord
-        prev_indices = ((() => {
-          let result3 = [];
-          let iterable2 = prev_tab_note.getPositions();
-          for (i = 0; i < iterable2.length; i++) {
-            n = iterable2[i];
-            if (Array.from(valid_strings).includes(n.str)) {
-              result3.push(i);
-            }
-          }
-          return result3;
-        })());
-
-        // Get indices of articulated notes on current chord
-        current_indices = ((() => {
-          let result4 = [];
-          let iterable3 = current_tab_note.getPositions();
-          for (i = 0; i < iterable3.length; i++) {
-            n = iterable3[i];
-            if (Array.from(valid_strings).includes(n.str)) {
-              result4.push(i);
-            }
-          }
-          return result4;
-        })());
-      }
-
-      if (stave.note != null) {
-        this.addStaveArticulation(valid_articulation,
-          stave_notes[prev_index], _.last(stave_notes),
-          prev_indices, current_indices);
-      }
-    }
-  }
-
-  addRest(params) {
-    let position;
-
-    if (params["position"] === 0) {
-      this.addStaveNote({
-        spec: ["r/4"],
-        accidentals: [],
-        is_rest: true
-      });
-    } else {
-      position = this.tuning.getNoteForFret((parseInt(params["position"], 10) + 5) * 2, 6);
-      this.addStaveNote({
-        spec: [position],
-        accidentals: [],
-        is_rest: true
-      });
-    }
-
-    let { tab_notes } = _.last(this.staves);
-    if (this.customizations["tab-stems"] === "true") {
-      let tab_note = new Vex.Flow.StaveNote({
-        keys: [position || "r/4"],
-        duration: this.current_duration + "r",
-        clef: "treble",
-        auto_stem: false
-      });
-      if (this.current_duration[this.current_duration.length - 1] === "d") {
-        tab_note.addDot(0);
-      }
-      return tab_notes.push(tab_note);
-    } else {
-      return tab_notes.push(new Vex.Flow.GhostNote(this.current_duration));
+      return __guard__(_.last(score_notes), x => x.articulations.addArticulation(0, score_modifier))
     }
   }
 
@@ -714,7 +550,7 @@ export default class Artist {
         this.addStaveNote({spec, accidentals: accidentals[i], play_note: play_notes[i]})
       }
 
-      this.addArticulations(articulations[i])
+      this.articulations.addArticulations(articulations[i])
 
       if (decorators[i] != null) {
         this.addDecorator(decorators[i])
@@ -726,7 +562,7 @@ export default class Artist {
       for (let num = 1, end = num_notes, asc = 1 <= end; asc ? num <= end : num >= end; asc ? num++ : num--) {
         art.push(chord_articulation)
       }
-      this.addArticulations(art);
+      this.articulations.addArticulations(art);
     }
 
     if (chord_decorator != null) {
