@@ -24,7 +24,7 @@ class Stave extends Component {
 
   componentDidMount() {
     const {
-      width = 500,
+      width = 800,
       clef = 'treble',
       keySignature = 'C',
       time = '4/4',

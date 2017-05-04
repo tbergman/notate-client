@@ -2,8 +2,3 @@
 import { List } from 'immutable'
 
 export type AppState = Map<string, any>
-
-export type Task = {
-  id: string
-}
-export type TasksState = Array<Task>

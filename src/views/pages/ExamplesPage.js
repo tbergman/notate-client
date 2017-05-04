@@ -2,41 +2,15 @@
 
 import React, { Component } from 'react';
 import Stave from 'views/music/components/Stave'
-import Question from 'views/questions/components/Question'
 
-import logo from './logo.svg'
-import './App.css'
-
-class App extends Component {
+export default class ExamplesPage extends Component {
   render(): React.Element<any> {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>Examples</h2>
         </div>
 
-        <Question
-          index={'1.2 a'}
-          statement={`
-            Write an ascending leap above each of these notes
-          `} notation={`
-            :q G/4 #99# E/5 #99# | C/5 #99# #99# #99# | E/4 #99# #99# #99# | G/5 #99# #99# #99# | :w B/4 #99# #99# #99# | A/5 #99# #99# #99# | A/4 #99# #99# #99# =||
-          `}/>
-
-        <Question
-          index={'1.2 b'}
-          statement={`
-            Write an descending step below each of these notes
-          `} notation={`
-            :q C/5 #99# B/4 #99# | A/5 #99# #99# #99# | D/4 #99# #99# #99# | C/4 #99# #99# #99# | :w F/4 #99# #99# #99# | B/5 #99# #99# #99# | E/4 #99# #99# #99# =||
-          `}/>
-
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
         <br />
 
         <Stave description={'Notes'} notes={`
@@ -127,8 +101,6 @@ class App extends Component {
           C-E-G/4 ## | G-B/4 D/5 ##`
         }/>
       </div>
-    );
+    )
   }
 }
-
-export default App
