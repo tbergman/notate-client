@@ -25,7 +25,8 @@ export const initialState = {
 }
 
 export default combineReducers({
-  tasks
+    tasks,
+    toolbox
 })
 
 export const selectTasks:(state: AppState) => TasksState = (state) => state.tasks
