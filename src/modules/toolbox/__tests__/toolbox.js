@@ -3,6 +3,7 @@
 import toolboxReducer from '../reducers'
 import { SET_ACCIDENTAL, SET_DURATION } from '../actionTypes'
 import type { SetAccidentalAction, SetDurationAction } from '../actions'
+import { setAccidental, setDuration } from '../actions'
 import { selectSelectedAccidental, selectSelectedDuration } from 'modules/toolbox/selectors'
 import { ACCIDENTAL, DURATION } from '../constants'
 
@@ -97,4 +98,33 @@ describe('modules/toolbox', () => {
         });
     });
 
+    describe('SET_ACCIDENTAL_ACTION', () => {
+        let expectedOutput;
+        beforeEach(() => {
+            expectedOutput = {
+                type: SET_ACCIDENTAL,
+                payload: ACCIDENTAL.SHARP
+            }
+        })
+        it('should return an object with type SET_ACCIDENTAL and payload of the passed in accidental', () => {
+            let expected = expectedOutput;
+            let out = setAccidental(ACCIDENTAL.SHARP);
+            expect(out).toEqual(expected);
+        });
+    });
+
+    describe('SET_DURATION_ACTION', () => {
+        let expectedOutput;
+        beforeEach(() => {
+            expectedOutput = {
+                type: SET_DURATION,
+                payload: DURATION.EIGHTH
+            }
+        })
+        it('should return an object with type SET_DURATION and payload of the passed in duration', () => {
+            let expected = expectedOutput;
+            let out = setDuration(DURATION.EIGHTH);
+            expect(out).toEqual(expected);
+        });
+    });
 });
