@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import Stave from 'views/music/components/Stave'
 import Note from 'views/music/components/Note'
+import Toolbox from 'views/main/containers/Toolbox'
 
 import logo from './logo.svg'
 import './App.css'
@@ -15,7 +16,7 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-
+          <Toolbox />
         <Stave>
           <Note duration={4} pitch={'g/4'} />
           <Note duration={4} pitch={'f/4'} />
