@@ -29,13 +29,13 @@ describe('stave component', () => {
     expect(element.querySelector('svg')).toBeDefined()
   })
 
-  it('defaults width to 500', () => {
+  it('defaults width to 800', () => {
     const component = mount(<Stave notes={'C-D-E/4'}/>)
     const element = component.getDOMNode()
     const svg = element.querySelector('svg')
     const { attributes = mockAttributesNamedNodeMap } = svg || {}
 
-    expect(attributes.getNamedItem('width').value).toEqual('500')
+    expect(attributes.getNamedItem('width').value).toEqual('800')
   })
 
   it('sets the svg width', () => {
