@@ -4,7 +4,7 @@ import type { ShallowWrapper } from 'enzyme'
 
 import React from 'react'
 import { shallow } from 'enzyme'
-import App from './App'
+import HomePage from './HomePage'
 
 type Setup = {
   props: Object,

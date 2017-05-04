@@ -1,19 +1,14 @@
 // @flow
 
 import { combineReducers } from 'redux'
-import { default as tasks, initialState as tasksInitialState } from './tasks/reducers'
-import type { State as TasksState } from './tasks/reducers'
+import { routerReducer } from 'react-router-redux'
 
-export type AppState = {
-  tasks: TasksState,
-}
+import { default as questions } from './questions/reducer'
 
 export const initialState = {
-  tasks: tasksInitialState,
 }
 
 export default combineReducers({
-  tasks
+  questions,
+  routing: routerReducer,
 })
-
-export const selectTasks:(state: AppState) => TasksState = (state) => state.tasks
