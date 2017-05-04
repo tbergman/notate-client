@@ -47,99 +47,6 @@ export default class Artist {
     this.reset()
   }
 
-  formatAndRender(ctx, tab, score, text_notes, customizations, options) {
-    let i, multi_voice, notes, score_stave, tab_stave, voice;
-    if (tab != null) { tab_stave = tab.stave; }
-    if (score != null) { score_stave = score.stave; }
-
-    let tab_voices = [];
-    let score_voices = [];
-    let text_voices = [];
-    let beams = [];
-    let format_stave = null;
-    let text_stave = null;
-
-    let beam_config = {
-      beam_rests: parseBool(customizations["beam-rests"]),
-      show_stemlets: parseBool(customizations["beam-stemlets"]),
-      beam_middle_only: parseBool(customizations["beam-middle-only"]),
-      groups: options.beam_groups
-    };
-
-    beam_config.beam_rests = parseBool(customizations["beam-rests"]);
-
-    if (score != null) {
-      multi_voice = (score.voices.length > 1) ? true : false;
-      for (i = 0; i < score.voices.length; i++) {
-        notes = score.voices[i];
-        if (_.isEmpty(notes)) { continue; }
-        let stem_direction = i === 0 ? 1 : -1;
-        _.each(notes, note => note.setStave(score_stave));
-
-        voice = new Vex.Flow.Voice(Vex.Flow.TIME4_4).
-          setMode(Vex.Flow.Voice.Mode.SOFT);
-        voice.addTickables(notes);
-        score_voices.push(voice);
-        if (multi_voice) {
-          beam_config.stem_direction = stem_direction;
-          beams = beams.concat(Vex.Flow.Beam.generateBeams(notes, beam_config));
-        } else {
-          beam_config.stem_direction = null;
-          beams = beams.concat(Vex.Flow.Beam.generateBeams(notes, beam_config));
-        }
-      }
-
-      format_stave = score_stave;
-      text_stave = score_stave;
-    }
-
-    for (notes of Array.from(text_notes)) {
-      if (_.isEmpty(notes)) { continue; }
-      _.each(notes, voice => voice.setStave(text_stave));
-      voice = new Vex.Flow.Voice(Vex.Flow.TIME4_4).
-          setMode(Vex.Flow.Voice.Mode.SOFT);
-      voice.addTickables(notes);
-      text_voices.push(voice);
-    }
-
-    if (format_stave != null) {
-      let format_voices = [];
-      let formatter = new Vex.Flow.Formatter();
-      let align_rests = false;
-
-      if (score != null) {
-        if (!_.isEmpty(score_voices)) { formatter.joinVoices(score_voices); }
-        format_voices = format_voices.concat(score_voices);
-        if (score_voices.length > 1) { align_rests = true; }
-      }
-
-      if (!_.isEmpty(text_notes) && !_.isEmpty(text_voices)) {
-        formatter.joinVoices(text_voices)
-        format_voices = format_voices.concat(text_voices)
-      }
-
-      if (!_.isEmpty(format_voices)) {
-        formatter.formatToStave(format_voices, format_stave, {align_rests})
-      }
-
-      if (score != null) {
-        _.each(score_voices, voice => voice.draw(ctx, score_stave))
-      }
-
-      _.each(beams, beam => beam.setContext(ctx).draw())
-
-      if (!_.isEmpty(text_notes)) {
-        _.each(text_voices, voice => voice.draw(ctx, text_stave))
-      }
-
-      if (score != null) {
-        return score_voices
-      } else {
-        return tab_voices
-      }
-    }
-  }
-
   reset() {
     this.tuning = new Vex.Flow.Tuning();
     this.key_manager = new Vex.Flow.KeyManager("C");
@@ -187,6 +94,96 @@ export default class Artist {
     return this.renderer_context = null;
   }
 
+  formatAndRender(ctx, tab, score, text_notes, customizations, options) {
+    let i, multi_voice, notes, score_stave, tab_stave
+
+    let scoreVoices = []
+    let textVoices = []
+    let beams = []
+
+    multi_voice = (score.voices.length > 1) ? true : false
+
+    _(score.voices)
+      .filter(notes => !_.isEmpty(notes))
+      .each((notes, i) => {
+        const stemDirection = i === 0 ? 1 : -1
+
+        const result = this.createNotesVoice(ctx, score.stave, notes, stemDirection, multi_voice, customizations)
+
+        scoreVoices.push(result.voice)
+        beams = beams.concat(result.beams)
+      })
+
+    _(text_notes)
+      .filter(notes => !_.isEmpty(notes))
+      .each((notes, i) => {
+        const result = this.createTextVoice(score.stave, notes)
+
+        textVoices.push(result.voice)
+      })
+
+    const alignRests = (scoreVoices.length > 1)
+    const formatter = new Vex.Flow.Formatter()
+    const voicesToFormat = _([])
+      .concat(scoreVoices)
+      .concat(textVoices)
+      .filter(x => !_.isEmpty(x))
+      .value()
+
+    formatter.joinVoices(voicesToFormat)
+    formatter.formatToStave(voicesToFormat, score.stave, { align_rests: alignRests })
+
+    this.drawMainVoices(ctx, score.stave, scoreVoices, beams, textVoices)
+
+    return scoreVoices
+  }
+
+  drawMainVoices(context, stave, notes, beams, textNotes) {
+    _.each(notes, note => {
+      note.draw(context, stave)
+    })
+
+    _.each(beams, beam => {
+      beam.setContext(context).draw()
+    })
+
+    _.each(textNotes, note => {
+      note.draw(context, stave)
+    })
+  }
+
+  createTextVoice(stave, textNotes) {
+    _.each(textNotes, note => note.setStave(stave))
+
+    const voice = new Vex.Flow.Voice(Vex.Flow.TIME4_4)
+      .setMode(Vex.Flow.Voice.Mode.SOFT)
+
+    voice.addTickables(textNotes)
+
+    return { voice }
+  }
+
+  createNotesVoice(context, stave, notes, stemDirection, multiVoice, customizations) {
+    let beamConfig = {
+      beam_rests: parseBool(customizations['beam-rests']),
+      show_stemlets: parseBool(customizations['beam-stemlets']),
+      beam_middle_only: parseBool(customizations['beam-middle-only']),
+      stem_direction: (multiVoice ? stemDirection : null),
+      groups: this.options.beam_groups,
+    }
+
+    _.each(notes, note => note.setStave(stave))
+
+    const beams = Vex.Flow.Beam.generateBeams(notes, beamConfig)
+
+    const voice = new Vex.Flow.Voice(Vex.Flow.TIME4_4)
+      .setMode(Vex.Flow.Voice.Mode.SOFT)
+
+    voice.addTickables(notes)
+
+    return { voice, beams }
+  }
+
   setOptions(options) {
     this.annotations.setOptions(options)
 
@@ -201,29 +198,27 @@ export default class Artist {
     }
 
     this.last_y += parseInt(this.customizations.space, 10)
-
-    if (this.customizations.player === "true") {
-      return this.last_y += 15
-    }
   }
 
   render(renderer) {
-    renderer.resize(this.customizations.width * this.customizations.scale,
-        (this.last_y + this.options.bottom_spacing) * this.customizations.scale);
-    let ctx = renderer.getContext();
-    ctx.scale(this.customizations.scale, this.customizations.scale);
-    ctx.clear();
-    ctx.setFont(this.options.font_face, this.options.font_size, "");
+    const width = this.customizations.width * this.customizations.scale
+    const height = (this.last_y + this.options.bottom_spacing) * this.customizations.scale
+    renderer.resize(width, height)
 
-    this.renderer_context = ctx;
+    let ctx = renderer.getContext()
+    ctx.scale(this.customizations.scale, this.customizations.scale)
+    ctx.clear()
+    ctx.setFont(this.options.font_face, this.options.font_size, '')
+
+    this.renderer_context = ctx
 
     let setBar = function(stave, notes) {
-      let last_note = _.last(notes);
+      let last_note = _.last(notes)
       if (last_note instanceof Vex.Flow.BarNote) {
-        notes.pop();
-        return stave.setEndBarType(last_note.getType());
+        notes.pop()
+        return stave.setEndBarType(last_note.getType())
       }
-    };
+    }
 
     for (let stave of Array.from(this.staves)) {
       // If the last note is a bar, then remove it and render it as a stave modifier.
@@ -233,25 +228,22 @@ export default class Artist {
       if (stave.tab != null) { stave.tab.setContext(ctx).draw(); }
       if (stave.note != null) { stave.note.setContext(ctx).draw(); }
 
-      stave.tab_voices.push(stave.tab_notes);
-      stave.note_voices.push(stave.note_notes);
+      stave.tab_voices.push(stave.tab_notes)
+      stave.note_voices.push(stave.note_notes)
 
-      let voices = this.formatAndRender(ctx,
-                      (stave.tab != null) ? {stave: stave.tab, voices: stave.tab_voices} : null,
-                      (stave.note != null) ? {stave: stave.note, voices: stave.note_voices} : null,
-                      stave.text_voices,
-                      this.customizations,
-                      {beam_groups: stave.beam_groups});
+      const tab = (stave.tab != null) ? { stave: stave.tab, voices: stave.tab_voices } : null
+      const score = (stave.note != null) ? { stave: stave.note, voices: stave.note_voices } : null
+      const options = { beam_groups: stave.beam_groups }
 
-      this.player_voices.push(voices);
+      this.formatAndRender(ctx, tab, score, stave.text_voices, this.customizations, options)
     }
 
     for (var articulation of Array.from(this.tab_articulations)) {
-      articulation.setContext(ctx).draw();
+      articulation.setContext(ctx).draw()
     }
 
     for (articulation of Array.from(this.stave_articulations)) {
-      articulation.setContext(ctx).draw();
+      articulation.setContext(ctx).draw()
     }
 
     this.rendered = true;
