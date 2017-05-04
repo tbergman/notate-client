@@ -11,45 +11,35 @@ const mockAttributesNamedNodeMap = {
 
 describe('stave component', () => {
   it('renders without crashing', () => {
-    const component = mount(<Stave/>)
+    const component = mount(<Stave notes={'C-D-E/4'}/>)
 
     expect(component).toBeDefined()
   })
 
   it('sets the component class', () => {
-    const component = mount(<Stave/>)
+    const component = mount(<Stave notes={'C-D-E/4'}/>)
 
-    expect(component.hasClass('stave')).toBe(true)
+    expect(component.find('.stave')).toBeDefined()
   })
 
   it('render the stave svg', () => {
-    const component = mount(<Stave/>)
+    const component = mount(<Stave notes={'C-D-E/4'}/>)
     const element = component.getDOMNode()
 
     expect(element.querySelector('svg')).toBeDefined()
   })
 
-  it('defaults height and width to 500', () => {
-    const component = mount(<Stave/>)
+  it('defaults width to 500', () => {
+    const component = mount(<Stave notes={'C-D-E/4'}/>)
     const element = component.getDOMNode()
     const svg = element.querySelector('svg')
     const { attributes = mockAttributesNamedNodeMap } = svg || {}
 
-    expect(attributes.getNamedItem('height').value).toEqual('500')
     expect(attributes.getNamedItem('width').value).toEqual('500')
   })
 
-  it('sets the svg height', () => {
-    const component = mount(<Stave height={100}/>)
-    const element = component.getDOMNode()
-    const svg = element.querySelector('svg')
-    const { attributes = mockAttributesNamedNodeMap } = svg || {}
-
-    expect(attributes.getNamedItem('height').value).toEqual('100')
-  })
-
   it('sets the svg width', () => {
-    const component = mount(<Stave width={100}/>)
+    const component = mount(<Stave notes={'C-D-E/4'} width={100}/>)
     const element = component.getDOMNode()
     const svg = element.querySelector('svg')
     const { attributes = mockAttributesNamedNodeMap } = svg || {}
@@ -59,14 +49,14 @@ describe('stave component', () => {
 
   it('defaults clef type to treble', () => {
     const addClef = spyOn(Flow.Stave.prototype, 'addClef').and.callThrough()
-    mount(<Stave/>)
+    mount(<Stave notes={'C-D-E/4'}/>)
 
     expect(addClef).toHaveBeenCalledWith('treble')
   })
 
   it('sets the svg height', () => {
     const addClef = spyOn(Flow.Stave.prototype, 'addClef').and.callThrough()
-    mount(<Stave clef={'bass'}/>)
+    mount(<Stave notes={'C-D-E/4'} clef={'bass'}/>)
 
     expect(addClef).toHaveBeenCalledWith('bass')
   })
