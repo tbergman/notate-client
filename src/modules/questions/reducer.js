@@ -1,6 +1,13 @@
-import { fromJS } from 'immutable';
+// @flow
 
-const initialState = fromJS({
+import { fromJS } from 'immutable'
+import type { QuestionsActions } from './actions'
+
+export type QuestionsState = {
+  questions: List<Object>
+}
+
+const initialState: QuestionsState = fromJS({
   questions: [{
     id: 1,
     index: '1.2 a',
@@ -26,11 +33,14 @@ const initialState = fromJS({
       'B/5 #99# #99# #99#    | ' +
       'E/4 #99# #99# #99#  =||',
   }],
-});
+})
 
-export default function reducer(state = initialState, action) {
+export default function reducer(
+  state: QuestionsState = initialState,
+  action: QuestionsActions): QuestionsState {
+
   switch (action.type) {
     default:
-      return state;
+      return state
   }
 }

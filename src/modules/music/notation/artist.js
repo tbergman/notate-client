@@ -14,6 +14,7 @@ import ArtistTuplets from './artist.tuplets'
 import ArtistBars from './artist.bars'
 import ArtistRests from './artist.rests'
 import ArtistArticulations from './artist.articulations'
+import ArtistLayers from './artist.layers'
 
 let parseBool = str => str === "true"
 
@@ -43,6 +44,7 @@ export default class Artist {
     this.bars = new ArtistBars(this)
     this.rests = new ArtistRests(this)
     this.articulations = new ArtistArticulations(this)
+    this.layers = new ArtistLayers(this)
 
     this.reset()
   }
@@ -103,6 +105,9 @@ export default class Artist {
 
     multi_voice = (score.voices.length > 1) ? true : false
 
+    ctx.attributes.fill = null
+    ctx.attributes.stroke = null
+
     _(score.voices)
       .filter(notes => !_.isEmpty(notes))
       .each((notes, i) => {
@@ -133,23 +138,9 @@ export default class Artist {
     formatter.joinVoices(voicesToFormat)
     formatter.formatToStave(voicesToFormat, score.stave, { align_rests: alignRests })
 
-    this.drawMainVoices(ctx, score.stave, scoreVoices, beams, textVoices)
+    this.layers.drawQuestionLayer(ctx, score.stave, scoreVoices, beams, textVoices)
 
     return scoreVoices
-  }
-
-  drawMainVoices(context, stave, notes, beams, textNotes) {
-    _.each(notes, note => {
-      note.draw(context, stave)
-    })
-
-    _.each(beams, beam => {
-      beam.setContext(context).draw()
-    })
-
-    _.each(textNotes, note => {
-      note.draw(context, stave)
-    })
   }
 
   createTextVoice(stave, textNotes) {
@@ -172,7 +163,7 @@ export default class Artist {
       groups: this.options.beam_groups,
     }
 
-    _.each(notes, note => note.setStave(stave))
+    _.each(notes, note => note.setContext(context).setStave(stave))
 
     const beams = Vex.Flow.Beam.generateBeams(notes, beamConfig)
 

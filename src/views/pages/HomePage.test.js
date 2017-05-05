@@ -1,9 +1,11 @@
 // @flow
 
 import type { ShallowWrapper } from 'enzyme'
-
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallowWithStore } from 'enzyme-redux'
+import { createMockStore } from 'redux-test-utils'
+import { fromJS } from 'immutable'
+
 import HomePage from './HomePage'
 
 type Setup = {
@@ -12,9 +14,11 @@ type Setup = {
 }
 
 function setup(): Setup {
-  const props = {}
-
-  const enzymeWrapper: ShallowWrapper = shallow(<App {...props} />)
+  const props = { }
+  const store = createMockStore({
+    questions: fromJS({ questions: [] })
+  })
+  const enzymeWrapper: ShallowWrapper = shallowWithStore(<HomePage {...props} />, store)
 
   return {
     props,
@@ -25,5 +29,5 @@ function setup(): Setup {
 it('renders without crashing', () => {
   const { enzymeWrapper } = setup()
 
-  expect(enzymeWrapper.hasClass('App')).toBe(true)
+  expect(enzymeWrapper.find('.App')).toBeDefined()
 })

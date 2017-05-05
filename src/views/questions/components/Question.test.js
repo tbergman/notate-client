@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { mount } from 'enzyme'
-import { Flow } from 'vexflow'
 import Question from './Question'
 
 describe('stave component', () => {

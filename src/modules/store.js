@@ -1,3 +1,5 @@
+// @flow
+
 import Immutable from 'immutable'
 import { applyMiddleware, createStore } from 'redux'
 import { createLogger } from 'redux-logger'
