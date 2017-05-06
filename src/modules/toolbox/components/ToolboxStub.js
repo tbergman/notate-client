@@ -1,15 +1,18 @@
 //@flow
 
 import React, { PureComponent } from 'react'
-import { ACCIDENTAL, DURATION } from '../constants'
+import { ACCIDENTAL, DURATION, BOX } from '../constants'
+import type { AccidentalType, DurationType, BoxType } from '../constants'
+import ToolGroup from './ToolGroup'
 
 type DispatchProps = {
-  setAccidental: Function,
-  setDuration: Function,
+    setAccidental: Function,
+    setDuration: Function,
 }
 
 type StateProps = {
-  selectedAccidental: number,
+    selectedAccidental: AccidentalType,
+    selectedDuration: DurationType
 }
 
 type Props = DispatchProps & StateProps
@@ -18,35 +21,16 @@ class ToolboxStub extends PureComponent {
 
   props: Props
 
-  handleAccidentalClick = (accidental: number) => {
-    this.props.setAccidental(accidental)
-  }
-
-  handleDurationClick = (duration: number) => {
-    this.props.setDuration(duration)
-  }
-
   render(): React.Element<any> {
-    const { selectedAccidental } = this.props
+    const { selectedAccidental, selectedDuration } = this.props;
     return (
       <div>
-        <p>
-          <a href='#' onClick={() => this.handleAccidentalClick(ACCIDENTAL.SHARP)}>Set accidental to "1"</a>
-          <br />
-          <a href='#' onClick={() => this.handleAccidentalClick(ACCIDENTAL.NATURAL)}>Set accidental to "0"</a>
-        </p>
-        <p>
-          <a href='#' onClick={() => this.handleDurationClick(DURATION.WHOLE)}>Set duration to whole</a>
-          <br />
-          <a href='#' onClick={() => this.handleDurationClick(DURATION.QUARTER)}>Set duration to quarter</a>
-        </p>
-        <p>My selected accidental is {selectedAccidental}</p>
-        {/*<ToolGroup name="accidentals" clickHandler="{this.props.setAccidental}">*/}
-          {/*<Tool></Tool>*/}
-        {/*</ToolGroup>*/}
-        {/*<ToolGroup name="durations" clickHandler="{this.props.setDuration}">*/}
-          {/*<Tool></Tool>*/}
-        {/*</ToolGroup>*/}
+        <p>Accidentals:</p>
+        <ToolGroup currentSelection={selectedAccidental} allowedValues={[ACCIDENTAL.FLAT, ACCIDENTAL.NATURAL, ACCIDENTAL.SHARP]} setValue={this.props.setAccidental} boxType={BOX.ACCIDENTAL}/>
+          <br/>
+          <p>Durations:</p>
+        <ToolGroup currentSelection={selectedDuration} allowedValues={[DURATION.EIGHTH, DURATION.QUARTER, DURATION.HALF, DURATION.WHOLE]} setValue={this.props.setDuration} boxType={BOX.DURATION}/>
+
       </div>
     )
   }
