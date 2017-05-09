@@ -3,12 +3,14 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Question from '../questions/components/Question'
+
+import { selectQuestions } from 'modules/student-test/selectors'
+import Question from 'views/questions/components/Question'
 
 class HomePage extends Component {
   renderQuestions(): React.Element<any> {
     return _.map(this.props.questions, x =>
-      <Question key={x.id} index={x.index} statement={x.statement} notation={x.notation} />
+      <Question key={x.id} question={x} />
     )
   }
 
@@ -25,10 +27,9 @@ class HomePage extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => {
   return {
-    questions: state.questions.get('questions').toJS(),
+    questions: selectQuestions(state)
   }
 }
 

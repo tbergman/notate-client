@@ -1,17 +1,20 @@
 // @flow
-
-import Immutable from 'immutable'
-import { applyMiddleware, createStore } from 'redux'
+import { Iterable } from 'immutable'
+import { applyMiddleware, createStore, compose } from 'redux'
 import { createLogger } from 'redux-logger'
 
-import { default as reducers, initialState } from './reducers'
+import { default as reducers } from 'modules/reducers'
+
+//NOTE: can add initial state and make this more abstracted
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const immutableJsLogger = createLogger({
   stateTransformer: (state) => {
     const newState = {}
 
     Object.keys(state).forEach((x) => {
-      if (Immutable.Iterable.isIterable(state[x])) {
+      if (Iterable.isIterable(state[x])) {
         newState[x] = state[x].toJS()
       } else {
         newState[x] = state[x]
@@ -23,6 +26,6 @@ const immutableJsLogger = createLogger({
 })
 
 const middleware = applyMiddleware(immutableJsLogger)
-const store = createStore(reducers, initialState, middleware)
+const store = createStore(reducers, undefined, composeEnhancers(middleware))
 
 export default store

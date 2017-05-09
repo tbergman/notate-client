@@ -6,6 +6,9 @@ import Artist from './artist'
 
 describe('notation parser', () => {
   let renderer, vextab
+  const question = {
+    student: []
+  }
 
   const assertVextabParsesCode = (code) => {
     expect(vextab.parse(code)).toBeDefined()
@@ -19,7 +22,7 @@ describe('notation parser', () => {
   })
 
   beforeEach(() => {
-    vextab = new VexTab(new Artist(0, 0, 600, {scale: 0.8}))
+    vextab = new VexTab(new Artist(0, 0, 600, {scale: 0.8}, question))
   })
 
   it('notes', () => {

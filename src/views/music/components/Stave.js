@@ -3,6 +3,7 @@
 import React, { Component } from 'react'
 import { Flow } from 'vexflow'
 import _ from 'lodash'
+import type { Question as QuestionType } from 'modules/student-test'
 
 import VexTab from '../../../modules/music/notation/vextab'
 import Artist from '../../../modules/music/notation/artist'
@@ -14,13 +15,19 @@ type Props = {
   keySignature?: string,
   time?: string,
   description?: string,
+  notes: string,
   annotations?: string,
-  notes: string
+  question?: QuestionType,
 }
 
 class Stave extends Component {
   staveContainer: React.Element<any>
+  artist: Artist
   props: Props
+
+  componentDidUpdate() {
+    this.artist.redrawQuestion(this.props.question)
+  }
 
   componentDidMount() {
     const {
@@ -41,11 +48,12 @@ class Stave extends Component {
       notes ${notes.trim()}
       ${text}
     `
-    const artist = new Artist(10, 10, width, { scale: 1 })
-    const vextab = new VexTab(artist)
+    this.artist = new Artist(10, 10, width, { scale: 1 }, this.props.question)
+    const vextab = new VexTab(this.artist)
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
     vextab.parse(notation)
-    artist.render(renderer)
+
+    this.artist.render(renderer)
   }
 
   render(): React.Element<any> {

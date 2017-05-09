@@ -23,10 +23,11 @@ const __guard__ = (value, transform) => {
 }
 
 export default class Artist {
-  constructor(x, y, width, options) {
+  constructor(x, y, width, options, question) {
     this.x = x
     this.y = y
     this.width = width
+    this.question = question
 
     this.options = {
       bottom_spacing: 20,
@@ -237,7 +238,15 @@ export default class Artist {
       articulation.setContext(ctx).draw()
     }
 
+    this.layers.drawStudentLayer(this.renderer_context, this.staves[0].note, this.question.student)
+
     this.rendered = true;
+  }
+
+  redrawQuestion(question) {
+    this.question = question
+
+    this.layers.drawStudentLayer(this.renderer_context, this.staves[0].note, this.question.student)
   }
 
   isRendered() { return this.rendered; }

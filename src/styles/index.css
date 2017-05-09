@@ -34,3 +34,8 @@ body {
   stroke: rgba(0,0,0,0.5);
   fill: rgba(0,0,0,0.5);
 }
+
+.layer-student {
+  stroke: green;
+  fill: green;
+}
