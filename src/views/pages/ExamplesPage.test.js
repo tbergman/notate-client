@@ -6,7 +6,7 @@ import { shallowWithStore } from 'enzyme-redux'
 import { createMockStore } from 'redux-test-utils'
 import { fromJS } from 'immutable'
 
-import HomePage from './HomePage'
+import ExamplesPage from './ExamplesPage'
 
 type Setup = {
   props: Object,
@@ -16,9 +16,9 @@ type Setup = {
 function setup(): Setup {
   const props = { }
   const store = createMockStore({
-    studentTest: fromJS({ questions: [] })
+    questions: fromJS({ questions: [] })
   })
-  const enzymeWrapper: ShallowWrapper = shallowWithStore(<HomePage {...props} />, store)
+  const enzymeWrapper: ShallowWrapper = shallowWithStore(<ExamplesPage {...props} />, store)
 
   return {
     props,

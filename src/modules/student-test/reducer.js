@@ -1,14 +1,10 @@
 // @flow
-
+import type { FluxStandardAction } from 'Types'
+import type { StudentTestState, iQuestion } from 'modules/student-test'
 import { fromJS } from 'immutable'
-import type { QuestionsActions } from './actions'
 
-export type QuestionsState = {
-  questions: List<Object>
-}
-
-const initialState: QuestionsState = fromJS({
-  questions: [{
+const initialState: StudentTestState = {
+  questions: fromJS([{
     id: 1,
     index: '1.2 a',
     statement: 'Write an ascending leap above each of these notes',
@@ -20,6 +16,9 @@ const initialState: QuestionsState = fromJS({
       ':w B/4 #99# #99# #99# | ' +
       'A/5 #99# #99# #99#    | ' +
       'A/4 #99# #99# #99#  =||',
+    student: [
+      { pitch: 'A/4', duration: 'q', position: 300 }
+    ],
   }, {
     id: 2,
     index: '1.2 b',
@@ -32,14 +31,27 @@ const initialState: QuestionsState = fromJS({
       ':w F/4 #99# #99# #99# | ' +
       'B/5 #99# #99# #99#    | ' +
       'E/4 #99# #99# #99#  =||',
-  }],
-})
+    student: [ ],
+  }]),
+}
 
 export default function reducer(
-  state: QuestionsState = initialState,
-  action: QuestionsActions): QuestionsState {
+  state: StudentTestState = initialState,
+  action: FluxStandardAction): StudentTestState {
 
   switch (action.type) {
+    case 'STUDENT_ADDED_NOTE': {
+      const question: ?iQuestion = state.questions.find((x: iQuestion) => x.get('id') === action.payload.questionId)
+      if (!question) return state
+
+      const questionIndex = state.questions.findIndex(x => x === question)
+      const newQuestion = question.updateIn(['student'], list => list.push(action.payload))
+      return {
+        ...state,
+        questions: state.questions.set(questionIndex, newQuestion)
+      }
+    }
+
     default:
       return state
   }

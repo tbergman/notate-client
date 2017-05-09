@@ -2,6 +2,8 @@
 
 import Vex from 'vexflow'
 import _ from 'lodash'
+import { studentAddedNote } from '../../student-test/actions'
+import store from '../../store'
 
 export default class ArtistLayers {
   constructor(artist) {
@@ -13,7 +15,7 @@ export default class ArtistLayers {
 
     _.each(notesVoice, voice => {
       voice.draw(context, stave)
-      this.attachEventListeners(context, stave, voice)
+      this.drawOptionsHighlightingLayer(context, stave, voice)
     })
 
     _.each(beams, beam => {
@@ -28,7 +30,30 @@ export default class ArtistLayers {
     group.classList.add('layer-question');
   }
 
-  attachEventListeners(context, stave, voice) {
+  clearStudentLayer() {
+    var elements = document.getElementsByClassName('layer-student');
+    while(elements.length > 0){
+      elements[0].parentNode.removeChild(elements[0]);
+    }
+  }
+
+  drawStudentLayer(context, stave, studentAnswers) {
+    const group = context.openGroup()
+    const tickContext = new Vex.Flow.TickContext()
+
+    _.each(studentAnswers, note => {
+      const studentNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: note.duration, stem_direction: 1 })
+      tickContext.addTickable(studentNote)
+      tickContext.preFormat().setX(note.position)
+      studentNote.setContext(context).setStave(stave)
+      studentNote.draw()
+    })
+
+    context.closeGroup()
+    group.classList.add('layer-student')
+  }
+
+  drawOptionsHighlightingLayer(context, stave, voice) {
     _.each(voice.tickables, x => {
 
       this.drawOptions(context, stave, x)
@@ -45,6 +70,7 @@ export default class ArtistLayers {
 
       _(availableOptions).each(x => {
         const group = context.openGroup()
+        group.classList.add('layer-option')
 
         const optionNote = new Vex.Flow.StaveNote({ keys: [x], duration: 'q', stem_direction: 1 })
         note.tickContext.addTickable(optionNote)
@@ -52,9 +78,16 @@ export default class ArtistLayers {
         optionNote.draw()
 
         context.closeGroup()
-        group.classList.add('layer-option')
-        group.addEventListener('click', () => console.log('clicked on ', x))
+
+        group.addEventListener('click', () => {
+          store.dispatch(studentAddedNote({
+            pitch: x,
+            duration: 'q',
+            position: optionNote.tickContext.getX(),
+            questionId: this.artist.question.id,
+          }))
+        })
       })
     }
   }
-};
+}

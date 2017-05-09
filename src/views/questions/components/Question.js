@@ -1,12 +1,11 @@
 // @flow
+import type { Question as QuestionType } from 'modules/student-test'
 
 import React, { Component } from 'react'
+import Stave from 'views/music/components/Stave'
 
-import Stave from '../../music/components/Stave'
 type Props = {
-  index: string,
-  statement: string,
-  notation: string,
+  question: QuestionType,
 }
 
 export default class Question extends Component {
@@ -16,13 +15,13 @@ export default class Question extends Component {
     return (
       <div className="question">
         <div className="question-index">
-          {this.props.index}
+          {this.props.question.index}
         </div>
         <div className="question-statement">
-          {this.props.statement}
+          {this.props.question.statement}
         </div>
         <div className="question-notation">
-          <Stave notes={this.props.notation} />
+          <Stave notes={this.props.question.notation} question={this.props.question}/>
         </div>
       </div>
     )
