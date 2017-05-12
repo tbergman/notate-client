@@ -1,27 +1,25 @@
 // @flow
-import type { Question as QuestionType } from 'modules/student-test'
 
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
 import Stave from 'views/music/components/Stave'
-import Grader from 'modules/grading/grader'
+import type { Question as QuestionType } from 'modules/student-test'
+import { gradeQuestion } from 'modules/grading/actions'
 
 type Props = {
   question: QuestionType,
 }
 
-export default class Question extends Component {
+class Question extends Component {
   props: Props
-
-  grade() {
-    new Grader().grade(this.props.question.answers, this.props.question.student)
-  }
 
   render(): React.Element<any> {
     return (
       <div className="question">
         <div className="question-index">
           {this.props.question.index}
-          <input type="button" onClick={() => this.grade()} value="Grade" />
+          <input type="button" onClick={() => this.props.grade(this.props.question)} value="Grade" />
         </div>
         <div className="question-statement">
           {this.props.question.statement}
@@ -33,3 +31,17 @@ export default class Question extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    grade: (question) => dispatch(gradeQuestion(question)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Question);

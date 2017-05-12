@@ -15,7 +15,6 @@ export default class ArtistLayers {
 
     _.each(notesVoice, voice => {
       voice.draw(context, stave)
-      this.drawOptionsHighlightingLayer(context, stave, voice)
     })
 
     _.each(beams, beam => {
@@ -29,6 +28,7 @@ export default class ArtistLayers {
     context.closeGroup();
     group.classList.add('layer-question');
   }
+
 
   clearStudentLayer() {
     var elements = document.getElementsByClassName('layer-student');
@@ -53,14 +53,15 @@ export default class ArtistLayers {
     group.classList.add('layer-student')
   }
 
-  drawOptionsHighlightingLayer(context, stave, voice) {
-    _.each(voice.tickables, x => {
-
-      this.drawOptions(context, stave, x)
+  drawOptionsLayer(context, stave, voices) {
+    _.each(voices, voice => {
+      _.each(voice.tickables, x => {
+        this.drawOptionsColumn(context, stave, x)
+      })
     })
   }
 
-  drawOptions(context, stave, note) {
+  drawOptionsColumn(context, stave, note) {
     if (note.attrs.type === 'StaveNote') {
       const availableOptions = [
         'E/3', 'F/3', 'G/3', 'A/3', 'B/3',

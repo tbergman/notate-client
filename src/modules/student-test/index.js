@@ -1,4 +1,5 @@
-//@flow
+// @flow
+
 import type { List } from 'immutable'
 import { Record } from 'immutable'
 
