@@ -11,6 +11,7 @@ describe('stave component', () => {
     statement: 'guess what',
     notation: 'C-D-E/4',
     student: [],
+    answers: [],
   }
   it('renders without crashing', () => {
     const component = mount(<Question question={question}/>)

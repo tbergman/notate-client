@@ -1,7 +1,10 @@
+// @flow
+
 import _ from 'lodash'
+import type { AnswerNote, StudentNote } from '../student-test'
 
 export default class Grader {
-  grade(answers, student) {
+  grade(answers: Array<AnswerNote>, student: Array<StudentNote>) {
     _.each(answers, answerNote => {
       const studentNote = _.find(student, x => x.position === answerNote.position)
 
