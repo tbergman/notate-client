@@ -16,7 +16,8 @@ describe('stave component', () => {
     index: '',
     notation: '',
     statement: '',
-    student: []
+    student: [],
+    answers: []
   }
 
   it('renders without crashing', () => {
