@@ -8,11 +8,22 @@ import type { AccidentalType, DurationType, BoxType } from '../constants'
 
 const Selected = styled.div`
   background-color: #b3d9ff	;
+  padding: 5px;
+  border: 1px solid black;
+  z-index = -1;
 `;
 const Unselected = styled.div`
   background-color: #DCDCDC;
+  padding: 5px;
+  border: 1px solid black;
+  z-index = -1;
 `;
-
+const Container = styled.div`
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    margin: 0 auto;
+`;
 // injectGlobal`
 //   @font-face {
 //     font-family: bravura;
@@ -46,9 +57,9 @@ class ToolGroup extends PureComponent{
 
     render(): React.Element<any> {
         return (
-            <div>
+            <Container>
                 {this.boxDivs()}
-            </div>
+            </Container>
         )
     }
 
@@ -57,7 +68,7 @@ class ToolGroup extends PureComponent{
     }
 
     /*
-     *This function creates an array with divs for each accidental (just -1,0, and 1)
+     *This function creates an array with divs for each accidental or duration
      * for now. For each div, a listener is assigned for on click.
      */
     boxDivs(): Array<React.Element<any>>{

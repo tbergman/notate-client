@@ -14,10 +14,10 @@ export type AppState = {
 }
 
 
-const root = combineReducers({
-    tasks,
-    toolbox,
-});
+// const root = combineReducers({
+//     tasks,
+//     toolbox,
+// });
 
 export const initialState = {
     tasks: tasksInitialState,

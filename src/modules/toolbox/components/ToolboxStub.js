@@ -2,8 +2,14 @@
 
 import React, { PureComponent } from 'react'
 import { ACCIDENTAL, DURATION, BOX } from '../constants'
-import type { AccidentalType, DurationType, BoxType } from '../constants'
+import type { AccidentalType, DurationType} from '../constants'
 import ToolGroup from './ToolGroup'
+import styled from 'styled-components';
+
+const ToolContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
 
 type DispatchProps = {
     setAccidental: Function,
@@ -24,14 +30,14 @@ class ToolboxStub extends PureComponent {
   render(): React.Element<any> {
     const { selectedAccidental, selectedDuration } = this.props;
     return (
-      <div>
-        <p>Accidentals:</p>
+      <ToolContainer>
+
         <ToolGroup currentSelection={selectedAccidental} allowedValues={[ACCIDENTAL.FLAT, ACCIDENTAL.NATURAL, ACCIDENTAL.SHARP]} setValue={this.props.setAccidental} boxType={BOX.ACCIDENTAL}/>
           <br/>
-          <p>Durations:</p>
+
         <ToolGroup currentSelection={selectedDuration} allowedValues={[DURATION.EIGHTH, DURATION.QUARTER, DURATION.HALF, DURATION.WHOLE]} setValue={this.props.setDuration} boxType={BOX.DURATION}/>
 
-      </div>
+      </ToolContainer>
     )
   }
 }
