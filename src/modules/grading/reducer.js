@@ -21,7 +21,8 @@ export default function reducer(
 
       const gradeResult = {
         questionId: question.id,
-        correct: new Grader().grade(question)
+        correct: new Grader().grade(question),
+        graded: true,
       }
 
       const questionIndex = state.questionGrades.findIndex(x => x.questionId === gradeResult.questionId)

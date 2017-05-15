@@ -9,7 +9,12 @@ export const selectQuestionGrade = (state, questionId) => {
     selectGrading,
     (state) => {
       const questionGrades = (state.questionGrades && state.questionGrades.toJS()) || []
-      return questionGrades.find(x => x.questionId === questionId) || {}
+      return questionGrades.find(x => x.questionId === questionId) ||
+        {
+          questionId: questionId,
+          correct: false,
+          graded: false,
+        }
     }
   )(state)
 }
