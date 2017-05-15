@@ -1,19 +1,16 @@
 // @flow
 
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import Stave from 'views/music/components/Stave'
 import type { Question as QuestionType } from 'modules/student-test'
-import { gradeQuestion } from 'modules/grading/actions'
-import { selectQuestionGrade } from 'modules/grading/selectors'
 
 type Props = {
   question: QuestionType,
 }
 
-class Question extends Component {
+export default class Question extends Component {
   props: Props
 
   renderGrade() {
@@ -33,6 +30,8 @@ class Question extends Component {
         <div className="question-index">
           {this.props.question.index}
           <input type="button" onClick={() => this.props.grade(this.props.question)} value="Grade" />
+        </div>
+        <div className="question-grade">
           {this.renderGrade()}
         </div>
         <div className="question-statement">
@@ -48,19 +47,4 @@ class Question extends Component {
 
 const StyledGrade = styled.span`
   color: ${props => props.correct ? 'green' : 'red'};
-  padding: 30px;
 `
-
-const mapStateToProps = (state, ownProps) => {
-  return {
-    questionGrade: selectQuestionGrade(state, ownProps.question.id)
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    grade: (question) => dispatch(gradeQuestion(question)),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Question);

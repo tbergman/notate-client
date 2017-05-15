@@ -3,7 +3,7 @@
 const stringToNote = (notation) => {
   return {
     pitch: notation.split('/')[0],
-    octave: parseInt(notation.split('/')[1])
+    octave: parseInt(notation.split('/')[1], 10)
   }
 }
 

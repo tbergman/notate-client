@@ -26,7 +26,7 @@ describe('grader', () => {
         { pitch: 'D/4', duration: 'q', position: 1 },
       ]
 
-      const correct = new Grader().grade(question)
+      const correct = Grader.grade(question)
 
       expect(correct).toBe(true)
     })
@@ -39,7 +39,7 @@ describe('grader', () => {
         { pitch: 'D/5', duration: 'q', position: 1 },
       ]
 
-      const correct = new Grader().grade(question)
+      const correct = Grader.grade(question)
 
       expect(correct).toBe(false)
     })
@@ -50,7 +50,7 @@ describe('grader', () => {
         { pitch: 'D/5', duration: 'q', position: 1 },
       ]
 
-      const correct = new Grader().grade(question)
+      const correct = Grader.grade(question)
 
       expect(correct).toBe(false)
     })
@@ -61,7 +61,7 @@ describe('grader', () => {
         { pitch: 'D/4', duration: 'q', position: 2 },
       ]
 
-      const correct = new Grader().grade(question)
+      const correct = Grader.grade(question)
 
       expect(correct).toBe(false)
     })
@@ -71,7 +71,7 @@ describe('grader', () => {
         { pitch: 'C/4', duration: 'q', position: 0 },
       ]
 
-      const correct = new Grader().grade(question)
+      const correct = Grader.grade(question)
 
       expect(correct).toBe(false)
     })

@@ -3,7 +3,7 @@
 import _ from 'lodash'
 import type { Question } from '../student-test'
 
-export default class Grader {
+const Grader = {
   grade(question: Question) {
     const answers = question.answers
     const student = question.student
@@ -15,3 +15,5 @@ export default class Grader {
     })
   }
 }
+
+export default Grader

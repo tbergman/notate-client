@@ -1,9 +1,8 @@
 // @flow
 
 import type { FluxStandardAction } from 'Types'
-import type { StudentTestState, Question } from 'modules/student-test'
+import type { Question } from 'modules/student-test'
 import { fromJS } from 'immutable'
-import PitchComparison from 'modules/grading/comparison.pitch'
 import Grader from 'modules/grading/grader'
 
 const initialState: QuestionGradesState = {
@@ -21,7 +20,7 @@ export default function reducer(
 
       const gradeResult = {
         questionId: question.id,
-        correct: new Grader().grade(question),
+        correct: Grader.grade(question),
         graded: true,
       }
 
