@@ -22,3 +22,7 @@ export default combineReducers({
 export const selectStudentTest = (state: AppState) => {
   return state.studentTest
 }
+
+export const selectGrading = (state: AppState) => {
+  return state.grading
+}

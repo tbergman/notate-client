@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import Stave from 'views/music/components/Stave'
 import type { Question as QuestionType } from 'modules/student-test'
 import { gradeQuestion } from 'modules/grading/actions'
+import { selectQuestionGrade } from 'modules/grading/selectors'
 
 type Props = {
   question: QuestionType,
@@ -20,6 +21,7 @@ class Question extends Component {
         <div className="question-index">
           {this.props.question.index}
           <input type="button" onClick={() => this.props.grade(this.props.question)} value="Grade" />
+          <span>{this.props.questionGrade.correct ? 'CORRECT' : 'FAIL'}</span>
         </div>
         <div className="question-statement">
           {this.props.question.statement}
@@ -32,9 +34,9 @@ class Question extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-
+    questionGrade: selectQuestionGrade(state, ownProps.question.id)
   }
 }
 
