@@ -26,8 +26,10 @@ function setup(): Setup {
   }
 }
 
-it('renders without crashing', () => {
-  const { enzymeWrapper } = setup()
+describe('examples page', () => {
+  it('renders without crashing', () => {
+    const { enzymeWrapper } = setup()
 
-  expect(enzymeWrapper.find('.App')).toBeDefined()
+    expect(enzymeWrapper.find('.App')).toBeDefined()
+  })
 })
