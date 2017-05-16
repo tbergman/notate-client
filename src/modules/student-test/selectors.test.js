@@ -2,13 +2,14 @@
 
 import { fromJS } from 'immutable'
 import { selectQuestions } from './selectors'
+import uuid from 'uuid'
 
 describe('student test selectors', () => {
   it('selects questions from the app state', () => {
     const state = {
       studentTest: {
         questions: fromJS([{
-          id: 1,
+          id: uuid(),
           index: '1.2 a',
           statement: 'Write an ascending leap above each of these notes',
           notation:'',

@@ -18,7 +18,7 @@ function setup(): Setup {
   const store = createMockStore({
     studentTest: {
       questions: fromJS([{
-        id: 1,
+        id: 'question-id',
         index: '1',
         statement: '',
         notation:'',

@@ -17,7 +17,7 @@ export type AnswerNote = {
 }
 
 export type Question = {
-  id: number,
+  id: string,
   index: string,
   statement: string,
   notation: string,
@@ -27,7 +27,7 @@ export type Question = {
 
 // create new record "class"
 const newIQuestion = Record({
-  id: 0,
+  id: '',
   index: '',
   statement: '',
   notation: '',

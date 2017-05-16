@@ -9,14 +9,14 @@ describe('grading selectors', () => {
       studentTest: {},
       grading: {
         questionGrades: fromJS([{
-          questionId: 1,
+          questionId: 'question-id',
           graded: true,
           correct: true,
         }])
       }
     }
 
-    const result = selectQuestionGrade(state, 1)
+    const result = selectQuestionGrade(state, 'question-id')
 
     expect(result.correct).toEqual(true)
     expect(result.graded).toEqual(true)
@@ -30,7 +30,7 @@ describe('grading selectors', () => {
       }
     }
 
-    const result = selectQuestionGrade(state, 1)
+    const result = selectQuestionGrade(state, 'question-id')
 
     expect(result.correct).toEqual(false)
     expect(result.graded).toEqual(false)

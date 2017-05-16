@@ -7,9 +7,10 @@ import PitchComparison from './comparison.pitch'
 
 describe('grading reducer', () => {
   let question
+  const questionId = 'question-id'
   const initialState = {
     questionGrades: new List([{
-      questionId: 1,
+      questionId: questionId,
       graded: true,
       correct: false,
     }])
@@ -17,7 +18,7 @@ describe('grading reducer', () => {
 
   beforeEach(() => {
     question = {
-      id: 1,
+      id: questionId,
       index: '1',
       statement: '',
       notation: '',
@@ -34,11 +35,11 @@ describe('grading reducer', () => {
   })
 
   it('grades a new question', () => {
-    question.id = 2
+    question.id = 'new-question-id'
     const result = reducer(initialState, { type: 'GRADE_QUESTION', payload: question })
     const grade = result.questionGrades.get('1')
 
-    expect(grade.questionId).toEqual(2)
+    expect(grade.questionId).toEqual('new-question-id')
     expect(grade.correct).toEqual(true)
   })
 })

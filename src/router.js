@@ -12,8 +12,6 @@ const history = syncHistoryWithStore(createBrowserHistory(), store)
 import HomePage from 'views/pages/HomePage'
 import ExamplesPage from 'views/pages/ExamplesPage'
 
-import 'styles/index.css'
-
 export default (
   <Provider store={store}>
     <Router history={history}>

@@ -5,7 +5,7 @@ import PitchComparison from './comparison.pitch'
 
 describe('grader', () => {
   const uninportantFields = {
-    id: 1,
+    id: '',
     index: '1',
     statement: '',
     notation: '',

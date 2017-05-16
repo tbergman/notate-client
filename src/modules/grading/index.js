@@ -4,7 +4,7 @@ import type { List } from 'immutable'
 import type { Question } from 'modules/student-test'
 
 export type QuestionGrade {
-  questionId: number,
+  questionId: string,
   correct: boolean,
   graded: boolean,
 }
