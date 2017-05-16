@@ -2,7 +2,9 @@
 
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
+import { connect } from 'react-redux'
+import { gradeQuestion } from 'modules/grading/actions'
+import { selectQuestionGrade } from 'modules/grading/selectors'
 import Stave from 'views/music/components/Stave'
 import type { Question as QuestionType } from 'modules/student-test'
 
@@ -10,7 +12,7 @@ type Props = {
   question: QuestionType,
 }
 
-export default class Question extends Component {
+class Question extends Component {
   props: Props
 
   renderGrade() {
@@ -48,3 +50,12 @@ export default class Question extends Component {
 const StyledGrade = styled.span`
   color: ${props => props.correct ? 'green' : 'red'};
 `
+
+export default connect(
+  (state, ownProps) => ({
+    questionGrade: selectQuestionGrade(state, ownProps.question.id)
+  }),
+  (dispatch) => ({
+    grade: ((question) => dispatch(gradeQuestion(question))),
+  })
+)(Question)

@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { selectQuestions } from 'modules/student-test/selectors'
-import Question from 'views/questions/components/QuestionContainer'
+import Question from 'views/questions/components/Question'
 import Layout from './Layout'
 
 class HomePage extends Component {
