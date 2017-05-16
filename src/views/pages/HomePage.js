@@ -10,7 +10,7 @@ import Question from 'views/questions/components/QuestionContainer'
 class HomePage extends Component {
   renderQuestions(): React.Element<any> {
     return _.map(this.props.questions, x =>
-      <Question key={x.id} question={x} />
+      <Question className="question" key={x.id} question={x} />
     )
   }
 
