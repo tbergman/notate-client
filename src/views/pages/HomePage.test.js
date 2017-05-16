@@ -39,7 +39,7 @@ describe('home page', () => {
   it('renders without crashing', () => {
     const { enzymeWrapper } = setup()
 
-    expect(enzymeWrapper.find('.App')).toBeDefined()
+    expect(enzymeWrapper.find('.app')).toBeDefined()
   })
 
   it('renders questions crashing', () => {

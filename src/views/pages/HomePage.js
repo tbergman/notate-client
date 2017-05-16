@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 
 import { selectQuestions } from 'modules/student-test/selectors'
 import Question from 'views/questions/components/QuestionContainer'
+import Layout from './Layout'
 
 class HomePage extends Component {
   renderQuestions(): React.Element<any> {
@@ -16,13 +17,13 @@ class HomePage extends Component {
 
   render(): React.Element<any> {
     return (
-      <div className="App">
-        <div className="App-header">
+      <Layout className="app">
+        <div className="header">
           <h2>Homework Exercises</h2>
         </div>
 
         {this.renderQuestions()}
-      </div>
+      </Layout>
     )
   }
 }

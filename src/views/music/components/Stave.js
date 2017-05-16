@@ -7,6 +7,7 @@ import type { Question as QuestionType } from 'modules/student-test'
 
 import VexTab from '../../../modules/music/notation/vextab'
 import Artist from '../../../modules/music/notation/artist'
+import StyledLayers from './StyledLayers'
 
 type Props = {
   width?: number,
@@ -37,6 +38,7 @@ class Stave extends Component {
       time = '4/4',
       annotations = '',
       notes = '',
+      question = {}
     } = this.props
 
     const text = (annotations ? `text ${annotations}` : '')
@@ -48,7 +50,7 @@ class Stave extends Component {
       notes ${notes.trim()}
       ${text}
     `
-    this.artist = new Artist(10, 10, width, { scale: 1 }, this.props.question)
+    this.artist = new Artist(10, 10, width, { scale: 1 }, question)
     const vextab = new VexTab(this.artist)
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
     vextab.parse(notation)
@@ -58,12 +60,13 @@ class Stave extends Component {
 
   render(): React.Element<any> {
     return (
-      <div>
+      <StyledLayers>
         <div className="description">
           {this.props.description}
         </div>
+
         <div className="stave" ref={(div) => { this.staveContainer = div }} />
-      </div>
+      </StyledLayers>
     )
   }
 }
