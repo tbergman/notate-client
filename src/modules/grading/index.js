@@ -3,7 +3,7 @@
 import type { List } from 'immutable'
 import type { Question } from 'modules/student-test'
 
-export type QuestionGrade {
+export type QuestionGrade = {
   questionId: string,
   correct: boolean,
   graded: boolean,

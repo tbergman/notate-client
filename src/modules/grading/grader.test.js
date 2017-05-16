@@ -4,7 +4,7 @@ import Grader from './grader'
 import PitchComparison from './comparison.pitch'
 
 describe('grader', () => {
-  const uninportantFields = {
+  const unimportantFields = {
     id: '',
     index: '1',
     statement: '',
@@ -12,7 +12,7 @@ describe('grader', () => {
   }
 
   const question = {
-    ...uninportantFields,
+    ...unimportantFields,
     answers: [
       { pitch: PitchComparison.equal('C/4'), duration: 'q', position: 0 },
       { pitch: PitchComparison.equal('D/4'), duration: 'q', position: 1 },

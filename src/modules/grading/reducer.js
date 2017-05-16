@@ -1,6 +1,7 @@
 // @flow
 
 import type { FluxStandardAction } from 'Types'
+import type { QuestionGradesState } from 'modules/grading'
 import type { Question } from 'modules/student-test'
 import { fromJS } from 'immutable'
 import Grader from 'modules/grading/grader'
