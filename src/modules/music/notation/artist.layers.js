@@ -1,5 +1,30 @@
 /* eslint-disable */
 
+/************************************************************
+
+  LAYERS:
+
+  The staff is being rendered in SVG with a layered concept
+  in mind. The layers are being created by SVG groups and css
+  classes applied to those groups. The current layers are:
+
+  QUESTION LAYER: used to draw the notes from a question that
+  appear for the student. This is the first layer to be rendered.
+
+  OPTIONS LAYER: for each note on the question layer, stavenote
+  or rest, we add an array of option notes to the same measure.
+  The range of these notes is specified manually in this file.
+  This allows the user to hover and click on a note at any given
+  measure allowed by this layer.
+
+  STUDENT LAYER: layer containing the answers a student added to
+  the staff. Each option note clicked by the user is being handled
+  so that it gets added to the student layer.
+
+*************************************************************/
+
+
+
 import Vex from 'vexflow'
 import _ from 'lodash'
 import { studentAddedNote } from '../../student-test/actions'
