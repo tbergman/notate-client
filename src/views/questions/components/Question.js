@@ -7,15 +7,24 @@ import { gradeQuestion } from 'modules/grading/actions'
 import { selectQuestionGrade } from 'modules/grading/selectors'
 import Stave from 'views/music/components/Stave'
 import type { Question as QuestionType } from 'modules/student-test'
+import type { QuestionGrade } from 'modules/grading'
+import type { Dispatch } from 'redux'
 
-type Props = {
+type StateProps = {
+  questionGrade: QuestionGrade,
+}
+type DispatchProps = {
+  grade: Function
+}
+type OwnProps = {
   question: QuestionType,
 }
+type Props = StateProps & DispatchProps & OwnProps
 
 class Question extends Component {
   props: Props
 
-  renderGrade() {
+  renderGrade(): React.Element<any>|null {
     if (this.props.questionGrade.graded) {
       return (
         <StyledGrade correct={this.props.questionGrade.correct}>
@@ -23,7 +32,7 @@ class Question extends Component {
         </StyledGrade>
       )
     }
-    return ''
+    return null
   }
 
   render(): React.Element<any> {
@@ -51,11 +60,16 @@ const StyledGrade = styled.span`
   color: ${props => props.correct ? 'green' : 'red'};
 `
 
-export default connect(
-  (state, ownProps) => ({
+const mapStateToProps = (state, ownProps) => {
+  return {
     questionGrade: selectQuestionGrade(state, ownProps.question.id)
-  }),
-  (dispatch) => ({
+  }
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+  return {
     grade: ((question) => dispatch(gradeQuestion(question))),
-  })
-)(Question)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Question)

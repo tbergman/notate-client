@@ -1,12 +1,14 @@
 // @flow
 
-import { fromJS } from 'immutable'
+import { fromJS, List } from 'immutable'
 import { selectQuestionGrade } from './selectors'
 
 describe('grading selectors', () => {
   it('selects a single question grade by question id', () => {
     const state = {
-      studentTest: {},
+      studentTest: {
+        questions: new List(),
+      },
       grading: {
         questionGrades: fromJS([{
           questionId: 'question-id',
@@ -24,7 +26,9 @@ describe('grading selectors', () => {
 
   it('returns a default question not yet graded when nothing is found in the state', () => {
     const state = {
-      studentTest: {},
+      studentTest: {
+        questions: new List(),
+      },
       grading: {
         questionGrades: fromJS([])
       }

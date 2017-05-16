@@ -7,7 +7,7 @@ export type StudentNote = {
   pitch: string,
   duration: string,
   position: number,
-  questionId: number,
+  questionId?: string,
 }
 
 export type AnswerNote = {

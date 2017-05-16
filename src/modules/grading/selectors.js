@@ -3,8 +3,9 @@
 import { createSelector } from 'reselect'
 
 import { selectGrading } from 'modules/reducers'
+import type { AppState } from 'modules/reducers'
 
-export const selectQuestionGrade = (state, questionId) => {
+export const selectQuestionGrade = (state: AppState, questionId: string) => {
   return createSelector(
     selectGrading,
     (state) => {

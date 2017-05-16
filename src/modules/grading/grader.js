@@ -4,7 +4,7 @@ import _ from 'lodash'
 import type { Question } from '../student-test'
 
 const Grader = {
-  grade(question: Question) {
+  grade(question: Question): boolean {
     const answers = question.answers
     const student = question.student
 

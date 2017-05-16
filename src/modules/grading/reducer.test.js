@@ -1,9 +1,7 @@
 // @flow
 
 import { List } from 'immutable'
-import Grader from './grader'
 import reducer from './reducer'
-import PitchComparison from './comparison.pitch'
 
 describe('grading reducer', () => {
   let question
@@ -29,7 +27,7 @@ describe('grading reducer', () => {
 
   it('grades an existing question', () => {
     const result = reducer(initialState, { type: 'GRADE_QUESTION', payload: question })
-    const grade = result.questionGrades.get('0')
+    const grade = result.questionGrades.get(0)
 
     expect(grade.correct).toEqual(true)
   })
@@ -37,7 +35,7 @@ describe('grading reducer', () => {
   it('grades a new question', () => {
     question.id = 'new-question-id'
     const result = reducer(initialState, { type: 'GRADE_QUESTION', payload: question })
-    const grade = result.questionGrades.get('1')
+    const grade = result.questionGrades.get(1)
 
     expect(grade.questionId).toEqual('new-question-id')
     expect(grade.correct).toEqual(true)
