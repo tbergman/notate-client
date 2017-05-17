@@ -1,5 +1,30 @@
 /* eslint-disable */
 
+/************************************************************
+
+  LAYERS:
+
+  The staff is being rendered in SVG with a layered concept
+  in mind. The layers are being created by SVG groups and css
+  classes applied to those groups. The current layers are:
+
+  QUESTION LAYER: used to draw the notes from a question that
+  appear for the student. This is the first layer to be rendered.
+
+  OPTIONS LAYER: for each note on the question layer, stavenote
+  or rest, we add an array of option notes to the same measure.
+  The range of these notes is specified manually in this file.
+  This allows the user to hover and click on a note at any given
+  measure allowed by this layer.
+
+  STUDENT LAYER: layer containing the answers a student added to
+  the staff. Each option note clicked by the user is being handled
+  so that it gets added to the student layer.
+
+*************************************************************/
+
+
+
 import Vex from 'vexflow'
 import _ from 'lodash'
 import { studentAddedNote } from '../../student-test/actions'
@@ -15,7 +40,6 @@ export default class ArtistLayers {
 
     _.each(notesVoice, voice => {
       voice.draw(context, stave)
-      this.drawOptionsHighlightingLayer(context, stave, voice)
     })
 
     _.each(beams, beam => {
@@ -29,6 +53,7 @@ export default class ArtistLayers {
     context.closeGroup();
     group.classList.add('layer-question');
   }
+
 
   clearStudentLayer() {
     var elements = document.getElementsByClassName('layer-student');
@@ -53,14 +78,15 @@ export default class ArtistLayers {
     group.classList.add('layer-student')
   }
 
-  drawOptionsHighlightingLayer(context, stave, voice) {
-    _.each(voice.tickables, x => {
-
-      this.drawOptions(context, stave, x)
+  drawOptionsLayer(context, stave, voices) {
+    _.each(voices, voice => {
+      _.each(voice.tickables, x => {
+        this.drawOptionsColumn(context, stave, x)
+      })
     })
   }
 
-  drawOptions(context, stave, note) {
+  drawOptionsColumn(context, stave, note) {
     if (note.attrs.type === 'StaveNote') {
       const availableOptions = [
         'E/3', 'F/3', 'G/3', 'A/3', 'B/3',

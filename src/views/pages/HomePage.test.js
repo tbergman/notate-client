@@ -16,7 +16,16 @@ type Setup = {
 function setup(): Setup {
   const props = { }
   const store = createMockStore({
-    studentTest: fromJS({ questions: [] })
+    studentTest: {
+      questions: fromJS([{
+        id: 'question-id',
+        index: '1',
+        statement: '',
+        notation:'',
+        student: [],
+        answers: [],
+      }])
+    }
   })
   const enzymeWrapper: ShallowWrapper = shallowWithStore(<HomePage {...props} />, store)
 
@@ -26,8 +35,16 @@ function setup(): Setup {
   }
 }
 
-it('renders without crashing', () => {
-  const { enzymeWrapper } = setup()
+describe('home page', () => {
+  it('renders without crashing', () => {
+    const { enzymeWrapper } = setup()
 
-  expect(enzymeWrapper.find('.App')).toBeDefined()
+    expect(enzymeWrapper.find('.app')).toBeDefined()
+  })
+
+  it('renders questions crashing', () => {
+    const { enzymeWrapper } = setup()
+
+    expect(enzymeWrapper.find('.question')).toBeDefined()
+  })
 })

@@ -1,12 +1,14 @@
 // @flow
+
 import type { FluxStandardAction } from 'Types'
 import type { StudentTestState, iQuestion } from 'modules/student-test'
 import { fromJS } from 'immutable'
 import PitchComparison from 'modules/grading/comparison.pitch'
+import uuid from 'uuid'
 
 const initialState: StudentTestState = {
   questions: fromJS([{
-    id: 1,
+    id: uuid(),
     index: '1.2 a',
     statement: 'Write an ascending leap above each of these notes',
     notation:
@@ -29,7 +31,7 @@ const initialState: StudentTestState = {
       { pitch: PitchComparison.equalOrHigher('C/5'), duration: 'q', position: 597.71235 }
     ],
   }, {
-    id: 2,
+    id: uuid(),
     index: '1.2 b',
     statement: 'Write an descending step below each of these notes',
     notation:

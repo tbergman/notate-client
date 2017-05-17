@@ -1,19 +1,38 @@
 // @flow
-import type { Question as QuestionType } from 'modules/student-test'
 
 import React, { Component } from 'react'
+import styled from 'styled-components'
+import { connect } from 'react-redux'
+import { gradeQuestion } from 'modules/grading/actions'
+import { selectQuestionGrade } from 'modules/grading/selectors'
 import Stave from 'views/music/components/Stave'
-import Grader from 'modules/grading/grader'
+import type { Question as QuestionType } from 'modules/student-test'
+import type { QuestionGrade } from 'modules/grading'
+import type { Dispatch } from 'redux'
 
-type Props = {
+type StateProps = {
+  questionGrade: QuestionGrade,
+}
+type DispatchProps = {
+  grade: Function
+}
+type OwnProps = {
   question: QuestionType,
 }
+type Props = StateProps & DispatchProps & OwnProps
 
-export default class Question extends Component {
+class Question extends Component {
   props: Props
 
-  grade() {
-    new Grader().grade(this.props.question.answers, this.props.question.student)
+  renderGrade(): React.Element<any>|null {
+    if (this.props.questionGrade.graded) {
+      return (
+        <StyledGrade correct={this.props.questionGrade.correct}>
+          {this.props.questionGrade.correct ? 'CORRECT' : 'FAIL'}
+        </StyledGrade>
+      )
+    }
+    return null
   }
 
   render(): React.Element<any> {
@@ -21,7 +40,10 @@ export default class Question extends Component {
       <div className="question">
         <div className="question-index">
           {this.props.question.index}
-          <input type="button" onClick={() => this.grade()} value="Grade" />
+          <input type="button" onClick={() => this.props.grade(this.props.question)} value="Grade" />
+        </div>
+        <div className="question-grade">
+          {this.renderGrade()}
         </div>
         <div className="question-statement">
           {this.props.question.statement}
@@ -33,3 +55,21 @@ export default class Question extends Component {
     )
   }
 }
+
+const StyledGrade = styled.span`
+  color: ${props => props.correct ? 'green' : 'red'};
+`
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    questionGrade: selectQuestionGrade(state, ownProps.question.id)
+  }
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+  return {
+    grade: ((question) => dispatch(gradeQuestion(question))),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Question)

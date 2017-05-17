@@ -2,12 +2,13 @@
 
 import React, { Component } from 'react';
 import Stave from 'views/music/components/Stave'
+import Layout from './Layout'
 
 export default class ExamplesPage extends Component {
   render(): React.Element<any> {
     return (
-      <div className="App">
-        <div className="App-header">
+      <Layout className="app">
+        <div className="header">
           <h2>Examples</h2>
         </div>
 
@@ -100,7 +101,7 @@ export default class ExamplesPage extends Component {
         <Stave description={'Annotations'} annotations={':w, C Major, G Major'} notes={`
           C-E-G/4 ## | G-B/4 D/5 ##`
         }/>
-      </div>
+      </Layout>
     )
   }
 }

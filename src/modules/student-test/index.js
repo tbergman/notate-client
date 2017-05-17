@@ -1,4 +1,5 @@
-//@flow
+// @flow
+
 import type { List } from 'immutable'
 import { Record } from 'immutable'
 
@@ -6,7 +7,7 @@ export type StudentNote = {
   pitch: string,
   duration: string,
   position: number,
-  questionId: number,
+  questionId?: string,
 }
 
 export type AnswerNote = {
@@ -16,7 +17,7 @@ export type AnswerNote = {
 }
 
 export type Question = {
-  id: number,
+  id: string,
   index: string,
   statement: string,
   notation: string,
@@ -26,7 +27,7 @@ export type Question = {
 
 // create new record "class"
 const newIQuestion = Record({
-  id: 0,
+  id: '',
   index: '',
   statement: '',
   notation: '',

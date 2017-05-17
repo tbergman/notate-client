@@ -12,7 +12,7 @@ const mockAttributesNamedNodeMap = {
 
 describe('stave component', () => {
   const question: Question = {
-    id: 1,
+    id: 'question-id',
     index: '',
     notation: '',
     statement: '',

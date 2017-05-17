@@ -141,6 +141,8 @@ export default class Artist {
 
     this.layers.drawQuestionLayer(ctx, score.stave, scoreVoices, beams, textVoices)
 
+    this.layers.drawOptionsLayer(ctx, score.stave, scoreVoices)
+
     return scoreVoices
   }
 
