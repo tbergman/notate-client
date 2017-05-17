@@ -19,7 +19,6 @@ const initialState: StudentTestState = {
       ':w B/4 #99# #99# #99# | ' +
       'A/5 #99# #99# #99#    | ' +
       'A/4 #99# #99# #99#  =||',
-    student: [ ],
     answers: [
       { pitch: PitchComparison.equalOrHigher('B/4'), duration: 'q', position: 0 },
       { pitch: PitchComparison.equalOrHigher('G/5'), duration: 'q', position: 36.88704 },
@@ -30,6 +29,10 @@ const initialState: StudentTestState = {
       { pitch: PitchComparison.equalOrHigher('B/5'), duration: 'q', position: 469.08242499999994 },
       { pitch: PitchComparison.equalOrHigher('C/5'), duration: 'q', position: 597.71235 }
     ],
+    options: {
+      maxNotesPerMeasure: 1
+    },
+    student: [ ],
   }, {
     id: uuid(),
     index: '1.2 b',

@@ -11,11 +11,11 @@ export default styled.div`
   .layer-option {
     stroke: transparent;
     fill: transparent;
-  }
 
-  .layer-option:hover {
-    stroke: rgba(0,0,0,0.5);
-    fill: rgba(0,0,0,0.5);
+    &:hover {
+      stroke: rgba(0,0,0,0.5);
+      fill: rgba(0,0,0,0.5);
+    }
   }
 
   .layer-student {
