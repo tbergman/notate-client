@@ -10,6 +10,7 @@ export const selectQuestionGrade = (state: AppState, questionId: string) => {
     selectGrading,
     (state) => {
       const questionGrades = (state.questionGrades && state.questionGrades.toJS()) || []
+
       return questionGrades.find(x => x.questionId === questionId) ||
         {
           questionId: questionId,
