@@ -92,6 +92,7 @@ export default class ArtistLayers {
         'E/3', 'F/3', 'G/3', 'A/3', 'B/3',
         'C/4', 'D/4', 'E/4', 'F/4', 'G/4', 'A/4', 'B/4',
         'C/5', 'D/5', 'E/5', 'F/5', 'G/5', 'A/5', 'B/5',
+        'C/6', 'D/6',
       ]
 
       _(availableOptions).each(x => {
@@ -106,14 +107,31 @@ export default class ArtistLayers {
         context.closeGroup()
 
         group.addEventListener('click', () => {
-          store.dispatch(studentAddedNote({
-            pitch: x,
-            duration: 'q',
-            position: optionNote.tickContext.getX(),
-            questionId: this.artist.question.id,
-          }))
+          this.handleStudentClick(optionNote, x)
         })
       })
+    }
+  }
+
+  handleStudentClick(optionNote, optionPitch) {
+    const studentNotes = this.artist.question.student
+    const currentPosition = optionNote.tickContext.getX()
+    const studentNotesAtPosition = _
+      .filter(studentNotes, x => x.position === currentPosition)
+      .length
+
+    const maxNumberOfNotes = (
+      this.artist.question.options &&
+      this.artist.question.options.maxNotesPerMeasure) ||
+      -1
+
+    if (maxNumberOfNotes === -1 || studentNotesAtPosition < maxNumberOfNotes) {
+      store.dispatch(studentAddedNote({
+        pitch: optionPitch,
+        duration: 'q',
+        position: currentPosition,
+        questionId: this.artist.question.id,
+      }))
     }
   }
 }

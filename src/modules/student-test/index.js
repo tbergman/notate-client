@@ -23,6 +23,11 @@ export type Question = {
   notation: string,
   student: Array<StudentNote>,
   answers: Array<AnswerNote>,
+  options?: QuestionOptions,
+}
+
+export type QuestionOptions = {
+  maxNotesPerMeasure?: number
 }
 
 // create new record "class"

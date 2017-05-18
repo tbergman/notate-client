@@ -19,7 +19,6 @@ const initialState: StudentTestState = {
       ':w B/4 #99# #99# #99# | ' +
       'A/5 #99# #99# #99#    | ' +
       'A/4 #99# #99# #99#  =||',
-    student: [ ],
     answers: [
       { pitch: PitchComparison.equalOrHigher('B/4'), duration: 'q', position: 0 },
       { pitch: PitchComparison.equalOrHigher('G/5'), duration: 'q', position: 36.88704 },
@@ -27,9 +26,13 @@ const initialState: StudentTestState = {
       { pitch: PitchComparison.equalOrHigher('G/4'), duration: 'q', position: 172.02337 },
       { pitch: PitchComparison.equalOrHigher('B/5'), duration: 'q', position: 256.237935 },
       { pitch: PitchComparison.equalOrHigher('D/5'), duration: 'q', position: 340.45249999999993 },
-      { pitch: PitchComparison.equalOrHigher('B/5'), duration: 'q', position: 469.08242499999994 },
-      { pitch: PitchComparison.equalOrHigher('C/5'), duration: 'q', position: 597.71235 }
+      { pitch: PitchComparison.equalOrHigher('C/6'), duration: 'q', position: 469.08242499999994 },
+      { pitch: PitchComparison.equalOrHigher('C/5'), duration: 'q', position: 597.71235 },
     ],
+    options: {
+      maxNotesPerMeasure: 1
+    },
+    student: [ ],
   }, {
     id: uuid(),
     index: '1.2 b',
@@ -42,6 +45,19 @@ const initialState: StudentTestState = {
       ':w F/4 #99# #99# #99# | ' +
       'B/5 #99# #99# #99#    | ' +
       'E/4 #99# #99# #99#  =||',
+    answers: [
+      { pitch: PitchComparison.equal('B/4'), duration: 'q', position: 0 },
+      { pitch: PitchComparison.equal('A/4'), duration: 'q', position: 36.88704 },
+      { pitch: PitchComparison.equal('G/5'), duration: 'q', position: 87.80880499999999 },
+      { pitch: PitchComparison.equal('C/4'), duration: 'q', position: 172.02337 },
+      { pitch: PitchComparison.equal('B/3'), duration: 'q', position: 256.237935 },
+      { pitch: PitchComparison.equal('E/4'), duration: 'q', position: 340.45249999999993 },
+      { pitch: PitchComparison.equal('A/5'), duration: 'q', position: 469.08242499999994 },
+      { pitch: PitchComparison.equal('D/4'), duration: 'q', position: 597.71235 },
+    ],
+    options: {
+      maxNotesPerMeasure: 1
+    },
     student: [ ],
   }]),
 }
