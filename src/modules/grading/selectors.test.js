@@ -9,6 +9,10 @@ describe('grading selectors', () => {
       studentTest: {
         questions: new List(),
       },
+      toolbox: {
+        selectedDuration: 0,
+        selectedAccidental: 0,
+      },
       grading: {
         questionGrades: fromJS([{
           questionId: 'question-id',
@@ -28,6 +32,10 @@ describe('grading selectors', () => {
     const state = {
       studentTest: {
         questions: new List(),
+      },
+      toolbox: {
+        selectedDuration: 0,
+        selectedAccidental: 0,
       },
       grading: {
         questionGrades: fromJS([])
