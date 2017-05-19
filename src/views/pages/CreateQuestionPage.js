@@ -5,6 +5,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import Layout from './Layout'
+import Toolbox from 'views/toolbox/Toolbox'
 
 class CreateQuestionPage extends Component {
   render(): React.Element<any> {
@@ -16,7 +17,7 @@ class CreateQuestionPage extends Component {
 
         <PageContainer>
           <ToolboxContainer>
-
+            <Toolbox />
           </ToolboxContainer>
           <QuestionContainer>
 
@@ -35,9 +36,10 @@ const PageContainer = styled.div`
 const ToolboxContainer = styled.div`
   flex: 3;
   box-shadow: 2px 0 5px -2px rgba(0, 0, 0, 0.2);
+  padding: 30px;
 `
 const QuestionContainer = styled.div`
   flex: 7
 `
 
-export default connect(state => {})(CreateQuestionPage)
+export default connect(state => ({}))(CreateQuestionPage)
