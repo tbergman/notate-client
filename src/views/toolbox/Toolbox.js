@@ -13,41 +13,59 @@ class Toolbox extends Component {
   render(): React.Element<any> {
     return (
       <ToolboxContainer>
-        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.EIGHTH)}>
+        <ToolboxItem bar
+          selected={this.props.selectedDuration === DURATION.EIGHTH}
+          onClick={() => this.props.setDuration(DURATION.EIGHTH)}>
           <DurationIcons.Eighth />
         </ToolboxItem>
 
-        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.QUARTER)}>
+        <ToolboxItem bar
+          selected={this.props.selectedDuration === DURATION.QUARTER}
+          onClick={() => this.props.setDuration(DURATION.QUARTER)}>
           <DurationIcons.Quarter />
         </ToolboxItem>
 
-        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.HALF)}>
+        <ToolboxItem bar
+          selected={this.props.selectedDuration === DURATION.HALF}
+          onClick={() => this.props.setDuration(DURATION.HALF)}>
           <DurationIcons.Half />
         </ToolboxItem>
 
-        <ToolboxItem onClick={() => this.props.setDuration(DURATION.WHOLE)}>
+        <ToolboxItem
+          selected={this.props.selectedDuration === DURATION.WHOLE}
+          onClick={() => this.props.setDuration(DURATION.WHOLE)}>
           <DurationIcons.Whole />
         </ToolboxItem>
 
         <ToolboxSeparator />
 
-        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>
+        <ToolboxItem bar
+          selected={this.props.selectedAccidental === ACCIDENTAL.NATURAL}
+          onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>
           <AccidentalIcons.Natural />
         </ToolboxItem>
 
-        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.SHARP)}>
+        <ToolboxItem bar
+          selected={this.props.selectedAccidental === ACCIDENTAL.SHARP}
+          onClick={() => this.props.setAccidental(ACCIDENTAL.SHARP)}>
           <AccidentalIcons.Sharp />
         </ToolboxItem>
 
-        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}>
+        <ToolboxItem bar
+          selected={this.props.selectedAccidental === ACCIDENTAL.DOUBLE_SHARP}
+          onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}>
           <AccidentalIcons.DoubleSharp />
         </ToolboxItem>
 
-        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.FLAT)}>
+        <ToolboxItem bar
+          selected={this.props.selectedAccidental === ACCIDENTAL.FLAT}
+          onClick={() => this.props.setAccidental(ACCIDENTAL.FLAT)}>
           <AccidentalIcons.Flat />
         </ToolboxItem>
 
-        <ToolboxItem onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>
+        <ToolboxItem
+          selected={this.props.selectedAccidental === ACCIDENTAL.DOUBLE_FLAT}
+          onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>
           <AccidentalIcons.DoubleFlat />
         </ToolboxItem>
       </ToolboxContainer>
@@ -68,6 +86,7 @@ const ToolboxItem = styled.div`
   justify-content: center;
   display: flex;
   border-right: ${props => props.bar ? '1px solid #dce0e0' : 'none'};
+  background-color: ${props => props.selected ? '#dce0e0' : 'transparent' }
   cursor: pointer;
 
   &:hover {
@@ -80,7 +99,10 @@ const ToolboxSeparator = styled.div`
 `
 
 export default connect(
-  state => ({}),
+  state => ({
+    selectedDuration: state.toolbox.selectedDuration,
+    selectedAccidental: state.toolbox.selectedAccidental,
+  }),
   dispatch => ({
     setDuration: ((duration) => dispatch(setDuration(duration))),
     setAccidental: ((accidental) => dispatch(setAccidental(accidental))),
