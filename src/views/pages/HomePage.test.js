@@ -42,7 +42,7 @@ describe('home page', () => {
     expect(enzymeWrapper.find('.app')).toBeDefined()
   })
 
-  it('renders questions crashing', () => {
+  it('renders questions without crashing', () => {
     const { enzymeWrapper } = setup()
 
     expect(enzymeWrapper.find('.question')).toBeDefined()
