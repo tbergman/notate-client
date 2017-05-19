@@ -19,7 +19,7 @@ export default class ExamplesPage extends Component {
           }/>
 
           <Stave description={'Different Durations'} notes={`
-            :w C-D/4 :h E-F/4 :q G-A/4 :8 B/4 C/5`
+            :w C-D/4 :h E-F/4 :q G-A/4 :8 G/4`
           }/>
 
           <Stave description={'Accidentals'} notes={`

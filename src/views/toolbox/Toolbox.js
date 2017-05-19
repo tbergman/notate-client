@@ -7,18 +7,28 @@ import styled from 'styled-components'
 import { setDuration, setAccidental } from 'modules/toolbox/actions'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 import AccidentalIcons from 'views/toolbox/AccidentalIcons'
+import DurationIcons from 'views/toolbox/DurationIcons'
 
 class Toolbox extends Component {
-  selectEraser() { }
-
   render(): React.Element<any> {
     return (
       <ToolboxContainer>
-        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.EIGHTH)}>e</ToolboxItem>
-        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.QUARTER)}>q</ToolboxItem>
-        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.HALF)}>h</ToolboxItem>
-        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.WHOLE)}>w</ToolboxItem>
-        <ToolboxItem onClick={() => this.selectEraser()}>D</ToolboxItem>
+        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.EIGHTH)}>
+          <DurationIcons.Eighth />
+        </ToolboxItem>
+
+        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.QUARTER)}>
+          <DurationIcons.Quarter />
+        </ToolboxItem>
+
+        <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.HALF)}>
+          <DurationIcons.Half />
+        </ToolboxItem>
+
+        <ToolboxItem onClick={() => this.props.setDuration(DURATION.WHOLE)}>
+          <DurationIcons.Whole />
+        </ToolboxItem>
+
         <ToolboxSeparator />
 
         <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>
