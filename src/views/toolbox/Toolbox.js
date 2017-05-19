@@ -56,7 +56,7 @@ class Toolbox extends Component {
 }
 
 const ToolboxContainer = styled.div`
-  border: 1px solid #dce0e0;
+  border: 1px solid #008489;
   border-radius: 4px;
   padding: 10px 2px;
   display: flex;
@@ -75,7 +75,7 @@ const ToolboxItem = styled.div`
   }
 `
 const ToolboxSeparator = styled.div`
-  border-right: 1px solid #dce0e0;
+  border-right: 1px solid #008489;
   margin: -10px 0;
 `
 
