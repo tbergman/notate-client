@@ -3,6 +3,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
 
 import { selectQuestions } from 'modules/student-test/selectors'
 import Question from 'views/questions/components/Question'
@@ -22,11 +23,17 @@ class HomePage extends Component {
           <h2>Homework Exercises</h2>
         </div>
 
-        {this.renderQuestions()}
+        <QuestionsContainer>
+          {this.renderQuestions()}
+        </QuestionsContainer>
       </Layout>
     )
   }
 }
+
+const QuestionsContainer = styled.div`
+  padding: 30px;
+`
 
 const mapStateToProps = (state) => {
   return {
