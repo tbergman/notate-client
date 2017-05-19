@@ -6,6 +6,7 @@ import _ from 'lodash'
 import styled from 'styled-components'
 import { setDuration, setAccidental } from 'modules/toolbox/actions'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
+import AccidentalIcons from 'views/toolbox/AccidentalIcons'
 
 class Toolbox extends Component {
   selectEraser() { }
@@ -19,12 +20,26 @@ class Toolbox extends Component {
         <ToolboxItem bar onClick={() => this.props.setDuration(DURATION.WHOLE)}>w</ToolboxItem>
         <ToolboxItem onClick={() => this.selectEraser()}>D</ToolboxItem>
         <ToolboxSeparator />
-        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>N</ToolboxItem>
-        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>NT</ToolboxItem>
-        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.SHARP)}>#</ToolboxItem>
-        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}>##</ToolboxItem>
-        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.FLAT)}>b</ToolboxItem>
-        <ToolboxItem onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>bb</ToolboxItem>
+
+        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>
+          <AccidentalIcons.Natural />
+        </ToolboxItem>
+
+        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.SHARP)}>
+          <AccidentalIcons.Sharp />
+        </ToolboxItem>
+
+        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}>
+          <AccidentalIcons.DoubleSharp />
+        </ToolboxItem>
+
+        <ToolboxItem bar onClick={() => this.props.setAccidental(ACCIDENTAL.FLAT)}>
+          <AccidentalIcons.Flat />
+        </ToolboxItem>
+
+        <ToolboxItem onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>
+          <AccidentalIcons.DoubleFlat />
+        </ToolboxItem>
       </ToolboxContainer>
     )
   }
