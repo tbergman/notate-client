@@ -3,12 +3,17 @@
 import styled from 'styled-components'
 
 export default styled.div`
-  .layer-question {
+  .layer-base {
     stroke: black;
     fill: black;
   }
 
-  .layer-option {
+  .note-question {
+    stroke: black;
+    fill: black;
+  }
+
+  .note-option {
     stroke: transparent;
     fill: transparent;
 
@@ -18,7 +23,7 @@ export default styled.div`
     }
   }
 
-  .layer-student {
+  .note-student {
     stroke: green;
     fill: green;
   }

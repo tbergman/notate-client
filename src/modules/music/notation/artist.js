@@ -241,15 +241,11 @@ export default class Artist {
       articulation.setContext(ctx).draw()
     }
 
-    this.layers.drawStudentLayer(this.renderer_context, this.staves[0].note, this.question.student)
-
     this.rendered = true;
   }
 
-  redrawQuestion(question) {
-    this.question = question
-
-    this.layers.drawStudentLayer(this.renderer_context, this.staves[0].note, this.question.student)
+  drawLayer(notes, layerId) {
+    this.layers.drawLayer(this.renderer_context, this.staves[0].note, notes, layerId)
   }
 
   isRendered() { return this.rendered; }
