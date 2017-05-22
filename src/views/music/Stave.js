@@ -29,7 +29,7 @@ class Stave extends Component {
   props: Props
 
   componentDidUpdate() {
-    this.artist.redrawQuestion(this.props.question)
+    this.artist.drawLayer(this.props.question.student, 'student')
   }
 
   componentDidMount() {
@@ -49,7 +49,7 @@ class Stave extends Component {
         key=${keySignature.trim()}
         time=${time.trim()}
         clef=${clef.trim()}
-      notes ${notes.trim()}
+      notes ${(notes.trim() || this.baseLayerNotation())}
       ${text}
     `
     this.artist = new Artist(10, 10, width, {
@@ -62,6 +62,18 @@ class Stave extends Component {
     vextab.parse(notation)
 
     this.artist.render(renderer)
+
+    if (this.props.question) {
+      this.artist.drawLayer(this.props.question.question, 'question')
+      this.artist.drawLayer(this.props.question.student, 'student')
+    }
+  }
+
+  baseLayerNotation(): string {
+    const ghostNotes = Array(this.props.question.bars)
+      .fill(':q #99# #99# #99# #99#')
+
+    return ghostNotes.join(' | ') + '=||'
   }
 
   render(): React.Element<any> {

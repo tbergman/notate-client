@@ -47,39 +47,61 @@ export default class ArtistLayers {
     })
 
     context.closeGroup();
-    group.classList.add('layer-question');
+    group.classList.add('layer-base');
   }
 
-
-  clearStudentLayer() {
-    var elements = document.getElementsByClassName('layer-student');
+  clearLayer(layerId) {
+    const elements = document.getElementsByClassName('layer-' + layerId)
     while(elements.length > 0){
-      elements[0].parentNode.removeChild(elements[0]);
+      elements[0].parentNode.removeChild(elements[0])
     }
   }
 
-  drawStudentLayer(context, stave, studentAnswers) {
+  drawLayer(context, stave, notes, layerId) {
+    if (_.isEmpty(notes)) {
+      return
+    }
+
+    this.clearLayer(layerId)
+
+    const rememberParent = context.parent
+    context.parent = this.staveLayers
+
     const group = context.openGroup()
     const tickContext = new Vex.Flow.TickContext()
 
-    _.each(studentAnswers, note => {
+    _.each(notes, note => {
+      const noteGroup = context.openGroup()
+      noteGroup.classList.add('note-' + layerId)
+
       const studentNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: note.duration, stem_direction: 1 })
       tickContext.addTickable(studentNote)
       tickContext.preFormat().setX(note.position)
       studentNote.setContext(context).setStave(stave)
       studentNote.draw()
+
+      context.closeGroup()
     })
 
+    group.classList.add('layer-' + layerId)
     context.closeGroup()
-    group.classList.add('layer-student')
+
+    context.parent = rememberParent
   }
 
   drawOptionsLayer(context, stave, voices) {
+    this.staveLayers = context.openGroup()
+    this.staveLayers.classList.add('layers')
+    context.closeGroup()
+
+    const optionLayer = context.openGroup()
+    optionLayer.classList.add('layer-option')
     _.each(voices, voice => {
       _.each(voice.tickables, x => {
         this.drawOptionsColumn(context, stave, x)
       })
     })
+    context.closeGroup()
   }
 
   drawOptionsColumn(context, stave, note) {
@@ -93,7 +115,8 @@ export default class ArtistLayers {
 
       _(availableOptions).each(x => {
         const group = context.openGroup()
-        group.classList.add('layer-option')
+        group.classList.add('note-option')
+        group.setAttribute('z-index', '100')
 
         const optionNote = new Vex.Flow.StaveNote({ keys: [x], duration: 'q', stem_direction: 1 })
         note.tickContext.addTickable(optionNote)
