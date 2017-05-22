@@ -28,8 +28,13 @@ class Stave extends Component {
   artist: Artist
   props: Props
 
+  drawLayers() {
+    const { layers = [] } = this.props
+    _.each(layers, x => { this.artist.drawLayer(x.data, x.id) })
+  }
+
   componentDidUpdate() {
-    this.artist.drawLayer(this.props.question.student, 'student')
+    this.drawLayers()
   }
 
   componentDidMount() {
@@ -53,7 +58,6 @@ class Stave extends Component {
       ${text}
     `
     this.artist = new Artist(10, 10, width, {
-      question: question,
       addNote: (position, pitch) => this.props.addNote(position, pitch),
     })
 
@@ -63,10 +67,7 @@ class Stave extends Component {
 
     this.artist.render(renderer)
 
-    if (this.props.question) {
-      this.artist.drawLayer(this.props.question.question, 'question')
-      this.artist.drawLayer(this.props.question.student, 'student')
-    }
+    this.drawLayers()
   }
 
   baseLayerNotation(): string {

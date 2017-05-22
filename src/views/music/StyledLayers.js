@@ -8,11 +8,6 @@ export default styled.div`
     fill: black;
   }
 
-  .note-question {
-    stroke: black;
-    fill: black;
-  }
-
   .note-option {
     stroke: transparent;
     fill: transparent;
@@ -23,8 +18,18 @@ export default styled.div`
     }
   }
 
+  .note-question {
+    stroke: black;
+    fill: black;
+  }
+
   .note-student {
     stroke: green;
     fill: green;
+  }
+
+  .note-answer {
+    stroke: blue;
+    fill: blue;
   }
 `

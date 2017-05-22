@@ -3,14 +3,14 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { professorAddedQuestionNote } from 'modules/create/actions'
+import { professorAddedAnswerNote } from 'modules/create/actions'
 import Stave from './Stave'
 
-class ProfessorQuestionStave extends Component {
-  addQuestionNote(position, pitch) {
+class ProfessorAnswersStave extends Component {
+  addAnswerNote(position, pitch) {
     const currentPosition = position
 
-    this.props.addQuestionNote({
+    this.props.addAnswerNote({
       pitch: pitch,
       duration: 'q',
       position: currentPosition,
@@ -22,8 +22,9 @@ class ProfessorQuestionStave extends Component {
       <Stave {...this.props}
         layers={[
           { id: 'question', data: this.props.question.notes },
+          { id: 'answer', data: this.props.question.answers },
         ]}
-        addNote={(position, note) => this.addQuestionNote(position, note)}
+        addNote={(position, note) => this.addAnswerNote(position, note)}
       />
     )
   }
@@ -37,8 +38,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    addQuestionNote: ((note) => dispatch(professorAddedQuestionNote(note))),
+    addAnswerNote: ((note) => dispatch(professorAddedAnswerNote(note))),
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfessorQuestionStave)
+export default connect(mapStateToProps, mapDispatchToProps)(ProfessorAnswersStave)

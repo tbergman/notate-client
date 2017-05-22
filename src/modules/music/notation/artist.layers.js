@@ -31,8 +31,9 @@ export default class ArtistLayers {
     this.artist = artist
   }
 
-  drawQuestionLayer(context, stave, notesVoice, beams, textNotesVoice) {
+  drawBaseLayer(context, stave, notesVoice, beams, textNotesVoice) {
     const group = context.openGroup()
+    group.classList.add('layer-base');
 
     _.each(notesVoice, voice => {
       voice.draw(context, stave)
@@ -47,46 +48,6 @@ export default class ArtistLayers {
     })
 
     context.closeGroup();
-    group.classList.add('layer-base');
-  }
-
-  clearLayer(layerId) {
-    const elements = document.getElementsByClassName('layer-' + layerId)
-    while(elements.length > 0){
-      elements[0].parentNode.removeChild(elements[0])
-    }
-  }
-
-  drawLayer(context, stave, notes, layerId) {
-    if (_.isEmpty(notes)) {
-      return
-    }
-
-    this.clearLayer(layerId)
-
-    const rememberParent = context.parent
-    context.parent = this.staveLayers
-
-    const group = context.openGroup()
-    const tickContext = new Vex.Flow.TickContext()
-
-    _.each(notes, note => {
-      const noteGroup = context.openGroup()
-      noteGroup.classList.add('note-' + layerId)
-
-      const studentNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: note.duration, stem_direction: 1 })
-      tickContext.addTickable(studentNote)
-      tickContext.preFormat().setX(note.position)
-      studentNote.setContext(context).setStave(stave)
-      studentNote.draw()
-
-      context.closeGroup()
-    })
-
-    group.classList.add('layer-' + layerId)
-    context.closeGroup()
-
-    context.parent = rememberParent
   }
 
   drawOptionsLayer(context, stave, voices) {
@@ -116,7 +77,6 @@ export default class ArtistLayers {
       _(availableOptions).each(x => {
         const group = context.openGroup()
         group.classList.add('note-option')
-        group.setAttribute('z-index', '100')
 
         const optionNote = new Vex.Flow.StaveNote({ keys: [x], duration: 'q', stem_direction: 1 })
         note.tickContext.addTickable(optionNote)
@@ -130,5 +90,44 @@ export default class ArtistLayers {
         })
       })
     }
+  }
+
+  clearLayer(parent, layerId) {
+    const elements = parent.getElementsByClassName('layer-' + layerId)
+    while(elements.length > 0){
+      elements[0].parentNode.removeChild(elements[0])
+    }
+  }
+
+  drawLayer(context, stave, notes, layerId) {
+    if (_.isEmpty(notes)) {
+      return
+    }
+
+    this.clearLayer(context.parent, layerId)
+
+    const rememberParent = context.parent
+    context.parent = this.staveLayers
+
+    const group = context.openGroup()
+    const tickContext = new Vex.Flow.TickContext()
+
+    _.each(notes, note => {
+      const noteGroup = context.openGroup()
+      noteGroup.classList.add('note-' + layerId)
+
+      const studentNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: note.duration, stem_direction: 1 })
+      tickContext.addTickable(studentNote)
+      tickContext.preFormat().setX(note.position)
+      studentNote.setContext(context).setStave(stave)
+      studentNote.draw()
+
+      context.closeGroup()
+    })
+
+    group.classList.add('layer-' + layerId)
+    context.closeGroup()
+
+    context.parent = rememberParent
   }
 }

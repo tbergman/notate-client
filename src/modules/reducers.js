@@ -10,6 +10,7 @@ import { routerReducer } from 'react-router-redux'
 import { default as studentTest } from 'modules/student-test/reducer'
 import { default as grading } from 'modules/grading/reducer'
 import { default as toolbox } from 'modules/toolbox/reducer'
+import { default as create } from 'modules/create/reducer'
 
 export type AppState = {
   studentTest: StudentTestState,
@@ -21,6 +22,7 @@ export default combineReducers({
   studentTest,
   grading,
   toolbox,
+  create,
   routing: routerReducer,
 })
 

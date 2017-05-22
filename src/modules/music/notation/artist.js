@@ -39,8 +39,6 @@ export default class Artist {
       _.extend(this.options, options)
     }
 
-    this.question = this.options.question
-
     this.annotations = new ArtistAnnotations(this, this.options)
     this.tuplets = new ArtistTuplets(this)
     this.bars = new ArtistBars(this)
@@ -140,8 +138,7 @@ export default class Artist {
     formatter.joinVoices(voicesToFormat)
     formatter.formatToStave(voicesToFormat, score.stave, { align_rests: alignRests })
 
-    this.layers.drawQuestionLayer(ctx, score.stave, scoreVoices, beams, textVoices)
-
+    this.layers.drawBaseLayer(ctx, score.stave, scoreVoices, beams, textVoices)
     this.layers.drawOptionsLayer(ctx, score.stave, scoreVoices)
 
     return scoreVoices

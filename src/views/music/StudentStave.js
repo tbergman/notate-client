@@ -32,6 +32,10 @@ class StudentStave extends Component {
   render(): React.Element<any> {
     return (
       <Stave {...this.props}
+        layers={[
+          { id: 'question', data: this.props.question.question },
+          { id: 'student', data: this.props.question.student },
+        ]}
         addNote={(position, note) => this.addStudentNote(position, note)}
       />
     )
