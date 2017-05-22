@@ -25,8 +25,6 @@
 
 import Vex from 'vexflow'
 import _ from 'lodash'
-import { studentAddedNote } from '../../student-test/actions'
-import store from '../../store'
 
 export default class ArtistLayers {
   constructor(artist) {
@@ -105,31 +103,9 @@ export default class ArtistLayers {
         context.closeGroup()
 
         group.addEventListener('click', () => {
-          this.handleStudentClick(optionNote, x)
+          this.artist.options.addNote(optionNote.tickContext.getX(), x)
         })
       })
-    }
-  }
-
-  handleStudentClick(optionNote, optionPitch) {
-    const studentNotes = this.artist.question.student
-    const currentPosition = optionNote.tickContext.getX()
-    const studentNotesAtPosition = _
-      .filter(studentNotes, x => x.position === currentPosition)
-      .length
-
-    const maxNumberOfNotes = (
-      this.artist.question.options &&
-      this.artist.question.options.maxNotesPerMeasure) ||
-      -1
-
-    if (maxNumberOfNotes === -1 || studentNotesAtPosition < maxNumberOfNotes) {
-      store.dispatch(studentAddedNote({
-        pitch: optionPitch,
-        duration: 'q',
-        position: currentPosition,
-        questionId: this.artist.question.id,
-      }))
     }
   }
 }

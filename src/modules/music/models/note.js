@@ -10,7 +10,7 @@ export default class Note extends StaveElement {
     return this
   }
 
-  toString() {
+  toString(): string {
     return `:${this.duration} ${this.pitch}`
   }
 }

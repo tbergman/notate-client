@@ -1,14 +1,14 @@
 // @flow
 
 export default class StaveElement {
-  duration: string = 'q'
+  duration: string = 'q';
 
   withDuration(duration: string): StaveElement {
     this.duration = duration
     return this
   }
 
-  toString() {
+  toString(): string {
     throw new TypeError('Cannot construct Stave Elements directly')
   }
 }
