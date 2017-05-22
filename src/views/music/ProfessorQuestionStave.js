@@ -12,7 +12,7 @@ class ProfessorQuestionStave extends Component {
 
     this.props.addQuestionNote({
       pitch: pitch,
-      duration: 'q',
+      duration: this.props.selectedDuration,
       position: currentPosition,
     })
   }
@@ -31,7 +31,9 @@ class ProfessorQuestionStave extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    question: state.create.question.toJS()
+    question: state.create.question.toJS(),
+    selectedDuration: state.toolbox.selectedDuration,
+    selectedAccidental: state.toolbox.selectedAccidental,
   }
 }
 

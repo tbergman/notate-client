@@ -47,5 +47,4 @@ const QuestionContainer = styled.div`
   flex: 7;
   padding: 30px;
 `
-
 export default connect(state => ({}))(CreateQuestionPage)

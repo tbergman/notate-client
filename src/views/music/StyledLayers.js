@@ -13,7 +13,6 @@ export default styled.div`
     fill: transparent;
 
     &:hover {
-      stroke: rgba(0,0,0,0.5);
       fill: rgba(0,0,0,0.5);
     }
   }
