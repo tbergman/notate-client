@@ -5,8 +5,8 @@ import { Flow } from 'vexflow'
 import _ from 'lodash'
 import type { Question as QuestionType } from 'modules/student-test'
 
-import VexTab from '../../../modules/music/notation/vextab'
-import Artist from '../../../modules/music/notation/artist'
+import VexTab from 'modules/music/notation/vextab'
+import Artist from 'modules/music/notation/artist'
 import StyledLayers from './StyledLayers'
 
 type Props = {
@@ -19,9 +19,10 @@ type Props = {
   notes: string,
   annotations?: string,
   question?: QuestionType,
+  disableEditing?: boolean,
 }
 
-class Stave extends Component {
+export default class Stave extends Component {
   staveContainer: React.Element<any>
   artist: Artist
   props: Props
@@ -38,7 +39,8 @@ class Stave extends Component {
       time = '4/4',
       annotations = '',
       notes = '',
-      question = {}
+      question = {},
+      disableEditing = false,
     } = this.props
 
     const text = (annotations ? `text ${annotations}` : '')
@@ -50,7 +52,7 @@ class Stave extends Component {
       notes ${notes.trim()}
       ${text}
     `
-    this.artist = new Artist(10, 10, width, { scale: 1 }, question)
+    this.artist = new Artist(10, 10, width, { scale: 1, disableEditing }, question)
     const vextab = new VexTab(this.artist)
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
     vextab.parse(notation)
@@ -70,5 +72,3 @@ class Stave extends Component {
     )
   }
 }
-
-export default Stave

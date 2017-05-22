@@ -23,8 +23,6 @@
 
 *************************************************************/
 
-
-
 import Vex from 'vexflow'
 import _ from 'lodash'
 import { studentAddedNote } from '../../student-test/actions'
