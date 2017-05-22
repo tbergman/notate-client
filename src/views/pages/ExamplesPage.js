@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import Stave from 'views/music/components/Stave'
+import Stave from 'views/music/Stave'
 import Layout from './Layout'
 import styled from 'styled-components'
 

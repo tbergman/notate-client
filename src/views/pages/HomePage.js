@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { selectQuestions } from 'modules/student-test/selectors'
-import Question from 'views/questions/components/Question'
+import Question from 'views/questions/Question'
 import Layout from './Layout'
 
 class HomePage extends Component {
