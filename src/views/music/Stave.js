@@ -21,7 +21,6 @@ type Props = {
   notes: string,
   annotations?: string,
   question?: QuestionType,
-  disableEditing?: boolean,
 }
 
 class Stave extends Component {
@@ -54,37 +53,15 @@ class Stave extends Component {
       ${text}
     `
     this.artist = new Artist(10, 10, width, {
-      scale: 1,
-      addNote: (position, pitch) => this.addStudentNote(position, pitch)
-    }, question)
-    
+      question: question,
+      addNote: (position, pitch) => this.props.addNote(position, pitch),
+    })
+
     const vextab = new VexTab(this.artist)
     const renderer = new Flow.Renderer(this.staveContainer, Flow.Renderer.Backends.SVG)
     vextab.parse(notation)
 
     this.artist.render(renderer)
-  }
-
-  addStudentNote(position, pitch) {
-    const studentNotes = this.props.question.student
-    const currentPosition = position
-    const studentNotesAtPosition = _
-      .filter(studentNotes, x => x.position === currentPosition)
-      .length
-
-    const maxNumberOfNotes = (
-      this.artist.question.options &&
-      this.artist.question.options.maxNotesPerMeasure) ||
-      -1
-
-    if (maxNumberOfNotes === -1 || studentNotesAtPosition < maxNumberOfNotes) {
-      this.props.studentAddedNote({
-        pitch: pitch,
-        duration: 'q',
-        position: currentPosition,
-        questionId: this.props.question.id,
-      })
-    }
   }
 
   render(): React.Element<any> {
@@ -100,15 +77,9 @@ class Stave extends Component {
   }
 }
 
-
-const mapStateToProps = (state, ownProps) => {
-  return { }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-  return {
+export default connect(
+  state => ({}),
+  dispatch => ({
     studentAddedNote: ((note) => dispatch(studentAddedNote(note))),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Stave)
+  })
+)(Stave)

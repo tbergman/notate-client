@@ -23,11 +23,10 @@ const __guard__ = (value, transform) => {
 }
 
 export default class Artist {
-  constructor(x, y, width, options, question) {
+  constructor(x, y, width, options) {
     this.x = x
     this.y = y
     this.width = width
-    this.question = question
 
     this.options = {
       bottom_spacing: 20,
@@ -39,6 +38,8 @@ export default class Artist {
     if (options != null) {
       _.extend(this.options, options)
     }
+
+    this.question = this.options.question
 
     this.annotations = new ArtistAnnotations(this, this.options)
     this.tuplets = new ArtistTuplets(this)
