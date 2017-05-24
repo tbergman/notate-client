@@ -3,12 +3,13 @@
 import type { SetAccidentalAction, SetDurationAction } from 'modules/toolbox/actions'
 import reducer from 'modules/toolbox/reducer'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
-import { SET_DURATION, SET_ACCIDENTAL } from 'modules/toolbox/actions'
+import { SET_DURATION, SET_ACCIDENTAL, TOGGLE_REST } from 'modules/toolbox/actions'
 
 describe('toolbox reducer', () => {
   const initialState = {
     selectedDuration: DURATION.QUARTER,
-    selectedAccidental: ACCIDENTAL.NATURAL
+    selectedAccidental: ACCIDENTAL.NATURAL,
+    restSelected: false
   }
 
   it('sets an accidental', () => {
@@ -33,5 +34,17 @@ describe('toolbox reducer', () => {
     const result = reducer(initialState, action)
 
     expect(result.selectedDuration).toEqual(DURATION.EIGHTH)
+  })
+
+  it('toggles a rest', () => {
+    const action: ToggleRestAction = { type: TOGGLE_REST }
+
+    const result = reducer(initialState, action)
+
+    expect(result.restSelected).toEqual(true)
+
+    const nextToggle = reducer(result, action)
+
+    expect(nextToggle.restSelected).toEqual(false)
   })
 })
