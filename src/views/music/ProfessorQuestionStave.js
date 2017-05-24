@@ -16,6 +16,7 @@ class ProfessorQuestionStave extends Component {
       accidental: this.props.selectedAccidental,
       position: currentPosition,
       isRest: this.props.restSelected,
+      isDotted: this.props.isDotted,
     })
   }
 
@@ -37,6 +38,7 @@ const mapStateToProps = (state) => {
     selectedDuration: state.toolbox.selectedDuration,
     selectedAccidental: state.toolbox.selectedAccidental,
     restSelected: state.toolbox.restSelected,
+    isDotted: state.toolbox.dotSelected,
   }
 }
 

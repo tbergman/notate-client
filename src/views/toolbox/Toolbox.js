@@ -4,10 +4,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import styled from 'styled-components'
-import { setDuration, setAccidental, toggleRest } from 'modules/toolbox/actions'
+import { setDuration, setAccidental, toggleRest, toggleDot } from 'modules/toolbox/actions'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 
-import { RestIcon } from 'views/toolbox/ToolboxIcons'
+import { RestIcon, DotIcon } from 'views/toolbox/ToolboxIcons'
 import AccidentalIcons from 'views/toolbox/AccidentalIcons'
 import DurationIcons from 'views/toolbox/DurationIcons'
 
@@ -65,16 +65,22 @@ class Toolbox extends Component {
           <AccidentalIcons.Flat />
         </ToolboxItem>
 
-        <ToolboxItem
+        <ToolboxItem bar
           selected={this.props.selectedAccidental === ACCIDENTAL.DOUBLE_FLAT}
           onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>
           <AccidentalIcons.DoubleFlat />
         </ToolboxItem>
 
-        <ToolboxItem
+        <ToolboxItem bar
           selected={this.props.restSelected}
           onClick={() => this.props.toggleRest()}>
           <RestIcon />
+        </ToolboxItem>
+
+        <ToolboxItem
+          selected={this.props.dotSelected}
+          onClick={() => this.props.toggleDot()}>
+          <DotIcon />
         </ToolboxItem>
       </ToolboxContainer>
     )
@@ -111,10 +117,12 @@ export default connect(
     selectedDuration: state.toolbox.selectedDuration,
     selectedAccidental: state.toolbox.selectedAccidental,
     restSelected: state.toolbox.restSelected,
+    dotSelected: state.toolbox.dotSelected,
   }),
   dispatch => ({
     setDuration: ((duration) => dispatch(setDuration(duration))),
     setAccidental: ((accidental) => dispatch(setAccidental(accidental))),
     toggleRest: (() => dispatch(toggleRest())),
+    toggleDot: (() => dispatch(toggleDot())),
   }),
 )(Toolbox)

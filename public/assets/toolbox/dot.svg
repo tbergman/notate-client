@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<svg version="1.1" id="dot" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="24" height="24" viewBox="130 46 28 28">
+  <g class="augmented">
+    <path stroke-width="0.3"
+      fill="null"
+      stroke="none"
+      stroke-dasharray="none"
+      font-weight="normal"
+      font-style="normal"
+      x="753.40585625"
+      y="30"
+      width="18.01824"
+      height="1"
+      d="M145.80023999999997 65 A2 2 0 0 0 141.80023999999997 65M0 0M141.80023999999997 65 A2 2 0 0 0 145.80023999999997 65M0 0">
+    </path>
+  </g>
+</svg>
