@@ -4,8 +4,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import styled from 'styled-components'
-import { setDuration, setAccidental } from 'modules/toolbox/actions'
+import { setDuration, setAccidental, toggleRest } from 'modules/toolbox/actions'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
+
+import { RestIcon } from 'views/toolbox/ToolboxIcons'
 import AccidentalIcons from 'views/toolbox/AccidentalIcons'
 import DurationIcons from 'views/toolbox/DurationIcons'
 
@@ -68,6 +70,12 @@ class Toolbox extends Component {
           onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>
           <AccidentalIcons.DoubleFlat />
         </ToolboxItem>
+
+        <ToolboxItem
+          selected={this.props.restSelected}
+          onClick={() => this.props.toggleRest()}>
+          <RestIcon />
+        </ToolboxItem>
       </ToolboxContainer>
     )
   }
@@ -102,9 +110,11 @@ export default connect(
   state => ({
     selectedDuration: state.toolbox.selectedDuration,
     selectedAccidental: state.toolbox.selectedAccidental,
+    restSelected: state.toolbox.restSelected,
   }),
   dispatch => ({
     setDuration: ((duration) => dispatch(setDuration(duration))),
     setAccidental: ((accidental) => dispatch(setAccidental(accidental))),
+    toggleRest: (() => dispatch(toggleRest())),
   }),
 )(Toolbox)
