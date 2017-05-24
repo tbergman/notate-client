@@ -1,6 +1,6 @@
 // @flow
 
-export type AccidentalType = -2 | -1 | 0 | 1 | 2
+export type AccidentalType = string
 
 export type DurationType = string
 
@@ -10,11 +10,12 @@ export type ToolboxState = {
 }
 
 export const ACCIDENTAL = {
-  NATURAL: 0,
-  SHARP: 1,
-  DOUBLE_SHARP: 2,
-  FLAT: -1,
-  DOUBLE_FLAT: -2,
+  NONE: '',
+  NATURAL: 'n',
+  SHARP: '#',
+  DOUBLE_SHARP: '##',
+  FLAT: 'b',
+  DOUBLE_FLAT: 'bb',
 }
 
 export const DURATION = {
