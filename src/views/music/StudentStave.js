@@ -7,7 +7,7 @@ import { studentAddedNote } from 'modules/student-test/actions'
 import Stave from './Stave'
 
 class StudentStave extends Component {
-  addStudentNote(position, pitch) {
+  addStudentNote(position: number, pitch: string) {
     const studentNotes = this.props.question.student
     const currentPosition = position
     const studentNotesAtPosition = _

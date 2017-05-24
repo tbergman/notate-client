@@ -1,10 +1,9 @@
 // @flow
 
 import type { FluxStandardAction } from 'Types'
-import type { StudentTestState, iQuestion } from 'modules/student-test'
+import type { CreateQuestionState } from 'modules/create'
+
 import { fromJS } from 'immutable'
-import PitchComparison from 'modules/grading/comparison.pitch'
-import uuid from 'uuid'
 
 const initialState = {
   question: fromJS({
@@ -14,7 +13,10 @@ const initialState = {
   }),
 }
 
-export default function reducer(state = initialState, action: FluxStandardAction) {
+export default function reducer(
+  state: CreateQuestionState = initialState,
+  action: FluxStandardAction): CreateQuestionState {
+
   switch (action.type) {
     case 'create/PROFESSOR_ADDED_QUESTION_NOTE': {
 

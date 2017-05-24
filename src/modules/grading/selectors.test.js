@@ -10,8 +10,10 @@ describe('grading selectors', () => {
         questions: new List(),
       },
       toolbox: {
-        selectedDuration: 0,
-        selectedAccidental: 0,
+        selectedDuration: '1',
+        selectedAccidental: '#',
+        restSelected: false,
+        dotSelected: false,
       },
       grading: {
         questionGrades: fromJS([{
@@ -34,8 +36,10 @@ describe('grading selectors', () => {
         questions: new List(),
       },
       toolbox: {
-        selectedDuration: 0,
-        selectedAccidental: 0,
+        selectedDuration: '1',
+        selectedAccidental: '#',
+        restSelected: false,
+        dotSelected: false,
       },
       grading: {
         questionGrades: fromJS([])

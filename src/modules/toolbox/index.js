@@ -7,6 +7,8 @@ export type DurationType = string
 export type ToolboxState = {
   selectedDuration: DurationType,
   selectedAccidental: AccidentalType,
+  restSelected: boolean,
+  dotSelected: boolean,
 }
 
 export const ACCIDENTAL = {
