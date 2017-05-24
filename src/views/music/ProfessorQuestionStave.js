@@ -15,6 +15,7 @@ class ProfessorQuestionStave extends Component {
       duration: this.props.selectedDuration,
       accidental: this.props.selectedAccidental,
       position: currentPosition,
+      isRest: this.props.restSelected,
     })
   }
 
@@ -35,6 +36,7 @@ const mapStateToProps = (state) => {
     question: state.create.question.toJS(),
     selectedDuration: state.toolbox.selectedDuration,
     selectedAccidental: state.toolbox.selectedAccidental,
+    restSelected: state.toolbox.restSelected,
   }
 }
 

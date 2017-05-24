@@ -116,7 +116,8 @@ export default class ArtistLayers {
       const noteGroup = context.openGroup()
       noteGroup.classList.add('note-' + layerId)
 
-      const studentNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: note.duration, stem_direction: 1 })
+      const duration = note.duration + (note.isRest ? 'r' : '')
+      const studentNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: duration, stem_direction: 1 })
       if (note.accidental) {
         studentNote.addAccidental(0, new Vex.Flow.Accidental(note.accidental))
       }
