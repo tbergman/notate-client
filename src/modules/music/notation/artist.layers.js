@@ -117,15 +117,19 @@ export default class ArtistLayers {
       noteGroup.classList.add('note-' + layerId)
 
       const duration = note.duration + (note.isRest ? 'r' : '')
-      const studentNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: duration, stem_direction: 1 })
+      const newNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: duration, stem_direction: 1 })
       if (note.accidental) {
-        studentNote.addAccidental(0, new Vex.Flow.Accidental(note.accidental))
+        newNote.addAccidental(0, new Vex.Flow.Accidental(note.accidental))
+      }
+      console.log(note)
+      if (note.isDotted) {
+        newNote.addDot(0)
       }
 
-      tickContext.addTickable(studentNote)
+      tickContext.addTickable(newNote)
       tickContext.preFormat().setX(note.position)
-      studentNote.setContext(context).setStave(stave)
-      studentNote.draw()
+      newNote.setContext(context).setStave(stave)
+      newNote.draw()
 
       context.closeGroup()
     })

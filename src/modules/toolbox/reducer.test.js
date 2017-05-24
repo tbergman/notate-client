@@ -1,9 +1,15 @@
 // @flow
 
-import type { SetAccidentalAction, SetDurationAction } from 'modules/toolbox/actions'
+import type {
+  SetAccidentalAction,
+  SetDurationAction,
+  ToggleRestAction,
+  ToggleDotAction }
+from 'modules/toolbox/actions'
+
 import reducer from 'modules/toolbox/reducer'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
-import { SET_DURATION, SET_ACCIDENTAL, TOGGLE_REST } from 'modules/toolbox/actions'
+import { SET_DURATION, SET_ACCIDENTAL, TOGGLE_REST, TOGGLE_DOT } from 'modules/toolbox/actions'
 
 describe('toolbox reducer', () => {
   const initialState = {
@@ -46,5 +52,17 @@ describe('toolbox reducer', () => {
     const nextToggle = reducer(result, action)
 
     expect(nextToggle.restSelected).toEqual(false)
+  })
+
+  it('toggles a dot', () => {
+    const action: ToggleDotAction = { type: TOGGLE_DOT }
+
+    const result = reducer(initialState, action)
+
+    expect(result.dotSelected).toEqual(true)
+
+    const nextToggle = reducer(result, action)
+
+    expect(nextToggle.dotSelected).toEqual(false)
   })
 })
