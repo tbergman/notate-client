@@ -19,6 +19,14 @@ describe('toolbox reducer', () => {
     expect(result.selectedAccidental).toEqual(ACCIDENTAL.SHARP)
   })
 
+  it('clear the accidental when selected value was same as before', () => {
+    const action: SetAccidentalAction = { type: SET_ACCIDENTAL, payload: ACCIDENTAL.NATURAL }
+
+    const result = reducer(initialState, action)
+
+    expect(result.selectedAccidental).toEqual(ACCIDENTAL.NONE)
+  })
+
   it('sets a duration', () => {
     const action: SetDurationAction = { type: SET_DURATION, payload: DURATION.EIGHTH }
 
