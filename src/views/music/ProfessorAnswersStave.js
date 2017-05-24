@@ -13,6 +13,7 @@ class ProfessorAnswersStave extends Component {
     this.props.addAnswerNote({
       pitch: pitch,
       duration: this.props.selectedDuration,
+      accidental: this.props.selectedAccidental,
       position: currentPosition,
     })
   }

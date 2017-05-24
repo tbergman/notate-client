@@ -117,6 +117,10 @@ export default class ArtistLayers {
       noteGroup.classList.add('note-' + layerId)
 
       const studentNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: note.duration, stem_direction: 1 })
+      if (note.accidental) {
+        studentNote.addAccidental(0, new Vex.Flow.Accidental(note.accidental))
+      }
+
       tickContext.addTickable(studentNote)
       tickContext.preFormat().setX(note.position)
       studentNote.setContext(context).setStave(stave)
