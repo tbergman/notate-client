@@ -16,6 +16,10 @@ export type AnswerNote = {
   position: number,
 }
 
+export type QuestionOptions = {
+  maxNotesPerMeasure?: number
+}
+
 export type Question = {
   id: string,
   index: string,
@@ -24,10 +28,7 @@ export type Question = {
   student: Array<StudentNote>,
   answers: Array<AnswerNote>,
   options?: QuestionOptions,
-}
-
-export type QuestionOptions = {
-  maxNotesPerMeasure?: number
+  bars?: number,
 }
 
 // create new record "class"

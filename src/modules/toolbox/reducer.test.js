@@ -15,7 +15,8 @@ describe('toolbox reducer', () => {
   const initialState = {
     selectedDuration: DURATION.QUARTER,
     selectedAccidental: ACCIDENTAL.NATURAL,
-    restSelected: false
+    restSelected: false,
+    dotSelected: false,
   }
 
   it('sets an accidental', () => {

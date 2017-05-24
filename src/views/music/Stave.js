@@ -6,10 +6,16 @@ import _ from 'lodash'
 import { Flow } from 'vexflow'
 import { studentAddedNote } from 'modules/student-test/actions'
 import type { Question as QuestionType } from 'modules/student-test'
+import type { StaveNote } from 'modules/types'
 
 import VexTab from 'modules/music/notation/vextab'
 import Artist from 'modules/music/notation/artist'
 import StyledLayers from './StyledLayers'
+
+type Layer = {
+  id: string,
+  data: Array<StaveNote>,
+}
 
 type Props = {
   width?: number,
@@ -21,6 +27,8 @@ type Props = {
   notes: string,
   annotations?: string,
   question?: QuestionType,
+  addNote?: Function,
+  layers?: Array<Layer>
 }
 
 class Stave extends Component {
@@ -45,7 +53,6 @@ class Stave extends Component {
       time = '4/4',
       annotations = '',
       notes = '',
-      question = {},
     } = this.props
 
     const text = (annotations ? `text ${annotations}` : '')

@@ -7,7 +7,7 @@ import { professorAddedAnswerNote } from 'modules/create/actions'
 import Stave from './Stave'
 
 class ProfessorAnswersStave extends Component {
-  addAnswerNote(position, pitch) {
+  addAnswerNote(position: number, pitch: string) {
     const currentPosition = position
 
     this.props.addAnswerNote({
