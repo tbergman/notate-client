@@ -8,7 +8,7 @@ import { SET_DURATION, SET_ACCIDENTAL } from 'modules/toolbox/actions'
 
 export const initialState: ToolboxState = {
   selectedDuration: DURATION.QUARTER,
-  selectedAccidental: ACCIDENTAL.NATURAL,
+  selectedAccidental: ACCIDENTAL.NONE,
 }
 
 export default (state: ToolboxState = initialState, action: ToolboxActions) => {
@@ -20,9 +20,13 @@ export default (state: ToolboxState = initialState, action: ToolboxActions) => {
       }
 
     case SET_ACCIDENTAL:
+      const newAccidental = action.payload === state.selectedAccidental
+        ? ACCIDENTAL.NONE
+        : action.payload
+
       return {
         ...state,
-        selectedAccidental: action.payload,
+        selectedAccidental: newAccidental,
       }
 
     default:
