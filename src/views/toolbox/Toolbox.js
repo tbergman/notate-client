@@ -4,10 +4,17 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import styled from 'styled-components'
-import { setDuration, setAccidental, toggleRest, toggleDot } from 'modules/toolbox/actions'
+import {
+  setDuration,
+  setAccidental,
+  toggleRest,
+  toggleDot,
+  toggleSelectionTool,
+} from 'modules/toolbox/actions'
+
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 
-import { RestIcon, DotIcon } from 'views/toolbox/ToolboxIcons'
+import { RestIcon, DotIcon, SelectionToolIcon } from 'views/toolbox/ToolboxIcons'
 import AccidentalIcons from 'views/toolbox/AccidentalIcons'
 import DurationIcons from 'views/toolbox/DurationIcons'
 
@@ -16,25 +23,31 @@ class Toolbox extends Component {
     return (
       <ToolboxContainer>
         <ToolboxItem bar
-          selected={this.props.selectedDuration === DURATION.EIGHTH}
+          selected={this.props.selectionTool}
+          onClick={() => this.props.toggleSelectionTool()}>
+          <SelectionToolIcon />
+        </ToolboxItem>
+
+        <ToolboxItem bar
+          selected={this.props.selectedDuration === DURATION.EIGHTH && !this.props.selectionTool}
           onClick={() => this.props.setDuration(DURATION.EIGHTH)}>
           <DurationIcons.Eighth />
         </ToolboxItem>
 
         <ToolboxItem bar
-          selected={this.props.selectedDuration === DURATION.QUARTER}
+          selected={this.props.selectedDuration === DURATION.QUARTER && !this.props.selectionTool}
           onClick={() => this.props.setDuration(DURATION.QUARTER)}>
           <DurationIcons.Quarter />
         </ToolboxItem>
 
         <ToolboxItem bar
-          selected={this.props.selectedDuration === DURATION.HALF}
+          selected={this.props.selectedDuration === DURATION.HALF && !this.props.selectionTool}
           onClick={() => this.props.setDuration(DURATION.HALF)}>
           <DurationIcons.Half />
         </ToolboxItem>
 
         <ToolboxItem
-          selected={this.props.selectedDuration === DURATION.WHOLE}
+          selected={this.props.selectedDuration === DURATION.WHOLE && !this.props.selectionTool}
           onClick={() => this.props.setDuration(DURATION.WHOLE)}>
           <DurationIcons.Whole />
         </ToolboxItem>
@@ -118,11 +131,13 @@ export default connect(
     selectedAccidental: state.toolbox.selectedAccidental,
     restSelected: state.toolbox.restSelected,
     dotSelected: state.toolbox.dotSelected,
+    selectionTool: state.toolbox.selectionTool,
   }),
   dispatch => ({
     setDuration: ((duration) => dispatch(setDuration(duration))),
     setAccidental: ((accidental) => dispatch(setAccidental(accidental))),
     toggleRest: (() => dispatch(toggleRest())),
     toggleDot: (() => dispatch(toggleDot())),
+    toggleSelectionTool: (() => dispatch(toggleSelectionTool())),
   }),
 )(Toolbox)

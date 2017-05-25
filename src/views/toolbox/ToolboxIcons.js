@@ -13,5 +13,8 @@ export const RestIcon = styled(ToolboxIcons)`
 export const DotIcon = styled(ToolboxIcons)`
   background-image: url(/assets/toolbox/dot.svg);
 `
+export const SelectionToolIcon = styled(ToolboxIcons)`
+  background-image: url(/assets/toolbox/selection.svg);
+`
 
 export default ToolboxIcons
