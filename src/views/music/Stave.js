@@ -7,6 +7,7 @@ import { Flow } from 'vexflow'
 import { studentAddedNote } from 'modules/student-test/actions'
 import type { Question as QuestionType } from 'modules/student-test'
 import type { StaveNote } from 'modules/types'
+import type { ToolboxState } from 'modules/toolbox'
 
 import VexTab from 'modules/music/notation/vextab'
 import Artist from 'modules/music/notation/artist'
@@ -28,7 +29,8 @@ type Props = {
   annotations?: string,
   question?: QuestionType,
   addNote?: Function,
-  layers?: Array<Layer>
+  layers?: Array<Layer>,
+  toolbox?: ToolboxState,
 }
 
 export class StaveUnconnected extends Component {
@@ -37,7 +39,13 @@ export class StaveUnconnected extends Component {
   props: Props
 
   drawLayers() {
-    const { layers = [] } = this.props
+    const {
+      layers = [],
+      toolbox,
+    } = this.props
+
+    this.artist.drawOptions(toolbox)
+
     _.each(layers, x => { this.artist.drawLayer(x.data, x.id) })
   }
 
@@ -97,7 +105,16 @@ export class StaveUnconnected extends Component {
   }
 }
 
-export default connect(
-  null,
-  { studentAddedNote }
-)(StaveUnconnected)
+const mapStateToProps = (state, ) => {
+  return {
+    toolbox: state.toolbox
+  }
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+  return {
+    studentAddedNote: ((note) => dispatch(studentAddedNote(note))),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(StaveUnconnected)

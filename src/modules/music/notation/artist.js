@@ -138,10 +138,15 @@ export default class Artist {
     formatter.joinVoices(voicesToFormat)
     formatter.formatToStave(voicesToFormat, score.stave, { align_rests: alignRests })
 
+    this.scoreVoices = scoreVoices
+
     this.layers.drawBaseLayer(ctx, score.stave, scoreVoices, beams, textVoices)
-    this.layers.drawOptionsLayer(ctx, score.stave, scoreVoices)
 
     return scoreVoices
+  }
+
+  drawOptions(toolbox) {
+    this.layers.drawOptionsLayer(this.renderer_context, this.staves[0].note, this.scoreVoices, toolbox)
   }
 
   createTextVoice(stave, textNotes) {
