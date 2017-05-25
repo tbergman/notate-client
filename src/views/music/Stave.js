@@ -37,7 +37,13 @@ class Stave extends Component {
   props: Props
 
   drawLayers() {
-    const { layers = [] } = this.props
+    const {
+      layers = [],
+      toolbox,
+    } = this.props
+
+    this.artist.drawOptions(toolbox)
+
     _.each(layers, x => { this.artist.drawLayer(x.data, x.id) })
   }
 
@@ -98,7 +104,9 @@ class Stave extends Component {
 }
 
 export default connect(
-  state => ({}),
+  state => ({
+    toolbox: state.toolbox,
+  }),
   dispatch => ({
     studentAddedNote: ((note) => dispatch(studentAddedNote(note))),
   })
