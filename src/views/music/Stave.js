@@ -105,7 +105,7 @@ export class StaveUnconnected extends Component {
   }
 }
 
-const mapStateToProps = (state, ) => {
+const mapStateToProps = (state) => {
   return {
     toolbox: state.toolbox
   }

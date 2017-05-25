@@ -6,6 +6,7 @@ export const SET_DURATION = 'toolbox/SELECT_DURATION'
 export const SET_ACCIDENTAL = 'toolbox/SELECT_ACCIDENTAL'
 export const TOGGLE_REST = 'toolbox/TOGGLE_REST'
 export const TOGGLE_DOT = 'toolbox/TOGGLE_DOT'
+export const TOGGLE_SELECTION_TOOL = 'toolbox/TOGGLE_SELECTION_TOOL'
 
 // SET DURATION
 export type SetDurationAction = {
@@ -43,8 +44,17 @@ export const toggleDot: () => ToggleDotAction = () => ({
   type: TOGGLE_DOT,
 })
 
+// TOGGLE SELECTION TOOL
+export type ToggleSelectionToolAction = {
+  type: 'toolbox/TOGGLE_SELECTION_TOOL'
+}
+export const toggleSelectionTool: () => ToggleSelectionToolAction = () => ({
+  type: TOGGLE_SELECTION_TOOL,
+})
+
 export type ToolboxActions =
   | SetDurationAction
   | SetAccidentalAction
   | ToggleRestAction
   | ToggleDotAction
+  | ToggleSelectionToolAction

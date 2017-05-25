@@ -9,6 +9,7 @@ export type ToolboxState = {
   selectedAccidental: AccidentalType,
   restSelected: boolean,
   dotSelected: boolean,
+  selectionTool: boolean,
 }
 
 export const ACCIDENTAL = {
