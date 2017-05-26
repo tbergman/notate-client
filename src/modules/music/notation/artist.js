@@ -246,8 +246,8 @@ export default class Artist {
     this.rendered = true;
   }
 
-  drawLayer(notes, layerId) {
-    this.layers.drawLayer(this.renderer_context, this.staves[0].note, notes, layerId)
+  drawLayer(notes, layerId, toolbox) {
+    this.layers.drawLayer(this.renderer_context, this.staves[0].note, notes, layerId, toolbox)
   }
 
   isRendered() { return this.rendered; }
