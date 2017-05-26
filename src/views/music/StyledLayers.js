@@ -18,9 +18,14 @@ export default styled.div`
     }
   }
 
-  .note-question {
+  .note-layer {
     stroke: black;
     fill: black;
+
+    &.note-selected {
+      stroke: pink;
+      fill: pink;
+    }
   }
 
   .note-student {

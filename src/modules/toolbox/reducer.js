@@ -9,7 +9,8 @@ import {
   SET_ACCIDENTAL,
   TOGGLE_REST,
   TOGGLE_DOT,
-  TOGGLE_SELECTION_TOOL
+  TOGGLE_SELECTION_TOOL,
+  SELECT_NOTE,
 } from 'modules/toolbox/actions'
 
 export const initialState: ToolboxState = {
@@ -18,6 +19,7 @@ export const initialState: ToolboxState = {
   restSelected: false,
   dotSelected: false,
   selectionTool: false,
+  selectedNote: null,
 }
 
 export default (state: ToolboxState = initialState, action: ToolboxActions) => {
@@ -55,6 +57,12 @@ export default (state: ToolboxState = initialState, action: ToolboxActions) => {
       return {
         ...state,
         selectionTool: !state.selectionTool,
+      }
+
+    case SELECT_NOTE:
+      return {
+        ...state,
+        selectedNote: action.payload,
       }
 
     default:
