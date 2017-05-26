@@ -42,9 +42,11 @@ class Stave extends Component {
       toolbox,
     } = this.props
 
-    this.artist.drawOptions(toolbox)
+    this.artist.setToolbox(toolbox)
 
-    _.each(layers, x => { this.artist.drawLayer(x.data, x.id, toolbox) })
+    this.artist.drawOptions()
+
+    _.each(layers, x => { this.artist.drawLayer(x.data, x.id) })
   }
 
   componentDidUpdate() {

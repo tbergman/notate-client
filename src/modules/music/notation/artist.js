@@ -145,8 +145,12 @@ export default class Artist {
     return scoreVoices
   }
 
-  drawOptions(toolbox) {
-    this.layers.drawOptionsLayer(this.renderer_context, this.staves[0].note, this.scoreVoices, toolbox)
+  setToolbox(toolbox) {
+    this.toolbox = toolbox
+  }
+
+  drawOptions() {
+    this.layers.drawOptionsLayer(this.renderer_context, this.staves[0].note, this.scoreVoices)
   }
 
   createTextVoice(stave, textNotes) {
@@ -246,8 +250,8 @@ export default class Artist {
     this.rendered = true;
   }
 
-  drawLayer(notes, layerId, toolbox) {
-    this.layers.drawLayer(this.renderer_context, this.staves[0].note, notes, layerId, toolbox)
+  drawLayer(notes, layerId) {
+    this.layers.drawLayer(this.renderer_context, this.staves[0].note, notes, layerId)
   }
 
   isRendered() { return this.rendered; }

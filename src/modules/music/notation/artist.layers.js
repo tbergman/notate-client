@@ -33,21 +33,21 @@ export default class ArtistLayers {
     context.closeGroup()
   }
 
-  drawOptionsLayer(context, stave, voices, toolbox) {
+  drawOptionsLayer(context, stave, voices) {
     // always draw options layer on root element
     context.parent = this.rootElement
 
     // if toolbox changed, clear and redraw options, otherwise do nothing
-    if (this.toolboxChanged(toolbox)) {
+    if (this.toolboxChanged(this.artist.toolbox)) {
       this.clearLayer(context.parent, 'option')
 
-      if (!toolbox.selectionTool) {
+      if (!this.artist.toolbox.selectionTool) {
         const optionLayer = context.openGroup()
         optionLayer.classList.add('layer-option')
 
         _.each(voices, voice => {
           _.each(voice.tickables, x => {
-            this.drawOptionsColumn(context, stave, x, toolbox)
+            this.drawOptionsColumn(context, stave, x)
           })
         })
 
@@ -55,10 +55,10 @@ export default class ArtistLayers {
       }
     }
 
-    this.previousToolbox = toolbox
+    this.previousToolbox = this.artist.toolbox
   }
 
-  drawOptionsColumn(context, stave, note, toolbox) {
+  drawOptionsColumn(context, stave, note) {
     if (note.attrs.type === 'StaveNote') {
       const availableOptions = [
         'E/3', 'F/3', 'G/3', 'A/3', 'B/3',
@@ -73,10 +73,10 @@ export default class ArtistLayers {
 
         const optionNote = {
           pitch: x,
-          duration: toolbox.selectedDuration,
-          accidental: toolbox.selectedAccidental,
-          isRest: toolbox.restSelected,
-          isDotted: toolbox.dotSelected
+          duration: this.artist.toolbox.selectedDuration,
+          accidental: this.artist.toolbox.selectedAccidental,
+          isRest: this.artist.toolbox.restSelected,
+          isDotted: this.artist.toolbox.dotSelected
         }
         const newNote = this.drawableNote(optionNote)
 
@@ -101,7 +101,7 @@ export default class ArtistLayers {
     }
   }
 
-  drawLayer(context, stave, notes, layerId, toolbox) {
+  drawLayer(context, stave, notes, layerId) {
     if (_.isEmpty(notes)) {
       return
     }
@@ -118,7 +118,7 @@ export default class ArtistLayers {
       const noteGroup = context.openGroup()
       noteGroup.classList.add('note-layer')
       noteGroup.classList.add('note-' + layerId)
-      if (toolbox.selectedNote && toolbox.selectedNote.id === note.id) {
+      if (this.artist.toolbox.selectedNote && this.artist.toolbox.selectedNote.id === note.id) {
         noteGroup.classList.add('note-selected')
       }
 
@@ -131,7 +131,7 @@ export default class ArtistLayers {
 
       context.closeGroup()
 
-      if (toolbox.selectionTool) {
+      if (this.artist.toolbox.selectionTool) {
         noteGroup.addEventListener('click', () => {
           this.artist.options.selectNote(note)
         })
