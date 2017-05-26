@@ -41,16 +41,18 @@ export default class ArtistLayers {
     if (this.toolboxChanged(toolbox)) {
       this.clearLayer(context.parent, 'option')
 
-      const optionLayer = context.openGroup()
-      optionLayer.classList.add('layer-option')
+      if (!toolbox.selectionTool) {
+        const optionLayer = context.openGroup()
+        optionLayer.classList.add('layer-option')
 
-      _.each(voices, voice => {
-        _.each(voice.tickables, x => {
-          this.drawOptionsColumn(context, stave, x, toolbox)
+        _.each(voices, voice => {
+          _.each(voice.tickables, x => {
+            this.drawOptionsColumn(context, stave, x, toolbox)
+          })
         })
-      })
 
-      context.closeGroup()
+        context.closeGroup()
+      }
     }
 
     this.previousToolbox = toolbox
@@ -99,7 +101,7 @@ export default class ArtistLayers {
     }
   }
 
-  drawLayer(context, stave, notes, layerId) {
+  drawLayer(context, stave, notes, layerId, toolbox) {
     if (_.isEmpty(notes)) {
       return
     }
@@ -124,6 +126,12 @@ export default class ArtistLayers {
       newNote.draw()
 
       context.closeGroup()
+
+      if (toolbox.selectionTool) {
+        noteGroup.addEventListener('click', () => {
+          this.artist.options.selectNote(note)
+        })
+      }
     })
 
     group.classList.add('layer-' + layerId)

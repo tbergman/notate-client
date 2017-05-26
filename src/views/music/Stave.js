@@ -46,7 +46,7 @@ export class StaveUnconnected extends Component {
 
     this.artist.drawOptions(toolbox)
 
-    _.each(layers, x => { this.artist.drawLayer(x.data, x.id) })
+    _.each(layers, x => { this.artist.drawLayer(x.data, x.id, toolbox) })
   }
 
   componentDidUpdate() {
@@ -74,6 +74,7 @@ export class StaveUnconnected extends Component {
     `
     this.artist = new Artist(10, 10, width, {
       addNote: (position, pitch) => this.props.addNote && this.props.addNote(position, pitch),
+      selectNote: (note) => this.props.selectNote && this.props.selectNote(note),
     })
 
     const vextab = new VexTab(this.artist)

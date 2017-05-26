@@ -27,6 +27,7 @@ class ProfessorQuestionStave extends Component {
           { id: 'question', data: this.props.question.notes },
         ]}
         addNote={(position, note) => this.addQuestionNote(position, note)}
+        selectNote={(note) => console.log(note)}
       />
     )
   }
