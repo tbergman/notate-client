@@ -21,7 +21,7 @@ type OwnProps = {
 }
 type Props = StateProps & DispatchProps & OwnProps
 
-class Question extends Component {
+export class QuestionUnconnected extends Component {
   props: Props
 
   renderGrade(): React.Element<any>|null {
@@ -72,4 +72,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Question)
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionUnconnected)
