@@ -7,29 +7,38 @@ export const SET_ACCIDENTAL = 'toolbox/SELECT_ACCIDENTAL'
 export const TOGGLE_REST = 'toolbox/TOGGLE_REST'
 export const TOGGLE_DOT = 'toolbox/TOGGLE_DOT'
 
-export type SetDuration = { type: SET_DURATION }
-export type SetAccidental = { type: SET_ACCIDENTAL }
-export type ToggleRest = { type: TOGGLE_REST }
-export type ToggleDot = { type: TOGGLE_DOT }
-
-export type SetDurationAction = SetDuration & { payload: DurationType }
+// SET DURATION
+export type SetDurationAction = {
+  type: 'toolbox/SELECT_DURATION',
+  payload: DurationType,
+}
 export const setDuration: (newDuration: DurationType) => SetDurationAction = (newDuration) => ({
   type: SET_DURATION,
   payload: newDuration
 })
 
-export type SetAccidentalAction = SetAccidental & { payload: AccidentalType }
+// SET ACCIDENTAL
+export type SetAccidentalAction = {
+  type: 'toolbox/SELECT_ACCIDENTAL',
+  payload: AccidentalType,
+}
 export const setAccidental: (newAccidental: AccidentalType) => SetAccidentalAction = (newAccidental) => ({
   type: SET_ACCIDENTAL,
   payload: newAccidental
 })
 
-export type ToggleRestAction = ToggleRest
+// TOGGLE REST
+export type ToggleRestAction = {
+  type: 'toolbox/TOGGLE_REST',
+}
 export const toggleRest: () => ToggleRestAction = () => ({
   type: TOGGLE_REST,
 })
 
-export type ToggleDotAction = ToggleDot
+// TOGGLE DOT
+export type ToggleDotAction = {
+  type: 'toolbox/TOGGLE_DOT'
+}
 export const toggleDot: () => ToggleDotAction = () => ({
   type: TOGGLE_DOT,
 })
@@ -39,9 +48,3 @@ export type ToolboxActions =
   | SetAccidentalAction
   | ToggleRestAction
   | ToggleDotAction
-
-export type ToolbarActionTypes =
-  | SetDuration
-  | SetAccidental
-  | ToggleRest
-  | ToggleDot

@@ -1,11 +1,12 @@
 // @flow
 
 import type { FluxStandardAction } from 'Types'
-import type { CreateQuestionState } from 'modules/create'
+import type { iCreateQuestion, CreateQuestionState } from 'modules/create'
+
 
 import { fromJS } from 'immutable'
 
-const initialState = {
+export const initialState = {
   question: fromJS({
     bars: 4,
     notes: [],
@@ -20,17 +21,19 @@ export default function reducer(
   switch (action.type) {
     case 'create/PROFESSOR_ADDED_QUESTION_NOTE': {
 
+      const question: iCreateQuestion = state.question
       return {
         ...state,
-        question: state.question.set('notes', state.question.get('notes').push(action.payload))
+        question: question.set('notes', question.get('notes').push(action.payload))
       }
     }
 
     case 'create/PROFESSOR_ADDED_ANSWER_NOTE': {
 
+      const question: iCreateQuestion = state.question
       return {
         ...state,
-        question: state.question.set('answers', state.question.get('answers').push(action.payload))
+        question: question.set('answers', question.get('answers').push(action.payload))
       }
     }
 

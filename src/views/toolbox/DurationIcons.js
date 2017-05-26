@@ -1,22 +1,21 @@
 // @flow
 
-import styled from 'styled-components'
 import ToolboxIcons from './ToolboxIcons'
 
 export default {
-  Whole: styled(ToolboxIcons)`
+  Whole: ToolboxIcons.extend`
     background-image: url(/assets/toolbox/duration.whole.svg);
   `,
 
-  Half: styled(ToolboxIcons)`
+  Half: ToolboxIcons.extend`
     background-image: url(/assets/toolbox/duration.half.svg);
   `,
 
-  Quarter: styled(ToolboxIcons)`
+  Quarter: ToolboxIcons.extend`
     background-image: url(/assets/toolbox/duration.quarter.svg);
   `,
 
-  Eighth: styled(ToolboxIcons)`
+  Eighth: ToolboxIcons.extend`
     background-image: url(/assets/toolbox/duration.eighth.svg);
   `,
 }

@@ -7,10 +7,10 @@ const ToolboxIcons = styled.div`
   height: 24px;
   width: 24px;
 `
-export const RestIcon = styled(ToolboxIcons)`
+export const RestIcon = ToolboxIcons.extend`
   background-image: url(/assets/toolbox/rest.quarter.svg);
 `
-export const DotIcon = styled(ToolboxIcons)`
+export const DotIcon = ToolboxIcons.extend`
   background-image: url(/assets/toolbox/dot.svg);
 `
 
