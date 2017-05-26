@@ -9,6 +9,7 @@ import {
   SET_ACCIDENTAL,
   TOGGLE_REST,
   TOGGLE_DOT,
+  TOGGLE_ERASER,
   TOGGLE_SELECTION_TOOL,
   SELECT_NOTE,
 } from 'modules/toolbox/actions'
@@ -19,6 +20,7 @@ export const initialState: ToolboxState = {
   restSelected: false,
   dotSelected: false,
   selectionTool: false,
+  eraserSelected: false,
   selectedNote: null,
 }
 
@@ -54,15 +56,29 @@ export default (state: ToolboxState = initialState, action: ToolboxActions) => {
       }
 
     case TOGGLE_SELECTION_TOOL:
+      const newSelectionToolState = !state.selectionTool
       return {
         ...state,
-        selectionTool: !state.selectionTool,
+        selectionTool: newSelectionToolState,
+        selectedNote: (newSelectionToolState ? state.selectedNote : null)
+      }
+
+    case TOGGLE_ERASER:
+      return {
+        ...state,
+        eraserSelected: !state.eraserSelected,
       }
 
     case SELECT_NOTE:
+      const note = action.payload
+
       return {
         ...state,
-        selectedNote: action.payload,
+        selectedAccidental: note.accidental,
+        selectedDuration: note.duration,
+        restSelected: note.isRest,
+        dotSelected: note.isDotted,
+        selectedNote: note,
       }
 
     default:

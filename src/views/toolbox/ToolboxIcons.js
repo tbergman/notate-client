@@ -16,5 +16,8 @@ export const DotIcon = ToolboxIcons.extend`
 export const SelectionToolIcon = styled(ToolboxIcons)`
   background-image: url(/assets/toolbox/selection.svg);
 `
+export const EraserIcon = styled(ToolboxIcons)`
+  background-image: url(/assets/toolbox/eraser.svg);
+`
 
 export default ToolboxIcons

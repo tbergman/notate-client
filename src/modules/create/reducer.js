@@ -31,6 +31,17 @@ export default function reducer(
       }
     }
 
+    case 'create/PROFESSOR_ERASED_QUESTION_NOTE': {
+      const note = action.payload
+      const deletedNoteIndex = state.question.get('notes').findIndex(x => x.id === note.id)
+      const notes = state.question.get('notes').remove(deletedNoteIndex)
+
+      return {
+        ...state,
+        question: state.question.set('notes', notes)
+      }
+    }
+
     case 'create/PROFESSOR_ADDED_ANSWER_NOTE': {
       const note = action.payload
       note.id = uuid()

@@ -1,4 +1,5 @@
 // @flow
+import type { StaveNote } from 'modules/types'
 
 export type AccidentalType = string
 
@@ -10,6 +11,8 @@ export type ToolboxState = {
   restSelected: boolean,
   dotSelected: boolean,
   selectionTool: boolean,
+  eraserSelected: boolean,
+  selectedNote: StaveNote,
 }
 
 export const ACCIDENTAL = {

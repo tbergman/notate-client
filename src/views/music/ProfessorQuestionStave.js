@@ -3,7 +3,11 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
-import { professorAddedQuestionNote } from 'modules/create/actions'
+import {
+  professorAddedQuestionNote,
+  professorErasedQuestionNote,
+} from 'modules/create/actions'
+
 import { selectNote } from 'modules/toolbox/actions'
 import Stave from './Stave'
 
@@ -29,6 +33,7 @@ class ProfessorQuestionStave extends Component {
         ]}
         addNote={(position, note) => this.addQuestionNote(position, note)}
         selectNote={(note) => this.props.selectNote(note)}
+        eraseNote={(note) => this.props.erasedQuestionNote(note)}
       />
     )
   }
@@ -47,6 +52,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     addQuestionNote: ((note) => dispatch(professorAddedQuestionNote(note))),
+    erasedQuestionNote: ((note) => dispatch(professorErasedQuestionNote(note))),
     selectNote: ((note) => dispatch(selectNote(note))),
   }
 }

@@ -4,7 +4,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { Flow } from 'vexflow'
-import { studentAddedNote } from 'modules/student-test/actions'
 import type { Question as QuestionType } from 'modules/student-test'
 import type { StaveNote } from 'modules/types'
 import type { ToolboxState } from 'modules/toolbox'
@@ -76,7 +75,7 @@ export class StaveUnconnected extends Component {
     `
     this.artist = new Artist(10, 10, width, {
       addNote: (position, pitch) => this.props.addNote && this.props.addNote(position, pitch),
-      selectNote: (note) => this.props.selectNote && this.props.selectNote(note),
+      selectNote: (note) => this.selectNote(note),
     })
 
     const vextab = new VexTab(this.artist)
@@ -86,6 +85,14 @@ export class StaveUnconnected extends Component {
     this.artist.render(renderer)
 
     this.drawLayers()
+  }
+
+  selectNote(note) {
+    if (this.props.toolbox.eraserSelected) {
+      this.props.eraseNote && this.props.eraseNote(note)
+    } else {
+      this.props.selectNote && this.props.selectNote(note)
+    }
   }
 
   baseLayerNotation(): string {
@@ -116,7 +123,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    studentAddedNote: ((note) => dispatch(studentAddedNote(note))),
+
   }
 }
 

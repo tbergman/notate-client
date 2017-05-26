@@ -41,7 +41,7 @@ export default class ArtistLayers {
     if (this.toolboxChanged(this.artist.toolbox)) {
       this.clearLayer(context.parent, 'option')
 
-      if (!this.artist.toolbox.selectionTool) {
+      if (!this.artist.toolbox.selectionTool && !this.artist.toolbox.eraserSelected) {
         const optionLayer = context.openGroup()
         optionLayer.classList.add('layer-option')
 
@@ -131,7 +131,7 @@ export default class ArtistLayers {
 
       context.closeGroup()
 
-      if (this.artist.toolbox.selectionTool) {
+      if (this.artist.toolbox.selectionTool || this.artist.toolbox.eraserSelected) {
         noteGroup.addEventListener('click', () => {
           this.artist.options.selectNote(note)
         })

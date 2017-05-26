@@ -7,6 +7,7 @@ export const SET_ACCIDENTAL = 'toolbox/SELECT_ACCIDENTAL'
 export const TOGGLE_REST = 'toolbox/TOGGLE_REST'
 export const TOGGLE_DOT = 'toolbox/TOGGLE_DOT'
 export const TOGGLE_SELECTION_TOOL = 'toolbox/TOGGLE_SELECTION_TOOL'
+export const TOGGLE_ERASER = 'toolbox/TOGGLE_ERASER'
 export const SELECT_NOTE = 'toolbox/SELECT_NOTE'
 
 // SET DURATION
@@ -62,6 +63,14 @@ export const selectNote: (note) => SelectNoteAction = (note) => ({
   payload: note,
 })
 
+// TOGGLE ERASER
+export type ToggleEraserAction = {
+  type: 'toolbox/TOGGLE_ERASER'
+}
+export const toggleEraser: () => ToggleEraserAction = () => ({
+  type: TOGGLE_ERASER,
+})
+
 export type ToolboxActions =
   | SetDurationAction
   | SetAccidentalAction
@@ -69,3 +78,4 @@ export type ToolboxActions =
   | ToggleDotAction
   | ToggleSelectionToolAction
   | SelectNoteAction
+  | ToggleEraserAction

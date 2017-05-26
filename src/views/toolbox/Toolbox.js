@@ -10,92 +10,101 @@ import {
   toggleRest,
   toggleDot,
   toggleSelectionTool,
+  toggleEraser,
 } from 'modules/toolbox/actions'
 
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 
-import { RestIcon, DotIcon, SelectionToolIcon } from 'views/toolbox/ToolboxIcons'
+import { RestIcon, DotIcon, SelectionToolIcon, EraserIcon } from 'views/toolbox/ToolboxIcons'
 import AccidentalIcons from 'views/toolbox/AccidentalIcons'
 import DurationIcons from 'views/toolbox/DurationIcons'
 
 class Toolbox extends Component {
   render(): React.Element<any> {
     return (
-      <ToolboxContainer>
-        <ToolboxItem bar
-          selected={this.props.selectionTool}
-          onClick={() => this.props.toggleSelectionTool()}>
-          <SelectionToolIcon />
-        </ToolboxItem>
+      <div>
+        <ToolboxContainer>
+          <ToolboxItem bar
+            selected={this.props.selectionTool}
+            onClick={() => this.props.toggleSelectionTool()}>
+            <SelectionToolIcon />
+          </ToolboxItem>
 
-        <ToolboxItem bar
-          selected={this.props.selectedDuration === DURATION.EIGHTH && !this.props.selectionTool}
-          onClick={() => this.props.setDuration(DURATION.EIGHTH)}>
-          <DurationIcons.Eighth />
-        </ToolboxItem>
+          <ToolboxItem bar
+            selected={this.props.eraserSelected}
+            onClick={() => this.props.toggleEraser()}>
+            <EraserIcon />
+          </ToolboxItem>
 
-        <ToolboxItem bar
-          selected={this.props.selectedDuration === DURATION.QUARTER && !this.props.selectionTool}
-          onClick={() => this.props.setDuration(DURATION.QUARTER)}>
-          <DurationIcons.Quarter />
-        </ToolboxItem>
+          <ToolboxItem bar
+            selected={this.props.selectedDuration === DURATION.EIGHTH}
+            onClick={() => this.props.setDuration(DURATION.EIGHTH)}>
+            <DurationIcons.Eighth />
+          </ToolboxItem>
 
-        <ToolboxItem bar
-          selected={this.props.selectedDuration === DURATION.HALF && !this.props.selectionTool}
-          onClick={() => this.props.setDuration(DURATION.HALF)}>
-          <DurationIcons.Half />
-        </ToolboxItem>
+          <ToolboxItem bar
+            selected={this.props.selectedDuration === DURATION.QUARTER}
+            onClick={() => this.props.setDuration(DURATION.QUARTER)}>
+            <DurationIcons.Quarter />
+          </ToolboxItem>
 
-        <ToolboxItem
-          selected={this.props.selectedDuration === DURATION.WHOLE && !this.props.selectionTool}
-          onClick={() => this.props.setDuration(DURATION.WHOLE)}>
-          <DurationIcons.Whole />
-        </ToolboxItem>
+          <ToolboxItem bar
+            selected={this.props.selectedDuration === DURATION.HALF}
+            onClick={() => this.props.setDuration(DURATION.HALF)}>
+            <DurationIcons.Half />
+          </ToolboxItem>
 
-        <ToolboxSeparator />
+          <ToolboxItem
+            selected={this.props.selectedDuration === DURATION.WHOLE}
+            onClick={() => this.props.setDuration(DURATION.WHOLE)}>
+            <DurationIcons.Whole />
+          </ToolboxItem>
+        </ToolboxContainer>
 
-        <ToolboxItem bar
-          selected={this.props.selectedAccidental === ACCIDENTAL.NATURAL}
-          onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>
-          <AccidentalIcons.Natural />
-        </ToolboxItem>
+        <ToolboxContainer>
+          <ToolboxItem bar
+            selected={this.props.selectedAccidental === ACCIDENTAL.NATURAL}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>
+            <AccidentalIcons.Natural />
+          </ToolboxItem>
 
-        <ToolboxItem bar
-          selected={this.props.selectedAccidental === ACCIDENTAL.SHARP}
-          onClick={() => this.props.setAccidental(ACCIDENTAL.SHARP)}>
-          <AccidentalIcons.Sharp />
-        </ToolboxItem>
+          <ToolboxItem bar
+            selected={this.props.selectedAccidental === ACCIDENTAL.SHARP}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.SHARP)}>
+            <AccidentalIcons.Sharp />
+          </ToolboxItem>
 
-        <ToolboxItem bar
-          selected={this.props.selectedAccidental === ACCIDENTAL.DOUBLE_SHARP}
-          onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}>
-          <AccidentalIcons.DoubleSharp />
-        </ToolboxItem>
+          <ToolboxItem bar
+            selected={this.props.selectedAccidental === ACCIDENTAL.DOUBLE_SHARP}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}>
+            <AccidentalIcons.DoubleSharp />
+          </ToolboxItem>
 
-        <ToolboxItem bar
-          selected={this.props.selectedAccidental === ACCIDENTAL.FLAT}
-          onClick={() => this.props.setAccidental(ACCIDENTAL.FLAT)}>
-          <AccidentalIcons.Flat />
-        </ToolboxItem>
+          <ToolboxItem bar
+            selected={this.props.selectedAccidental === ACCIDENTAL.FLAT}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.FLAT)}>
+            <AccidentalIcons.Flat />
+          </ToolboxItem>
 
-        <ToolboxItem bar
-          selected={this.props.selectedAccidental === ACCIDENTAL.DOUBLE_FLAT}
-          onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>
-          <AccidentalIcons.DoubleFlat />
-        </ToolboxItem>
+          <ToolboxItem bar
+            selected={this.props.selectedAccidental === ACCIDENTAL.DOUBLE_FLAT}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>
+            <AccidentalIcons.DoubleFlat />
+          </ToolboxItem>
 
-        <ToolboxItem bar
-          selected={this.props.restSelected}
-          onClick={() => this.props.toggleRest()}>
-          <RestIcon />
-        </ToolboxItem>
+          <ToolboxItem bar
+            selected={this.props.restSelected}
+            onClick={() => this.props.toggleRest()}>
+            <RestIcon />
+          </ToolboxItem>
 
-        <ToolboxItem
-          selected={this.props.dotSelected}
-          onClick={() => this.props.toggleDot()}>
-          <DotIcon />
-        </ToolboxItem>
-      </ToolboxContainer>
+          <ToolboxItem
+            selected={this.props.dotSelected}
+            onClick={() => this.props.toggleDot()}>
+            <DotIcon />
+          </ToolboxItem>
+        </ToolboxContainer>
+      </div>
     )
   }
 }
@@ -104,6 +113,7 @@ const ToolboxContainer = styled.div`
   border: 1px solid #008489;
   border-radius: 4px;
   padding: 10px 2px;
+  margin-bottom: 10px;
   display: flex;
   height: 30px;
 `
@@ -131,6 +141,7 @@ const mapStateToProps = (state) => {
     selectedAccidental: state.toolbox.selectedAccidental,
     restSelected: state.toolbox.restSelected,
     dotSelected: state.toolbox.dotSelected,
+    eraserSelected: state.toolbox.eraserSelected,
     selectionTool: state.toolbox.selectionTool,
   }
 }
@@ -141,6 +152,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     setAccidental: ((accidental) => dispatch(setAccidental(accidental))),
     toggleRest: (() => dispatch(toggleRest())),
     toggleDot: (() => dispatch(toggleDot())),
+    toggleEraser: (() => dispatch(toggleEraser())),
     toggleSelectionTool: (() => dispatch(toggleSelectionTool())),
   }
 }
