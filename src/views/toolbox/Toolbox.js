@@ -112,17 +112,11 @@ const ToolboxSeparator = styled.div`
   margin: -10px 0;
 `
 
-export default connect(
-  state => ({
-    selectedDuration: state.toolbox.selectedDuration,
-    selectedAccidental: state.toolbox.selectedAccidental,
-    restSelected: state.toolbox.restSelected,
-    dotSelected: state.toolbox.dotSelected,
-  }),
-  dispatch => ({
-    setDuration: ((duration) => dispatch(setDuration(duration))),
-    setAccidental: ((accidental) => dispatch(setAccidental(accidental))),
-    toggleRest: (() => dispatch(toggleRest())),
-    toggleDot: (() => dispatch(toggleDot())),
-  }),
-)(Toolbox)
+const mapStateToProps = (state) => ({
+  selectedDuration: state.toolbox.selectedDuration,
+  selectedAccidental: state.toolbox.selectedAccidental,
+  restSelected: state.toolbox.restSelected,
+  dotSelected: state.toolbox.dotSelected,
+})
+
+export default connect(mapStateToProps, { setDuration, setAccidental, toggleRest, toggleDot })(Toolbox)

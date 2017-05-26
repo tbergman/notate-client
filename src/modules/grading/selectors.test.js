@@ -2,6 +2,7 @@
 
 import { fromJS, List } from 'immutable'
 import { selectQuestionGrade } from './selectors'
+import { initialState as createState } from 'modules/create/reducer'
 
 describe('grading selectors', () => {
   it('selects a single question grade by question id', () => {
@@ -21,7 +22,8 @@ describe('grading selectors', () => {
           graded: true,
           correct: true,
         }])
-      }
+      },
+      create: createState,
     }
 
     const result = selectQuestionGrade(state, 'question-id')
@@ -43,7 +45,8 @@ describe('grading selectors', () => {
       },
       grading: {
         questionGrades: fromJS([])
-      }
+      },
+      create: createState,
     }
 
     const result = selectQuestionGrade(state, 'question-id')

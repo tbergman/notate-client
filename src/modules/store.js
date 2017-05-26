@@ -26,6 +26,8 @@ const immutableJsLogger = createLogger({
 })
 
 const middleware = applyMiddleware(immutableJsLogger)
-const store = createStore(reducers, undefined, composeEnhancers(middleware))
+const store = composeEnhancers(
+  middleware
+)(createStore)(reducers);
 
 export default store

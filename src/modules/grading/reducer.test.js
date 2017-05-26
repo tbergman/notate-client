@@ -1,13 +1,13 @@
 // @flow
 
-import { List } from 'immutable'
+import { fromJS } from 'immutable'
 import reducer from './reducer'
 
 describe('grading reducer', () => {
   let question
   const questionId = 'question-id'
   const initialState = {
-    questionGrades: new List([{
+    questionGrades: fromJS([{
       questionId: questionId,
       graded: true,
       correct: false,

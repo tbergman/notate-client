@@ -65,7 +65,7 @@ class Stave extends Component {
       ${text}
     `
     this.artist = new Artist(10, 10, width, {
-      addNote: (position, pitch) => this.props.addNote(position, pitch),
+      addNote: (position, pitch) => this.props.addNote && this.props.addNote(position, pitch),
     })
 
     const vextab = new VexTab(this.artist)
@@ -78,7 +78,7 @@ class Stave extends Component {
   }
 
   baseLayerNotation(): string {
-    const ghostNotes = Array(this.props.question.bars)
+    const ghostNotes = Array(this.props.question && this.props.question.bars)
       .fill(':q #99# #99# #99# #99#')
 
     return ghostNotes.join(' | ') + '=||'
@@ -98,8 +98,6 @@ class Stave extends Component {
 }
 
 export default connect(
-  state => ({}),
-  dispatch => ({
-    studentAddedNote: ((note) => dispatch(studentAddedNote(note))),
-  })
+  null,
+  { studentAddedNote }
 )(Stave)

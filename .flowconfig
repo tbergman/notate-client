@@ -2,8 +2,7 @@
 <PROJECT_ROOT>/node_modules/fbjs/.*
 <PROJECT_ROOT>/node_modules/flow-runtime/.*
 .*/redux-saga-test-plan/.*
-.*/styled-components/src/.*
-.*/styled-components/lib/models/StyleSheet.js.flow
+.*/node_modules/styled-components/.*
 
 [libs]
 ./node_modules/fbjs/flow/lib

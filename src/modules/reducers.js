@@ -14,10 +14,10 @@ import { default as toolbox } from 'modules/toolbox/reducer'
 import { default as create } from 'modules/create/reducer'
 
 export type AppState = {
-  studentTest: StudentTestState,
-  grading: QuestionGradesState,
-  toolbox: ToolboxState,
   create: CreateQuestionState,
+  grading: QuestionGradesState,
+  studentTest: StudentTestState,
+  toolbox: ToolboxState,
 }
 
 export default combineReducers({
