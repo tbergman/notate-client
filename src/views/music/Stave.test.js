@@ -4,7 +4,7 @@ import type { Question } from 'modules/student-test'
 import React from 'react'
 import { mount } from 'enzyme'
 import { Flow } from 'vexflow'
-import Stave from './Stave'
+import { StaveUnconnected as Stave } from './Stave'
 
 const mockAttributesNamedNodeMap = {
   getNamedItem: jest.fn()

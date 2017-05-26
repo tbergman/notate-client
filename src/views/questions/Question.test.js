@@ -5,7 +5,7 @@ import { fromJS } from 'immutable'
 import type { ShallowWrapper } from 'enzyme'
 import { shallowWithStore } from 'enzyme-redux'
 import { createMockStore } from 'redux-test-utils'
-import Question from './Question'
+import { QuestionUnconnected as Question } from './Question'
 
 type Setup = {
   props: Object,

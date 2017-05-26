@@ -31,7 +31,7 @@ type Props = {
   layers?: Array<Layer>
 }
 
-class Stave extends Component {
+export class StaveUnconnected extends Component {
   staveContainer: React.Element<any>
   artist: Artist
   props: Props
@@ -100,4 +100,4 @@ class Stave extends Component {
 export default connect(
   null,
   { studentAddedNote }
-)(Stave)
+)(StaveUnconnected)

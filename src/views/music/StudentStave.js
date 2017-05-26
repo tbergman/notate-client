@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { studentAddedNote } from 'modules/student-test/actions'
 import Stave from './Stave'
 
-class StudentStave extends Component {
+export class StudentStaveUnconnected extends Component {
   addStudentNote(position: number, pitch: string) {
     const studentNotes = this.props.question.student
     const currentPosition = position
@@ -42,14 +42,4 @@ class StudentStave extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  return { }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-  return {
-    studentAddedNote: ((note) => dispatch(studentAddedNote(note))),
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(StudentStave)
+export default connect(null, { studentAddedNote })(StudentStaveUnconnected)
