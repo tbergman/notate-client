@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import _ from 'lodash'
 import { connect } from 'react-redux'
 import { professorAddedQuestionNote } from 'modules/create/actions'
+import { selectNote } from 'modules/toolbox/actions'
 import Stave from './Stave'
 
 class ProfessorQuestionStave extends Component {
@@ -27,7 +28,7 @@ class ProfessorQuestionStave extends Component {
           { id: 'question', data: this.props.question.notes },
         ]}
         addNote={(position, note) => this.addQuestionNote(position, note)}
-        selectNote={(note) => console.log(note)}
+        selectNote={(note) => this.props.selectNote(note)}
       />
     )
   }
@@ -46,6 +47,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     addQuestionNote: ((note) => dispatch(professorAddedQuestionNote(note))),
+    selectNote: ((note) => dispatch(selectNote(note))),
   }
 }
 

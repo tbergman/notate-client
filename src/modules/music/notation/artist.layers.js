@@ -116,7 +116,11 @@ export default class ArtistLayers {
 
     _.each(notes, note => {
       const noteGroup = context.openGroup()
+      noteGroup.classList.add('note-layer')
       noteGroup.classList.add('note-' + layerId)
+      if (toolbox.selectedNote && toolbox.selectedNote.id === note.id) {
+        noteGroup.classList.add('note-selected')
+      }
 
       const newNote = this.drawableNote(note)
 

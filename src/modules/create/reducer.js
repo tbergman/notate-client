@@ -4,6 +4,7 @@ import type { FluxStandardAction } from 'Types'
 import type { iCreateQuestion, CreateQuestionState } from 'modules/create'
 
 
+import uuid from 'uuid'
 import { fromJS } from 'immutable'
 
 export const initialState = {
@@ -20,20 +21,24 @@ export default function reducer(
 
   switch (action.type) {
     case 'create/PROFESSOR_ADDED_QUESTION_NOTE': {
+      const note = action.payload
+      note.id = uuid()
 
       const question: iCreateQuestion = state.question
       return {
         ...state,
-        question: question.set('notes', question.get('notes').push(action.payload))
+        question: question.set('notes', question.get('notes').push(note))
       }
     }
 
     case 'create/PROFESSOR_ADDED_ANSWER_NOTE': {
+      const note = action.payload
+      note.id = uuid()
 
       const question: iCreateQuestion = state.question
       return {
         ...state,
-        question: question.set('answers', question.get('answers').push(action.payload))
+        question: question.set('answers', question.get('answers').push(note))
       }
     }
 
