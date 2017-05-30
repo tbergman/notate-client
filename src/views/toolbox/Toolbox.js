@@ -50,12 +50,14 @@ class Toolbox extends Component {
 
           <ToolboxItem bar
             selected={this.props.restSelected && this.props.shouldHighlightNoteSpecificItems}
+            disabled={this.props.eraserSelected}
             onClick={() => this.props.toggleRest()}
             icon={<RestIcon />}
           />
 
           <ToolboxItem
             selected={this.props.dotSelected && this.props.shouldHighlightNoteSpecificItems}
+            disabled={this.props.eraserSelected}
             onClick={() => this.props.toggleDot()}
             icon={<DotIcon />}
           />
