@@ -9,6 +9,11 @@ export const selectSelectedAccidental = createSelector(
 )
 
 export const selectSelectedDuration = createSelector(
-    selectToolbox,
-    toolbox => toolbox.selectedDuration
+  selectToolbox,
+  toolbox => toolbox.selectedDuration
+)
+
+export const shouldHighlightNoteSpecificItems = createSelector(
+  selectToolbox,
+  toolbox => (!toolbox.selectionTool && !toolbox.eraserSelected) || toolbox.selectedNote
 )
