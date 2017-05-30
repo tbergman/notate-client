@@ -20,6 +20,19 @@ import AccidentalIcons from 'views/toolbox/AccidentalIcons'
 import DurationIcons from 'views/toolbox/DurationIcons'
 
 class Toolbox extends Component {
+
+  isDurationSelected(duration) {
+    return this.props.selectedDuration === duration && this.shouldHighlightNoteSpecificItems()
+  }
+
+  isAccidentalSelected(accidental) {
+    return this.props.selectedAccidental === accidental && this.shouldHighlightNoteSpecificItems()
+  }
+
+  shouldHighlightNoteSpecificItems() {
+    return !this.props.selectionTool || this.props.selectedNote
+  }
+
   render(): React.Element<any> {
     return (
       <div>
@@ -37,25 +50,25 @@ class Toolbox extends Component {
           </ToolboxItem>
 
           <ToolboxItem bar
-            selected={this.props.selectedDuration === DURATION.EIGHTH}
+            selected={this.isDurationSelected(DURATION.EIGHTH)}
             onClick={() => this.props.setDuration(DURATION.EIGHTH)}>
             <DurationIcons.Eighth />
           </ToolboxItem>
 
           <ToolboxItem bar
-            selected={this.props.selectedDuration === DURATION.QUARTER}
+            selected={this.isDurationSelected(DURATION.QUARTER)}
             onClick={() => this.props.setDuration(DURATION.QUARTER)}>
             <DurationIcons.Quarter />
           </ToolboxItem>
 
           <ToolboxItem bar
-            selected={this.props.selectedDuration === DURATION.HALF}
+            selected={this.isDurationSelected(DURATION.HALF)}
             onClick={() => this.props.setDuration(DURATION.HALF)}>
             <DurationIcons.Half />
           </ToolboxItem>
 
           <ToolboxItem
-            selected={this.props.selectedDuration === DURATION.WHOLE}
+            selected={this.isDurationSelected(DURATION.WHOLE)}
             onClick={() => this.props.setDuration(DURATION.WHOLE)}>
             <DurationIcons.Whole />
           </ToolboxItem>
@@ -63,43 +76,43 @@ class Toolbox extends Component {
 
         <ToolboxContainer>
           <ToolboxItem bar
-            selected={this.props.selectedAccidental === ACCIDENTAL.NATURAL}
+            selected={this.isAccidentalSelected(ACCIDENTAL.NATURAL)}
             onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>
             <AccidentalIcons.Natural />
           </ToolboxItem>
 
           <ToolboxItem bar
-            selected={this.props.selectedAccidental === ACCIDENTAL.SHARP}
+            selected={this.isAccidentalSelected(ACCIDENTAL.SHARP)}
             onClick={() => this.props.setAccidental(ACCIDENTAL.SHARP)}>
             <AccidentalIcons.Sharp />
           </ToolboxItem>
 
           <ToolboxItem bar
-            selected={this.props.selectedAccidental === ACCIDENTAL.DOUBLE_SHARP}
+            selected={this.isAccidentalSelected(ACCIDENTAL.DOUBLE_SHARP)}
             onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}>
             <AccidentalIcons.DoubleSharp />
           </ToolboxItem>
 
           <ToolboxItem bar
-            selected={this.props.selectedAccidental === ACCIDENTAL.FLAT}
+            selected={this.isAccidentalSelected(ACCIDENTAL.FLAT)}
             onClick={() => this.props.setAccidental(ACCIDENTAL.FLAT)}>
             <AccidentalIcons.Flat />
           </ToolboxItem>
 
           <ToolboxItem bar
-            selected={this.props.selectedAccidental === ACCIDENTAL.DOUBLE_FLAT}
+            selected={this.isAccidentalSelected(ACCIDENTAL.DOUBLE_FLAT)}
             onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>
             <AccidentalIcons.DoubleFlat />
           </ToolboxItem>
 
           <ToolboxItem bar
-            selected={this.props.restSelected}
+            selected={this.props.restSelected && this.shouldHighlightNoteSpecificItems()}
             onClick={() => this.props.toggleRest()}>
             <RestIcon />
           </ToolboxItem>
 
           <ToolboxItem
-            selected={this.props.dotSelected}
+            selected={this.props.dotSelected && this.shouldHighlightNoteSpecificItems()}
             onClick={() => this.props.toggleDot()}>
             <DotIcon />
           </ToolboxItem>
@@ -143,6 +156,7 @@ const mapStateToProps = (state) => {
     dotSelected: state.toolbox.dotSelected,
     eraserSelected: state.toolbox.eraserSelected,
     selectionTool: state.toolbox.selectionTool,
+    selectedNote: state.toolbox.selectedNote,
   }
 }
 
