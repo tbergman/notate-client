@@ -26,7 +26,9 @@ class Toolbox extends Component {
   }
 
   isAccidentalSelected(accidental) {
-    return this.props.selectedAccidental === accidental && this.shouldHighlightNoteSpecificItems()
+    return this.props.selectedAccidental === accidental
+      && this.shouldHighlightNoteSpecificItems()
+      && !this.props.restSelected
   }
 
   shouldHighlightNoteSpecificItems() {
@@ -76,30 +78,35 @@ class Toolbox extends Component {
 
         <ToolboxContainer>
           <ToolboxItem bar
+            disabled={this.props.restSelected}
             selected={this.isAccidentalSelected(ACCIDENTAL.NATURAL)}
-            onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}>
+            onClick={() => !this.props.restSelected && this.props.setAccidental(ACCIDENTAL.NATURAL)}>
             <AccidentalIcons.Natural />
           </ToolboxItem>
 
           <ToolboxItem bar
+            disabled={this.props.restSelected}
             selected={this.isAccidentalSelected(ACCIDENTAL.SHARP)}
-            onClick={() => this.props.setAccidental(ACCIDENTAL.SHARP)}>
+            onClick={() => !this.props.restSelected && this.props.setAccidental(ACCIDENTAL.SHARP)}>
             <AccidentalIcons.Sharp />
           </ToolboxItem>
 
           <ToolboxItem bar
+            disabled={this.props.restSelected}
             selected={this.isAccidentalSelected(ACCIDENTAL.DOUBLE_SHARP)}
-            onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}>
+            onClick={() => !this.props.restSelected && this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}>
             <AccidentalIcons.DoubleSharp />
           </ToolboxItem>
 
           <ToolboxItem bar
+            disabled={this.props.restSelected}
             selected={this.isAccidentalSelected(ACCIDENTAL.FLAT)}
-            onClick={() => this.props.setAccidental(ACCIDENTAL.FLAT)}>
+            onClick={() => !this.props.restSelected && this.props.setAccidental(ACCIDENTAL.FLAT)}>
             <AccidentalIcons.Flat />
           </ToolboxItem>
 
           <ToolboxItem bar
+            disabled={this.props.restSelected}
             selected={this.isAccidentalSelected(ACCIDENTAL.DOUBLE_FLAT)}
             onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}>
             <AccidentalIcons.DoubleFlat />
@@ -136,7 +143,8 @@ const ToolboxItem = styled.div`
   justify-content: center;
   display: flex;
   border-right: ${props => props.bar ? '1px solid #dce0e0' : 'none'};
-  background-color: ${props => props.selected ? '#dce0e0' : 'transparent' }
+  background-color: ${props => props.selected ? '#dce0e0' : 'transparent' };
+  opacity: ${props => props.disabled ? '0.25': '1'};
   cursor: pointer;
 
   &:hover {

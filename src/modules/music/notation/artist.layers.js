@@ -147,7 +147,7 @@ export default class ArtistLayers {
   drawableNote(note) {
     const duration = note.duration + (note.isRest ? 'r' : '')
     const newNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: duration, stem_direction: 1 })
-    if (note.accidental) {
+    if (note.accidental && !note.isRest) {
       newNote.addAccidental(0, new Vex.Flow.Accidental(note.accidental))
     }
     if (note.isDotted) {
