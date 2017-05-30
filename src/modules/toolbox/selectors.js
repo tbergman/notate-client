@@ -4,24 +4,14 @@ import { createSelector } from 'reselect'
 import { selectToolbox } from 'modules/reducers'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 
-export const selectSelectedAccidental = createSelector(
-  selectToolbox,
-  toolbox => toolbox.selectedAccidental
-)
-
-export const selectSelectedDuration = createSelector(
-  selectToolbox,
-  toolbox => toolbox.selectedDuration
-)
-
 export const selectToolboxItems = createSelector(
   selectToolbox,
   toolbox => {
     const shouldHighlightNoteSpecificItems =
       (!toolbox.selectionTool && !toolbox.eraserSelected)
-      || toolbox.selectedNote
+      || !!toolbox.selectedNote
 
-    const durationButton = (duration) => {
+    const durationButton  = (duration) => {
       return {
         duration: duration,
         enabled: !toolbox.eraserSelected,
@@ -33,7 +23,7 @@ export const selectToolboxItems = createSelector(
     const accidentalButton = (accidental) => {
       return {
         accidental: accidental,
-        enabled: !toolbox.eraserSelected,
+        enabled: !toolbox.eraserSelected && !toolbox.restSelected,
         active: toolbox.selectedAccidental === accidental
           && !toolbox.restSelected
           && shouldHighlightNoteSpecificItems,

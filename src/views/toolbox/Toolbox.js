@@ -94,6 +94,7 @@ const mapStateToProps = (state) => {
     eraserSelected: state.toolbox.eraserSelected,
     selectionTool: state.toolbox.selectionTool,
     selectedNote: state.toolbox.selectedNote,
+    toolboxItems: selectToolboxItems(state),
   }
 }
 
@@ -101,8 +102,6 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     setDuration: ((duration) => dispatch(setDuration(duration))),
     setAccidental: ((accidental) => dispatch(setAccidental(accidental))),
-    shouldHighlightNoteSpecificItems: shouldHighlightNoteSpecificItems(state),
-    toolboxItems: selectToolboxItems(state),
     toggleRest: (() => dispatch(toggleRest())),
     toggleDot: (() => dispatch(toggleDot())),
     toggleEraser: (() => dispatch(toggleEraser())),
