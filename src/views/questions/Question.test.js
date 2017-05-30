@@ -1,18 +1,19 @@
 // @flow
-
+import type { ShallowWrapper } from 'enzyme'
 import React from 'react'
 import { fromJS } from 'immutable'
-import type { ShallowWrapper } from 'enzyme'
+import { shallow } from 'enzyme'
 import { shallowWithStore } from 'enzyme-redux'
 import { createMockStore } from 'redux-test-utils'
-import { QuestionUnconnected as Question } from './Question'
+import Question, { QuestionUnconnected } from './Question'
 
 type Setup = {
   props: Object,
   component: ShallowWrapper
 }
 
-function setup(graded: boolean, correct: boolean): Setup {
+function setup(graded: boolean, correct: boolean, useShallow: boolean = true): Setup {
+  let component: ShallowWrapper
   const question = {
     id: 'question-id',
     index: '1.a',
@@ -21,15 +22,26 @@ function setup(graded: boolean, correct: boolean): Setup {
     student: [],
     answers: [],
   }
+  const questionGrade = {
+    questionId: 'question-id',
+    correct,
+    graded,
+  }
+  const grade = jest.fn()
 
-  const props = { question }
+  const props = { grade, question, questionGrade }
 
   const store = createMockStore({
      grading: { questionGrades:
-       fromJS([{ questionId: 'question-id', graded: graded, correct: correct }])
+       fromJS([{...questionGrade}])
      }
   })
-  const component: ShallowWrapper = shallowWithStore(<Question {...props} />, store)
+  if(useShallow) {
+    component = shallow(<QuestionUnconnected {...props} />)
+  } else {
+    component = shallowWithStore(<Question {...props} />, store)
+  }
+
 
   return {
     props,
@@ -39,51 +51,53 @@ function setup(graded: boolean, correct: boolean): Setup {
 
 describe('question component', () => {
   it('renders without crashing', () => {
-    const { component } = setup(false, false)
+    const { component }: Setup = setup(false, false)
 
     expect(component).toBeDefined()
   })
 
   it('sets the component class', () => {
-    const { component } = setup(false, false)
+    const { component }: Setup = setup(false, false)
 
     expect(component.find('.question')).toBeDefined()
   })
 
   it('sets the question index', () => {
-    const { component } = setup(false, false)
+    const { component }: Setup = setup(false, false, false)
 
-    const text = component.render().find('.question-index')[0].children[0].data
-
+    const text = component.find('.question-index').first().text();
+    console.info('text?', text)
     expect(text).toEqual('1.a')
   })
 
   it('sets the question statement', () => {
-    const { component } = setup(false, false)
+    const { component }: Setup = setup(false, false)
 
-    const text = component.render().find('.question-statement')[0].children[0].data
+    const text = component.find('.question-statement').first().text()
+    console.info('text', text)
 
     expect(text).toEqual('guess what')
   })
 
   it('displays a failed question', () => {
-    const { component } = setup(false, false)
+    const { component }: Setup = setup(false, false)
 
-    const text = component.render().find('.question-grade')[0].children[0]
+    const text = component.find('.question-grade').first().children().first();//[0].children[0]
+    // console.info('text', text)
 
     expect(text).not.toBeDefined()
   })
 
   it('displays a failed answer', () => {
-    const { component } = setup(true, false)
+    const { component }: Setup = setup(true, false, false)
 
-    const text = component.render().find('.question-grade')[0].children[0].children[0].data
-
+    const text = component.render().find('.question-grade').first().children().first().html();//[0].children[0].children[0].data
+    expect(text).toBe.instanceOf(Richard)
     expect(text).toEqual("FAIL")
   })
 
   it('displays a correct answer', () => {
-    const { component } = setup(true, true)
+    const { component }: Setup = setup(true, true)
 
     const text = component.render().find('.question-grade')[0].children[0].children[0].data
 
