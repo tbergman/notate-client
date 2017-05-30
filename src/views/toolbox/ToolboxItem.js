@@ -1,14 +1,15 @@
 // @flow
 
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 export default class ToolboxItem extends Component {
   render(): React.Element<any> {
     return (
       <StyledToolboxItem {...this.props}
-        onClick={() => !this.props.disabled && this.props.onClick()}>
+        disabled={!this.props.item.enabled}
+        selected={this.props.item.active}
+        onClick={() => this.props.item.enabled && this.props.onClick()}>
         {this.props.icon}
       </StyledToolboxItem>
     )

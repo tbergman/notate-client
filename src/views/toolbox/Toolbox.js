@@ -3,64 +3,69 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { shouldHighlightNoteSpecificItems } from 'modules/toolbox/selectors'
+import { selectToolboxItems } from 'modules/toolbox/selectors'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
-import { RestIcon, DotIcon, SelectionToolIcon, EraserIcon } from 'views/toolbox/ToolboxIcons'
-import AccidentalIcons from 'views/toolbox/AccidentalIcons'
-import DurationIcons from 'views/toolbox/DurationIcons'
+import * as Icons from 'views/toolbox/ToolboxIcons'
 import ToolboxItem from 'views/toolbox/ToolboxItem'
-import AccidentalToolboxItem from 'views/toolbox/AccidentalToolboxItem'
-import DurationToolboxItem from 'views/toolbox/DurationToolboxItem'
+
 import {
   toggleRest,
   toggleDot,
   toggleSelectionTool,
   toggleEraser,
+  setAccidental,
+  setDuration,
 } from 'modules/toolbox/actions'
 
 class Toolbox extends Component {
   render(): React.Element<any> {
+    const items = this.props.toolboxItems
+
     return (
       <div>
         <ToolboxContainer>
-          <ToolboxItem bar
-            selected={this.props.selectionTool}
-            onClick={() => this.props.toggleSelectionTool()}
-            icon={<SelectionToolIcon />}
-          />
+          <ToolboxItem bar item={items.cursor} icon={<Icons.SelectionTool />}
+            onClick={() => this.props.toggleSelectionTool()}/>
 
-          <ToolboxItem bar
-            selected={this.props.eraserSelected}
-            onClick={() => this.props.toggleEraser()}
-            icon={<EraserIcon />}
-          />
+          <ToolboxItem bar item={items.eraser} icon={<Icons.Eraser />}
+            onClick={() => this.props.toggleEraser()}/>
 
-          <DurationToolboxItem bar duration={DURATION.EIGHTH} icon={<DurationIcons.Eighth />} />
-          <DurationToolboxItem bar duration={DURATION.QUARTER} icon={<DurationIcons.Quarter />} />
-          <DurationToolboxItem bar duration={DURATION.HALF} icon={<DurationIcons.Half />} />
-          <DurationToolboxItem duration={DURATION.WHOLE} icon={<DurationIcons.Whole />} />
+          <ToolboxItem bar item={items.durations.eighth} icon={<Icons.DurationEighth />}
+            onClick={() => this.props.setDuration(DURATION.EIGHTH)} />
+
+          <ToolboxItem bar item={items.durations.quarter} icon={<Icons.DurationQuarter />}
+            onClick={() => this.props.setDuration(DURATION.QUARTER)}/>
+
+          <ToolboxItem bar item={items.durations.half} icon={<Icons.DurationHalf />}
+            onClick={() => this.props.setDuration(DURATION.HALF)}/>
+
+          <ToolboxItem item={items.durations.whole} icon={<Icons.DurationWhole />}
+            onClick={() => this.props.setDuration(DURATION.WHOLE)}/>
+
         </ToolboxContainer>
 
         <ToolboxContainer>
-          <AccidentalToolboxItem bar accidental={ACCIDENTAL.NATURAL} icon={<AccidentalIcons.Natural />} />
-          <AccidentalToolboxItem bar accidental={ACCIDENTAL.SHARP} icon={<AccidentalIcons.Sharp />} />
-          <AccidentalToolboxItem bar accidental={ACCIDENTAL.DOUBLE_SHARP} icon={<AccidentalIcons.DoubleSharp />} />
-          <AccidentalToolboxItem bar accidental={ACCIDENTAL.FLAT} icon={<AccidentalIcons.Flat />} />
-          <AccidentalToolboxItem bar accidental={ACCIDENTAL.DOUBLE_FLAT} icon={<AccidentalIcons.DoubleFlat />} />
+          <ToolboxItem bar item={items.accidentals.natural} icon={<Icons.AccidentalNatural />}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}/>
 
-          <ToolboxItem bar
-            selected={this.props.restSelected && this.props.shouldHighlightNoteSpecificItems}
-            disabled={this.props.eraserSelected}
-            onClick={() => this.props.toggleRest()}
-            icon={<RestIcon />}
-          />
+          <ToolboxItem bar item={items.accidentals.sharp} icon={<Icons.AccidentalSharp />}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.SHARP)}/>
 
-          <ToolboxItem
-            selected={this.props.dotSelected && this.props.shouldHighlightNoteSpecificItems}
-            disabled={this.props.eraserSelected}
-            onClick={() => this.props.toggleDot()}
-            icon={<DotIcon />}
-          />
+          <ToolboxItem bar item={items.accidentals.doubleSharp} icon={<Icons.AccidentalDoubleSharp />}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_SHARP)}/>
+
+          <ToolboxItem bar item={items.accidentals.flat} icon={<Icons.AccidentalFlat />}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.FLAT)}/>
+
+          <ToolboxItem bar item={items.accidentals.doubleFlat} icon={<Icons.AccidentalDoubleFlat />}
+            onClick={() => this.props.setAccidental(ACCIDENTAL.DOUBLE_FLAT)}/>
+
+          <ToolboxItem bar item={items.rest} icon={<Icons.Rest />}
+            onClick={() => this.props.toggleRest()}/>
+
+          <ToolboxItem item={items.dot} icon={<Icons.Dot />}
+            onClick={() => this.props.toggleDot()}/>
+
         </ToolboxContainer>
       </div>
     )
@@ -97,6 +102,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     setDuration: ((duration) => dispatch(setDuration(duration))),
     setAccidental: ((accidental) => dispatch(setAccidental(accidental))),
     shouldHighlightNoteSpecificItems: shouldHighlightNoteSpecificItems(state),
+    toolboxItems: selectToolboxItems(state),
     toggleRest: (() => dispatch(toggleRest())),
     toggleDot: (() => dispatch(toggleDot())),
     toggleEraser: (() => dispatch(toggleEraser())),
