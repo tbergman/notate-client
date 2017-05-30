@@ -32,7 +32,8 @@ class Toolbox extends Component {
   }
 
   shouldHighlightNoteSpecificItems() {
-    return !this.props.selectionTool || this.props.selectedNote
+    return (!this.props.selectionTool && !this.props.eraserSelected)
+      || this.props.selectedNote
   }
 
   render(): React.Element<any> {

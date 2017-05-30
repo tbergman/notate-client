@@ -60,13 +60,16 @@ export default (state: ToolboxState = initialState, action: ToolboxActions) => {
       return {
         ...state,
         selectionTool: newSelectionToolState,
-        selectedNote: (newSelectionToolState ? state.selectedNote : null)
+        selectedNote: (newSelectionToolState ? state.selectedNote : null),
+        eraserSelected: false,
       }
 
     case TOGGLE_ERASER:
       return {
         ...state,
         eraserSelected: !state.eraserSelected,
+        selectedNote: null,
+        selectionTool: false,
       }
 
     case SELECT_NOTE:
