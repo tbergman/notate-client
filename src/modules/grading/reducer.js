@@ -3,11 +3,10 @@
 import type { FluxStandardAction } from 'Types'
 import type { QuestionGradesState } from 'modules/grading'
 import type { Question } from 'modules/student-test'
-import { fromJS } from 'immutable'
 import Grader from 'modules/grading/grader'
 
 const initialState: QuestionGradesState = {
-  questionGrades: fromJS([])
+  questionGrades: []
 }
 
 export default function reducer(
@@ -27,14 +26,14 @@ export default function reducer(
 
       const questionIndex = state.questionGrades.findIndex(x => x.questionId === gradeResult.questionId)
       if (questionIndex >= 0) {
-        newQuestionGradesState = state.questionGrades.set(questionIndex, gradeResult)
+        state.questionGrades[questionIndex] = gradeResult
       } else {
-        newQuestionGradesState = state.questionGrades.push(gradeResult)
+        state.questionGrades.push(gradeResult)
       }
 
       return {
         ...state,
-        questionGrades: newQuestionGradesState
+        questionGrades: state.questionGrades
       }
     }
 

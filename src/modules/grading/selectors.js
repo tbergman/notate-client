@@ -1,5 +1,6 @@
 // @flow
 
+import _ from 'lodash'
 import { createSelector } from 'reselect'
 
 import { selectGrading } from 'modules/reducers'
@@ -9,9 +10,9 @@ export const selectQuestionGrade = (state: AppState, questionId: string) => {
   return createSelector(
     selectGrading,
     (state) => {
-      const questionGrades = (state.questionGrades && state.questionGrades.toJS()) || []
+      const questionGrades = state.questionGrades || []
 
-      return questionGrades.find(x => x.questionId === questionId) ||
+      return _.find(questionGrades, x => x.questionId === questionId) ||
         {
           questionId: questionId,
           correct: false,

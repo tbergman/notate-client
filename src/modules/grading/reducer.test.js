@@ -1,17 +1,16 @@
 // @flow
 
-import { fromJS } from 'immutable'
 import reducer from './reducer'
 
 describe('grading reducer', () => {
   let question
   const questionId = 'question-id'
   const initialState = {
-    questionGrades: fromJS([{
+    questionGrades: [{
       questionId: questionId,
       graded: true,
       correct: false,
-    }])
+    }]
   }
 
   beforeEach(() => {
@@ -27,7 +26,7 @@ describe('grading reducer', () => {
 
   it('grades an existing question', () => {
     const result = reducer(initialState, { type: 'GRADE_QUESTION', payload: question })
-    const grade = result.questionGrades.get(0)
+    const grade = result.questionGrades[0]
 
     expect(grade.correct).toEqual(true)
   })
@@ -35,7 +34,7 @@ describe('grading reducer', () => {
   it('grades a new question', () => {
     question.id = 'new-question-id'
     const result = reducer(initialState, { type: 'GRADE_QUESTION', payload: question })
-    const grade = result.questionGrades.get(1)
+    const grade = result.questionGrades[1]
 
     expect(grade.questionId).toEqual('new-question-id')
     expect(grade.correct).toEqual(true)

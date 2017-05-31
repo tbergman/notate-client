@@ -1,6 +1,6 @@
 // @flow
 
-import { fromJS, List } from 'immutable'
+import { List } from 'immutable'
 import { selectQuestionGrade } from './selectors'
 import { initialState as createState } from 'modules/create/reducer'
 
@@ -17,11 +17,11 @@ describe('grading selectors', () => {
         dotSelected: false,
       },
       grading: {
-        questionGrades: fromJS([{
+        questionGrades: [{
           questionId: 'question-id',
           graded: true,
           correct: true,
-        }])
+        }]
       },
       create: createState,
     }
@@ -44,7 +44,7 @@ describe('grading selectors', () => {
         dotSelected: false,
       },
       grading: {
-        questionGrades: fromJS([])
+        questionGrades: []
       },
       create: createState,
     }
