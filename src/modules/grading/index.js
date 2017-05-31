@@ -9,5 +9,5 @@ export type QuestionGrade = {
 }
 
 export type QuestionGradesState = {
-  questionGrades: List<QuestionGrade>,
+  questionGrades: Array<QuestionGrade>,
 }
