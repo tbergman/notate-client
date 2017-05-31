@@ -33,12 +33,13 @@ export default function reducer(
 
     case 'create/PROFESSOR_ERASED_QUESTION_NOTE': {
       const note = action.payload
-      const deletedNoteIndex = state.question.get('notes').findIndex(x => x.id === note.id)
-      const notes = state.question.get('notes').remove(deletedNoteIndex)
+      const question: iCreateQuestion = state.question
+      const deletedNoteIndex = question.get('notes').findIndex(x => x.id === note.id)
+      const notes = question.get('notes').remove(deletedNoteIndex)
 
       return {
         ...state,
-        question: state.question.set('notes', notes)
+        question: question.set('notes', notes)
       }
     }
 

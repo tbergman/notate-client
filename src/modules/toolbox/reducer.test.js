@@ -4,8 +4,9 @@ import type {
   SetAccidentalAction,
   SetDurationAction,
   ToggleRestAction,
-  ToggleDotAction }
-from 'modules/toolbox/actions'
+  ToggleDotAction,
+  ToggleSelectionToolAction,
+} from 'modules/toolbox/actions'
 
 import reducer from 'modules/toolbox/reducer'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
@@ -21,9 +22,11 @@ describe('toolbox reducer', () => {
   const initialState = {
     selectedDuration: DURATION.QUARTER,
     selectedAccidental: ACCIDENTAL.NATURAL,
+    selectionTool: false,
     restSelected: false,
     dotSelected: false,
-    selectionTool: false,
+    eraserSelected: false,
+    selectedNote: null,
   }
 
   it('sets an accidental', () => {

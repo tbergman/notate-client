@@ -27,9 +27,11 @@ type Props = {
   notes: string,
   annotations?: string,
   question?: QuestionType,
-  addNote?: Function,
   layers?: Array<Layer>,
   toolbox?: ToolboxState,
+  addNote?: Function,
+  eraseNote?: Function,
+  selectNote?: Function,
 }
 
 export class StaveUnconnected extends Component {
@@ -87,8 +89,8 @@ export class StaveUnconnected extends Component {
     this.drawLayers()
   }
 
-  selectNote(note) {
-    if (this.props.toolbox.eraserSelected) {
+  selectNote(note: StaveNote) {
+    if (!!(this.props.toolbox && this.props.toolbox.eraserSelected)) {
       this.props.eraseNote && this.props.eraseNote(note)
     } else {
       this.props.selectNote && this.props.selectNote(note)

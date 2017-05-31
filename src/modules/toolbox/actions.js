@@ -1,6 +1,7 @@
 // @flow
 
 import type { AccidentalType, DurationType } from 'modules/toolbox'
+import type { StaveNote } from 'modules/types'
 
 export const SET_DURATION = 'toolbox/SELECT_DURATION'
 export const SET_ACCIDENTAL = 'toolbox/SELECT_ACCIDENTAL'
@@ -56,9 +57,10 @@ export const toggleSelectionTool: () => ToggleSelectionToolAction = () => ({
 
 // SELECT NOTE
 export type SelectNoteAction = {
-  type: 'toolbox/SELECT_NOTE'
+  type: 'toolbox/SELECT_NOTE',
+  payload: StaveNote
 }
-export const selectNote: (note) => SelectNoteAction = (note) => ({
+export const selectNote: (note: StaveNote) => SelectNoteAction = (note) => ({
   type: SELECT_NOTE,
   payload: note,
 })
