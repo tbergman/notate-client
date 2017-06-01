@@ -2,8 +2,10 @@
 import { Iterable } from 'immutable'
 import { applyMiddleware, createStore, compose } from 'redux'
 import { createLogger } from 'redux-logger'
+import createSagaMiddleware from 'redux-saga'
 
-import { default as reducers } from 'modules/reducers'
+import reducers from 'modules/reducers'
+import sagas from 'modules/sagas'
 
 //NOTE: can add initial state and make this more abstracted
 
@@ -25,9 +27,12 @@ const immutableJsLogger = createLogger({
   },
 })
 
-const middleware = applyMiddleware(immutableJsLogger)
+const sagaMiddleware = createSagaMiddleware()
+const middleware = applyMiddleware(immutableJsLogger, sagaMiddleware)
 const store = composeEnhancers(
-  middleware
+  middleware,
 )(createStore)(reducers);
+
+sagaMiddleware.run(sagas)
 
 export default store

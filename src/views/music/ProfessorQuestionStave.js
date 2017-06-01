@@ -13,13 +13,11 @@ import Stave from './Stave'
 
 class ProfessorQuestionStave extends Component {
   addQuestionNote(position: number, pitch: string) {
-    const currentPosition = position
-
     this.props.addQuestionNote({
       pitch: pitch,
       duration: this.props.selectedDuration,
       accidental: this.props.selectedAccidental,
-      position: currentPosition,
+      position: position,
       isRest: this.props.restSelected,
       isDotted: this.props.isDotted,
     })
