@@ -14,6 +14,7 @@ export default styled.div`
 
     &:hover {
       fill: rgba(0,0,0,0.5);
+      stroke: rgba(0,0,0,0.5);
     }
   }
 

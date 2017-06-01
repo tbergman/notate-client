@@ -1,28 +1,5 @@
 /* eslint-disable */
 
-/************************************************************
-
-  LAYERS:
-
-  The staff is being rendered in SVG with a layered concept
-  in mind. The layers are being created by SVG groups and css
-  classes applied to those groups. The current layers are:
-
-  QUESTION LAYER: used to draw the notes from a question that
-  appear for the student. This is the first layer to be rendered.
-
-  OPTIONS LAYER: for each note on the question layer, stavenote
-  or rest, we add an array of option notes to the same measure.
-  The range of these notes is specified manually in this file.
-  This allows the user to hover and click on a note at any given
-  measure allowed by this layer.
-
-  STUDENT LAYER: layer containing the answers a student added to
-  the staff. Each option note clicked by the user is being handled
-  so that it gets added to the student layer.
-
-*************************************************************/
-
 import Vex from 'vexflow'
 import _ from 'lodash'
 
@@ -32,6 +9,8 @@ export default class ArtistLayers {
   }
 
   drawBaseLayer(context, stave, notesVoice, beams, textNotesVoice) {
+    this.rootElement = context.parent
+
     const group = context.openGroup()
     group.classList.add('layer-base');
 
@@ -48,24 +27,36 @@ export default class ArtistLayers {
     })
 
     context.closeGroup();
-  }
 
-  drawOptionsLayer(context, stave, voices) {
     this.staveLayers = context.openGroup()
     this.staveLayers.classList.add('layers')
     context.closeGroup()
-
-    const optionLayer = context.openGroup()
-    optionLayer.classList.add('layer-option')
-    _.each(voices, voice => {
-      _.each(voice.tickables, x => {
-        this.drawOptionsColumn(context, stave, x)
-      })
-    })
-    context.closeGroup()
   }
 
-  drawOptionsColumn(context, stave, note) {
+  drawOptionsLayer(context, stave, voices, toolbox) {
+    // always draw options layer on root element
+    context.parent = this.rootElement
+
+    // if toolbox changed, clear and redraw options, otherwise do nothing
+    if (this.toolboxChanged(toolbox)) {
+      this.clearLayer(context.parent, 'option')
+
+      const optionLayer = context.openGroup()
+      optionLayer.classList.add('layer-option')
+
+      _.each(voices, voice => {
+        _.each(voice.tickables, x => {
+          this.drawOptionsColumn(context, stave, x, toolbox)
+        })
+      })
+
+      context.closeGroup()
+    }
+
+    this.previousToolbox = toolbox
+  }
+
+  drawOptionsColumn(context, stave, note, toolbox) {
     if (note.attrs.type === 'StaveNote') {
       const availableOptions = [
         'E/3', 'F/3', 'G/3', 'A/3', 'B/3',
@@ -78,15 +69,24 @@ export default class ArtistLayers {
         const group = context.openGroup()
         group.classList.add('note-option')
 
-        const optionNote = new Vex.Flow.StaveNote({ keys: [x], duration: 'q', stem_direction: 1 })
-        note.tickContext.addTickable(optionNote)
-        optionNote.setContext(context).setStave(stave)
-        optionNote.draw()
+        const optionNote = {
+          pitch: x,
+          duration: toolbox.selectedDuration,
+          accidental: toolbox.selectedAccidental,
+          isRest: toolbox.restSelected,
+          isDotted: toolbox.dotSelected
+        }
+        const newNote = this.drawableNote(optionNote)
+
+        note.tickContext.addTickable(newNote)
+        note.tickContext.preFormat()
+        newNote.setContext(context).setStave(stave)
+        newNote.draw()
 
         context.closeGroup()
 
         group.addEventListener('click', () => {
-          this.artist.options.addNote(optionNote.tickContext.getX(), x)
+          this.artist.options.addNote(newNote.tickContext.getX(), x)
         })
       })
     }
@@ -116,15 +116,7 @@ export default class ArtistLayers {
       const noteGroup = context.openGroup()
       noteGroup.classList.add('note-' + layerId)
 
-      const duration = note.duration + (note.isRest ? 'r' : '')
-      const newNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: duration, stem_direction: 1 })
-      if (note.accidental) {
-        newNote.addAccidental(0, new Vex.Flow.Accidental(note.accidental))
-      }
-      console.log(note)
-      if (note.isDotted) {
-        newNote.addDot(0)
-      }
+      const newNote = this.drawableNote(note)
 
       tickContext.addTickable(newNote)
       tickContext.preFormat().setX(note.position)
@@ -138,5 +130,21 @@ export default class ArtistLayers {
     context.closeGroup()
 
     context.parent = rememberParent
+  }
+
+  drawableNote(note) {
+    const duration = note.duration + (note.isRest ? 'r' : '')
+    const newNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: duration, stem_direction: 1 })
+    if (note.accidental) {
+      newNote.addAccidental(0, new Vex.Flow.Accidental(note.accidental))
+    }
+    if (note.isDotted) {
+      newNote.addDot(0)
+    }
+    return newNote
+  }
+
+  toolboxChanged(toolbox) {
+    return !_.isEqual(toolbox, this.previousToolbox);
   }
 }
