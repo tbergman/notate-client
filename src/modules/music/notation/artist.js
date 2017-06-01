@@ -145,8 +145,12 @@ export default class Artist {
     return scoreVoices
   }
 
-  drawOptions(toolbox) {
-    this.layers.drawOptionsLayer(this.renderer_context, this.staves[0].note, this.scoreVoices, toolbox)
+  setToolbox(toolbox) {
+    this.toolbox = toolbox
+  }
+
+  drawOptions() {
+    this.layers.drawOptionsLayer(this.renderer_context, this.staves[0].note, this.scoreVoices)
   }
 
   createTextVoice(stave, textNotes) {

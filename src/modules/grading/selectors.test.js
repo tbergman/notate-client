@@ -13,8 +13,11 @@ describe('grading selectors', () => {
       toolbox: {
         selectedDuration: '1',
         selectedAccidental: '#',
+        selectionTool: false,
         restSelected: false,
         dotSelected: false,
+        eraserSelected: false,
+        selectedNote: null,
       },
       grading: {
         questionGrades: [{
@@ -40,8 +43,11 @@ describe('grading selectors', () => {
       toolbox: {
         selectedDuration: '1',
         selectedAccidental: '#',
+        selectionTool: false,
         restSelected: false,
         dotSelected: false,
+        eraserSelected: false,
+        selectedNote: null,
       },
       grading: {
         questionGrades: []

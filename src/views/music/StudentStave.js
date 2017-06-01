@@ -37,6 +37,7 @@ export class StudentStaveUnconnected extends Component {
           { id: 'student', data: this.props.question.student },
         ]}
         addNote={(position, note) => this.addStudentNote(position, note)}
+        selectNote={(note) => console.log(note)}
       />
     )
   }

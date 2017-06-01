@@ -4,19 +4,29 @@ import type {
   SetAccidentalAction,
   SetDurationAction,
   ToggleRestAction,
-  ToggleDotAction }
-from 'modules/toolbox/actions'
+  ToggleDotAction,
+  ToggleSelectionToolAction,
+} from 'modules/toolbox/actions'
 
 import reducer from 'modules/toolbox/reducer'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
-import { SET_DURATION, SET_ACCIDENTAL, TOGGLE_REST, TOGGLE_DOT } from 'modules/toolbox/actions'
+import {
+  SET_DURATION,
+  SET_ACCIDENTAL,
+  TOGGLE_REST,
+  TOGGLE_DOT,
+  TOGGLE_SELECTION_TOOL,
+} from 'modules/toolbox/actions'
 
 describe('toolbox reducer', () => {
   const initialState = {
     selectedDuration: DURATION.QUARTER,
     selectedAccidental: ACCIDENTAL.NATURAL,
+    selectionTool: false,
     restSelected: false,
     dotSelected: false,
+    eraserSelected: false,
+    selectedNote: null,
   }
 
   it('sets an accidental', () => {
@@ -43,6 +53,19 @@ describe('toolbox reducer', () => {
     expect(result.selectedDuration).toEqual(DURATION.EIGHTH)
   })
 
+  it('setting a duration should clear the selection tool', () => {
+    const action: SetDurationAction = { type: SET_DURATION, payload: DURATION.EIGHTH }
+
+    const state = {
+      ...initialState,
+      selectionTool: true,
+    }
+
+    const result = reducer(state, action)
+
+    expect(result.selectionTool).toEqual(false)
+  })
+
   it('toggles a rest', () => {
     const action: ToggleRestAction = { type: TOGGLE_REST }
 
@@ -65,5 +88,17 @@ describe('toolbox reducer', () => {
     const nextToggle = reducer(result, action)
 
     expect(nextToggle.dotSelected).toEqual(false)
+  })
+
+  it('toggles the selection tool', () => {
+    const action: ToggleSelectionToolAction = { type: TOGGLE_SELECTION_TOOL }
+
+    const result = reducer(initialState, action)
+
+    expect(result.selectionTool).toEqual(true)
+
+    const nextToggle = reducer(result, action)
+
+    expect(nextToggle.selectionTool).toEqual(false)
   })
 })

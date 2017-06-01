@@ -4,7 +4,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 import { Flow } from 'vexflow'
-import { studentAddedNote } from 'modules/student-test/actions'
 import type { Question as QuestionType } from 'modules/student-test'
 import type { StaveNote } from 'modules/types'
 import type { ToolboxState } from 'modules/toolbox'
@@ -28,9 +27,11 @@ type Props = {
   notes: string,
   annotations?: string,
   question?: QuestionType,
-  addNote?: Function,
   layers?: Array<Layer>,
   toolbox?: ToolboxState,
+  addNote?: Function,
+  eraseNote?: Function,
+  selectNote?: Function,
 }
 
 export class StaveUnconnected extends Component {
@@ -44,7 +45,9 @@ export class StaveUnconnected extends Component {
       toolbox,
     } = this.props
 
-    this.artist.drawOptions(toolbox)
+    this.artist.setToolbox(toolbox)
+
+    this.artist.drawOptions()
 
     _.each(layers, x => { this.artist.drawLayer(x.data, x.id) })
   }
@@ -74,6 +77,7 @@ export class StaveUnconnected extends Component {
     `
     this.artist = new Artist(10, 10, width, {
       addNote: (position, pitch) => this.props.addNote && this.props.addNote(position, pitch),
+      selectNote: (note) => this.selectNote(note),
     })
 
     const vextab = new VexTab(this.artist)
@@ -83,6 +87,14 @@ export class StaveUnconnected extends Component {
     this.artist.render(renderer)
 
     this.drawLayers()
+  }
+
+  selectNote(note: StaveNote) {
+    if (!!(this.props.toolbox && this.props.toolbox.eraserSelected)) {
+      this.props.eraseNote && this.props.eraseNote(note)
+    } else {
+      this.props.selectNote && this.props.selectNote(note)
+    }
   }
 
   baseLayerNotation(): string {
@@ -105,7 +117,7 @@ export class StaveUnconnected extends Component {
   }
 }
 
-const mapStateToProps = (state, ) => {
+const mapStateToProps = (state) => {
   return {
     toolbox: state.toolbox
   }
@@ -113,7 +125,7 @@ const mapStateToProps = (state, ) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    studentAddedNote: ((note) => dispatch(studentAddedNote(note))),
+
   }
 }
 
