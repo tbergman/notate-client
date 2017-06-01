@@ -1,10 +1,8 @@
 // @flow
 
-import { fromJS } from 'immutable'
 import { selectToolboxItems } from './selectors'
 import { initialState } from './reducer'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
-import uuid from 'uuid'
 
 describe('toolbox selectors', () => {
   let state, result

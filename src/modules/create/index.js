@@ -1,6 +1,6 @@
 // @flow
 import type { StaveNote } from 'modules/types'
-import { Record } from 'immutable'
+import { Record, Map } from 'immutable'
 
 export type CreateQuestion = {
   bars: number,
@@ -22,5 +22,5 @@ const dummyICreateQuestionInst = newICreateQuestion()
 export type iCreateQuestion = typeof dummyICreateQuestionInst
 
 export type CreateQuestionState = {
-  question: CreateQuestion | iCreateQuestion
+  question: Record<CreateQuestion | iCreateQuestion>
 }
