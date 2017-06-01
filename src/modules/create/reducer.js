@@ -2,7 +2,7 @@
 
 import type { FluxStandardAction } from 'Types'
 import type { iCreateQuestion, CreateQuestionState } from 'modules/create'
-
+import { NOTE_CHANGED } from 'modules/notes/actions'
 
 import uuid from 'uuid'
 import { fromJS } from 'immutable'
@@ -51,6 +51,30 @@ export default function reducer(
       return {
         ...state,
         question: question.set('answers', question.get('answers').push(note))
+      }
+    }
+
+    case NOTE_CHANGED: {
+      const question: iCreateQuestion = state.question;
+      let notes = question.get('notes')
+      let answers = question.get('answers')
+      const note = action.payload
+
+      const noteIndex = notes.findIndex(x => x.id === note.id)
+      if (noteIndex !== -1) {
+        notes = notes.update(noteIndex, () => note)
+      }
+
+      const answerIndex = answers.findIndex(x => x.id === note.id)
+      if (answerIndex !== -1) {
+        answers = answers.update(answerIndex, () => note)
+      }
+
+      return {
+        ...state,
+        question: question
+          .set('notes', notes)
+          .set('answers', answers)
       }
     }
 

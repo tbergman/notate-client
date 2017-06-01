@@ -1,5 +1,6 @@
-import { select, takeEvery } from 'redux-saga/effects'
+import { select, takeEvery, put } from 'redux-saga/effects'
 
+import { NOTE_CHANGED } from 'modules/notes/actions'
 import {
   SET_DURATION,
   SET_ACCIDENTAL,
@@ -8,7 +9,14 @@ import {
 } from 'modules/toolbox/actions'
 
 function* noteChanged(action, toolbox) {
-  console.log('note changing action happened, this is the new toolbox', toolbox)
+  const newNote = {
+    ...toolbox.selectedNote,
+    duration: toolbox.selectedDuration,
+    accidental: toolbox.selectedAccidental,
+    isRest: toolbox.restSelected,
+    isDotted: toolbox.dotSelected,
+  }
+  yield put({ type: NOTE_CHANGED, payload: newNote })
 }
 
 export default function* watchToolboxNoteEditing(){
