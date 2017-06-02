@@ -6,11 +6,11 @@ import { createSelector } from 'reselect'
 import { selectGrading } from 'modules/reducers'
 import type { AppState } from 'modules/reducers'
 
-export const selectQuestionGrade = (state: AppState, gradingId: string) => {
+export const selectGradingById = (state: AppState, gradingId: string) => {
   return createSelector(
     selectGrading,
     (state) => {
-      const questionGrades = state.questionGrades || []
+      const questionGrades = state.questionGrades.toJS() || []
 
       return _.find(questionGrades, x => x.gradingId === gradingId)
     }

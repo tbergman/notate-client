@@ -10,3 +10,10 @@ export const gradeLayers = (gradingId: string, answers, student) => {
     }
   }
 }
+
+export const clearGrading = (gradingId: string) => {
+  return {
+    type: 'CLEAR_GRADING',
+    payload: gradingId,
+  }
+}

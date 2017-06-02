@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { gradeQuestion } from 'modules/grading/actions'
-import { selectQuestionGrade } from 'modules/grading/selectors'
+import { selectGrading } from 'modules/grading/selectors'
 import StudentStave from 'views/music/StudentStave'
 import type { Question as QuestionType } from 'modules/student-test'
 import type { QuestionGrade } from 'modules/grading'
@@ -62,7 +62,7 @@ const StyledGrade = styled.span`
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    questionGrade: selectQuestionGrade(state, ownProps.question.id)
+    questionGrade: selectGrading(state, ownProps.question.id)
   }
 }
 

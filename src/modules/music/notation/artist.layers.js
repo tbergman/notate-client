@@ -102,10 +102,6 @@ export default class ArtistLayers {
   }
 
   drawLayer(context, stave, notes, layerId) {
-    if (_.isEmpty(notes)) {
-      return
-    }
-
     this.clearLayer(context.parent, layerId)
 
     const rememberParent = context.parent

@@ -8,14 +8,25 @@ import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import PitchComparison from 'modules/grading/comparison.pitch'
-import { gradeLayers } from 'modules/grading/actions'
+import { gradeLayers, clearGrading } from 'modules/grading/actions'
+import { clearLayer } from 'modules/notes/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
-import { selectQuestionGrade } from 'modules/grading/selectors'
+import { selectGradingById } from 'modules/grading/selectors'
+
+const questionLayerId = 'question'
+const answersLayerId = 'answer'
+const studentLayerId = 'student'
+const gradingId = 'create-question-grading'
 
 class CreateQuestionPage extends Component {
   onBeforeAddingNote(note) {
     note.validator = PitchComparison.equal(note.pitch)
     return note
+  }
+
+  clearStudentLayer() {
+    this.props.clearLayer(studentLayerId)
+    this.props.clearGrading(gradingId)
   }
 
   renderGrade(): React.Element<any>|null {
@@ -43,34 +54,38 @@ class CreateQuestionPage extends Component {
 
           <QuestionContainer>
             <Stave description={'What will the question look like?'}
-              editingStaveId={'question'}
+              editingStaveId={questionLayerId}
               layers={[
-                { id: 'question' }
+                { id: questionLayerId }
               ]}
             />
 
             <Stave description={'What would the answers be?'}
-              editingStaveId={'answer'}
+              editingStaveId={answersLayerId}
               onBeforeAddingNote={(note) => this.onBeforeAddingNote(note) }
               layers={[
-                { id: 'question' },
-                { id: 'answer' }
+                { id: questionLayerId },
+                { id: answersLayerId }
               ]}
             />
 
             <Stave description={'Answer here as a student would'}
-              editingStaveId={'student'}
+              editingStaveId={studentLayerId}
               layers={[
-                { id: 'question' },
-                { id: 'student' }
+                { id: questionLayerId },
+                { id: studentLayerId }
               ]}
+            />
+
+            <input type="button" value="Clear Student's Answers"
+              onClick={() => this.clearStudentLayer()}
             />
 
             <input type="button" value="Grade"
               onClick={() => this.props.gradeLayers(
-                'create-question-grading',
-                this.props.selectStaveNotes('answer'),
-                this.props.selectStaveNotes('student'),
+                gradingId,
+                this.props.selectStaveNotes(answersLayerId),
+                this.props.selectStaveNotes(studentLayerId),
               )}
             />
 
@@ -103,12 +118,14 @@ const StyledGrade = styled.span`
 const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
-    grade: selectQuestionGrade(state, 'create-question-grading')
+    grade: selectGradingById(state, gradingId)
   }
 }
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     gradeLayers: ((gradingId, answers, student) => dispatch(gradeLayers(gradingId, answers, student))),
+    clearGrading: ((gradingId) => dispatch(clearGrading(gradingId))),
+    clearLayer: ((layerId) => dispatch(clearLayer(layerId))),
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CreateQuestionPage)

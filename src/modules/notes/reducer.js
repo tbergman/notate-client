@@ -9,6 +9,7 @@ import {
   NOTE_ADDED,
   NOTE_CHANGED,
   NOTE_REMOVED,
+  CLEAR_LAYER,
 } from 'modules/notes/actions'
 
 export const initialState: NotesState = {
@@ -39,6 +40,16 @@ export default (state: NotesState = initialState, action: NotesActions) => {
       const note = action.payload
       const index = state.notes.findIndex(x => x.id === note.id)
       const notes = state.notes.remove(index)
+
+      return {
+        ...state,
+        notes: notes
+      }
+    }
+
+    case CLEAR_LAYER: {
+      const layerId = action.payload
+      const notes = state.notes.filter(x => x.staveLayerId !== layerId)
 
       return {
         ...state,

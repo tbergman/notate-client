@@ -1,7 +1,7 @@
 // @flow
 
 import { List } from 'immutable'
-import { selectQuestionGrade } from './selectors'
+import { selectGrading } from './selectors'
 import { initialState as createState } from 'modules/create/reducer'
 
 describe('grading selectors', () => {
@@ -29,7 +29,7 @@ describe('grading selectors', () => {
       create: createState,
     }
 
-    const result = selectQuestionGrade(state, 'question-id')
+    const result = selectGrading(state, 'question-id')
 
     expect(result.correct).toEqual(true)
     expect(result.graded).toEqual(true)
@@ -55,7 +55,7 @@ describe('grading selectors', () => {
       create: createState,
     }
 
-    const result = selectQuestionGrade(state, 'question-id')
+    const result = selectGrading(state, 'question-id')
 
     expect(result.correct).toEqual(false)
     expect(result.graded).toEqual(false)

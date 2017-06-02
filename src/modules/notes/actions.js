@@ -5,6 +5,7 @@ import type { StaveNote } from 'modules/types'
 export const NOTE_CHANGED = 'notes/NOTE_CHANGED'
 export const NOTE_ADDED = 'notes/NOTE_ADDED'
 export const NOTE_REMOVED = 'notes/NOTE_REMOVED'
+export const CLEAR_LAYER = 'notes/CLEAR_LAYER'
 
 // NOTE ADDED
 export type NoteAddedAction = {
@@ -32,7 +33,18 @@ export type NoteChangedAction = {
   payload: StaveNote,
 }
 
+// CLEAR LAYER
+export type CLearLayerAction = {
+  type: 'notes/CLEAR_LAYER',
+  payload: string,
+}
+export const clearLayer: (layerId: string) => CLearLayerAction = (layerId) => ({
+  type: CLEAR_LAYER,
+  payload: layerId
+})
+
 export type NotesActions =
   | NoteAddedAction
   | NoteRemovedAction
   | NoteChangedAction
+  | CLearLayerAction
