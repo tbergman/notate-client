@@ -7,8 +7,14 @@ import { connect } from 'react-redux'
 import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
+import PitchComparison from 'modules/grading/comparison.pitch'
 
 class CreateQuestionPage extends Component {
+  onBeforeAddingNote(note) {
+    note.validator = PitchComparison.equal(note.pitch)
+    return note
+  }
+
   render(): React.Element<any> {
     return (
       <Layout className="app">
@@ -31,6 +37,7 @@ class CreateQuestionPage extends Component {
 
             <Stave description={'What would the answers be?'}
               editingStaveId={'answer'}
+              onBeforeAddingNote={(note) => this.onBeforeAddingNote(note) }
               layers={[
                 { id: 'question' },
                 { id: 'answer' }
@@ -65,8 +72,5 @@ const QuestionContainer = styled.div`
   flex: 7;
   padding: 30px;
 `
-const mapStateToProps = (state) => {
-  return {
-  }
-}
+const mapStateToProps = (state) => { return { } }
 export default connect(mapStateToProps)(CreateQuestionPage)

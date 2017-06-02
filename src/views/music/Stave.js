@@ -35,6 +35,7 @@ type Props = {
   layers?: Array<Layer>,
   toolbox?: ToolboxState,
   editingStaveId?: string,
+  onBeforeAddingNote?: Function,
 }
 
 export class StaveUnconnected extends Component {
@@ -93,7 +94,7 @@ export class StaveUnconnected extends Component {
   }
 
   addNote(position: number, pitch: string, staveLayerId: string) {
-    this.props.addNote({
+    let newNote = {
       id: uuid(),
       staveLayerId: this.props.editingStaveId,
       pitch: pitch,
@@ -102,7 +103,13 @@ export class StaveUnconnected extends Component {
       position: position,
       isRest: this.props.toolbox.restSelected,
       isDotted: this.props.toolbox.isDotted,
-    })
+    }
+
+    if (this.props.onBeforeAddingNote) {
+      newNote = this.props.onBeforeAddingNote(newNote)
+    }
+
+    this.props.addNote(newNote)
   }
 
   selectNote(note: StaveNote) {
