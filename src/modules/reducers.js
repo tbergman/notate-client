@@ -3,7 +3,6 @@
 import type { StudentTestState } from 'modules/student-test'
 import type { QuestionGradesState } from 'modules/grading'
 import type { ToolboxState } from 'modules/toolbox'
-import type { CreateQuestionState } from 'modules/create'
 import type { NotesState } from 'modules/notes'
 
 import { combineReducers } from 'redux'
@@ -12,11 +11,9 @@ import { routerReducer } from 'react-router-redux'
 import { default as studentTest } from 'modules/student-test/reducer'
 import { default as grading } from 'modules/grading/reducer'
 import { default as toolbox } from 'modules/toolbox/reducer'
-import { default as create } from 'modules/create/reducer'
 import { default as notes } from 'modules/notes/reducer'
 
 export type AppState = {
-  create: CreateQuestionState,
   grading: QuestionGradesState,
   studentTest: StudentTestState,
   toolbox: ToolboxState,
@@ -27,7 +24,6 @@ export default combineReducers({
   studentTest,
   grading,
   toolbox,
-  create,
   notes,
   routing: routerReducer,
 })
