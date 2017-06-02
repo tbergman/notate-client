@@ -7,7 +7,6 @@ import { connect } from 'react-redux'
 import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
-import { selectStaveNotes } from 'modules/notes/selectors'
 
 class CreateQuestionPage extends Component {
   render(): React.Element<any> {
@@ -26,16 +25,25 @@ class CreateQuestionPage extends Component {
             <Stave description={'What will the question look like?'}
               editingStaveId={'question'}
               layers={[
-                { id: 'question', data: this.props.questionNotes },
+                { id: 'question' }
               ]}
             />
 
             <Stave description={'What would the answers be?'}
               editingStaveId={'answer'}
               layers={[
-                { id: 'question', data: this.props.questionNotes },
-                { id: 'answer', data: this.props.answerNotes },
-              ]}/>
+                { id: 'question' },
+                { id: 'answer' }
+              ]}
+            />
+
+            <Stave description={'Answer here as a student would'}
+              editingStaveId={'student'}
+              layers={[
+                { id: 'question' },
+                { id: 'student' }
+              ]}
+            />
           </QuestionContainer>
         </PageContainer>
       </Layout>
@@ -59,8 +67,6 @@ const QuestionContainer = styled.div`
 `
 const mapStateToProps = (state) => {
   return {
-    questionNotes: selectStaveNotes(state, 'question'),
-    answerNotes: selectStaveNotes(state, 'answer'),
   }
 }
 export default connect(mapStateToProps)(CreateQuestionPage)

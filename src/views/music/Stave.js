@@ -10,6 +10,7 @@ import type { StaveNote } from 'modules/types'
 import type { ToolboxState } from 'modules/toolbox'
 import { addNote, removeNote } from 'modules/notes/actions'
 import { selectNote } from 'modules/toolbox/actions'
+import { selectStaveNotes } from 'modules/notes/selectors'
 
 import { Flow } from 'vexflow'
 import VexTab from 'modules/music/notation/vextab'
@@ -51,7 +52,7 @@ export class StaveUnconnected extends Component {
 
     this.artist.drawOptions()
 
-    _.each(layers, x => { this.artist.drawLayer(x.data, x.id) })
+    _.each(layers, x => { this.artist.drawLayer(x.id, this.props.selectStaveNotes(x.id)) })
   }
 
   componentDidUpdate() {
@@ -135,7 +136,8 @@ export class StaveUnconnected extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    toolbox: state.toolbox
+    toolbox: state.toolbox,
+    selectStaveNotes: selectStaveNotes(state),
   }
 }
 
