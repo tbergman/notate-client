@@ -14,17 +14,18 @@ export default function reducer(
   action: FluxStandardAction): QuestionGradesState {
 
   switch (action.type) {
-    case 'GRADE_QUESTION': {
+    case 'GRADE_LAYERS': {
       let newQuestionGradesState
-      const question: Question = action.payload;
+      const gradingId = action.payload.gradingId
+      const answers = action.payload.answers
+      const student = action.payload.student
 
       const gradeResult = {
-        questionId: question.id,
-        correct: Grader.grade(question),
-        graded: true,
+        gradingId: gradingId,
+        correct: Grader.grade(answers, student),
       }
 
-      const questionIndex = state.questionGrades.findIndex(x => x.questionId === gradeResult.questionId)
+      const questionIndex = state.questionGrades.findIndex(x => x.gradingId === gradeResult.gradingId)
       if (questionIndex >= 0) {
         state.questionGrades[questionIndex] = gradeResult
       } else {

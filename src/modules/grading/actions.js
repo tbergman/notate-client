@@ -1,10 +1,12 @@
 // @flow
 
-import type { Question } from 'modules/student-test'
-
-export const gradeQuestion = (question: Question) => {
+export const gradeLayers = (gradingId: string, answers, student) => {
   return {
-    type: 'GRADE_QUESTION',
-    payload: question
+    type: 'GRADE_LAYERS',
+    payload: {
+      gradingId,
+      answers,
+      student,
+    }
   }
 }

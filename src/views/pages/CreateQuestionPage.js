@@ -8,11 +8,25 @@ import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import PitchComparison from 'modules/grading/comparison.pitch'
+import { gradeLayers } from 'modules/grading/actions'
+import { selectStaveNotes } from 'modules/notes/selectors'
+import { selectQuestionGrade } from 'modules/grading/selectors'
 
 class CreateQuestionPage extends Component {
   onBeforeAddingNote(note) {
     note.validator = PitchComparison.equal(note.pitch)
     return note
+  }
+
+  renderGrade(): React.Element<any>|null {
+    if (this.props.grade) {
+      return (
+        <StyledGrade correct={this.props.grade.correct}>
+          {this.props.grade.correct ? 'CORRECT' : 'FAIL'}
+        </StyledGrade>
+      )
+    }
+    return null
   }
 
   render(): React.Element<any> {
@@ -51,6 +65,17 @@ class CreateQuestionPage extends Component {
                 { id: 'student' }
               ]}
             />
+
+            <input type="button" value="Grade"
+              onClick={() => this.props.gradeLayers(
+                'create-question-grading',
+                this.props.selectStaveNotes('answer'),
+                this.props.selectStaveNotes('student'),
+              )}
+            />
+
+            {this.renderGrade()}
+
           </QuestionContainer>
         </PageContainer>
       </Layout>
@@ -72,5 +97,18 @@ const QuestionContainer = styled.div`
   flex: 7;
   padding: 30px;
 `
-const mapStateToProps = (state) => { return { } }
-export default connect(mapStateToProps)(CreateQuestionPage)
+const StyledGrade = styled.span`
+  color: ${props => props.correct ? 'green' : 'red'};
+`
+const mapStateToProps = (state) => {
+  return {
+    selectStaveNotes: selectStaveNotes(state),
+    grade: selectQuestionGrade(state, 'create-question-grading')
+  }
+}
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+  return {
+    gradeLayers: ((gradingId, answers, student) => dispatch(gradeLayers(gradingId, answers, student))),
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(CreateQuestionPage)
