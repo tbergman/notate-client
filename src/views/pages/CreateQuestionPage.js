@@ -6,8 +6,8 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
-import ProfessorQuestionStave from 'views/music/ProfessorQuestionStave'
-import ProfessorAnswersStave from 'views/music/ProfessorAnswersStave'
+import Stave from 'views/music/Stave'
+import { selectStaveNotes } from 'modules/notes/selectors'
 
 class CreateQuestionPage extends Component {
   render(): React.Element<any> {
@@ -23,9 +23,19 @@ class CreateQuestionPage extends Component {
           </ToolboxContainer>
 
           <QuestionContainer>
-            <ProfessorQuestionStave description={'What will the question look like?'} />
+            <Stave description={'What will the question look like?'}
+              editingStaveId={'question'}
+              layers={[
+                { id: 'question', data: this.props.questionNotes },
+              ]}
+            />
 
-            <ProfessorAnswersStave description={'What would the answers be?'} />
+            <Stave description={'What would the answers be?'}
+              editingStaveId={'answer'}
+              layers={[
+                { id: 'question', data: this.props.questionNotes },
+                { id: 'answer', data: this.props.answerNotes },
+              ]}/>
           </QuestionContainer>
         </PageContainer>
       </Layout>
@@ -47,4 +57,10 @@ const QuestionContainer = styled.div`
   flex: 7;
   padding: 30px;
 `
-export default connect(state => ({}))(CreateQuestionPage)
+const mapStateToProps = (state) => {
+  return {
+    questionNotes: selectStaveNotes(state, 'question'),
+    answerNotes: selectStaveNotes(state, 'answer'),
+  }
+}
+export default connect(mapStateToProps)(CreateQuestionPage)

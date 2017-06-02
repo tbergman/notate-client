@@ -3,11 +3,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { Flow } from 'vexflow'
+import uuid from 'uuid'
+
 import type { Question as QuestionType } from 'modules/student-test'
 import type { StaveNote } from 'modules/types'
 import type { ToolboxState } from 'modules/toolbox'
+import { addNote, removeNote } from 'modules/notes/actions'
+import { selectNote } from 'modules/toolbox/actions'
 
+import { Flow } from 'vexflow'
 import VexTab from 'modules/music/notation/vextab'
 import Artist from 'modules/music/notation/artist'
 import StyledLayers from './StyledLayers'
@@ -29,9 +33,7 @@ type Props = {
   question?: QuestionType,
   layers?: Array<Layer>,
   toolbox?: ToolboxState,
-  addNote?: Function,
-  eraseNote?: Function,
-  selectNote?: Function,
+  editingStaveId?: string,
 }
 
 export class StaveUnconnected extends Component {
@@ -76,7 +78,7 @@ export class StaveUnconnected extends Component {
       ${text}
     `
     this.artist = new Artist(10, 10, width, {
-      addNote: (position, pitch) => this.props.addNote && this.props.addNote(position, pitch),
+      addNote: (position, pitch) => this.addNote(position, pitch),
       selectNote: (note) => this.selectNote(note),
     })
 
@@ -89,16 +91,30 @@ export class StaveUnconnected extends Component {
     this.drawLayers()
   }
 
+  addNote(position: number, pitch: string, staveLayerId: string) {
+    this.props.addNote({
+      id: uuid(),
+      staveLayerId: this.props.editingStaveId,
+      pitch: pitch,
+      duration: this.props.toolbox.selectedDuration,
+      accidental: this.props.toolbox.selectedAccidental,
+      position: position,
+      isRest: this.props.toolbox.restSelected,
+      isDotted: this.props.toolbox.isDotted,
+    })
+  }
+
   selectNote(note: StaveNote) {
     if (!!(this.props.toolbox && this.props.toolbox.eraserSelected)) {
-      this.props.eraseNote && this.props.eraseNote(note)
+      this.props.removeNote && this.props.removeNote(note)
     } else {
       this.props.selectNote && this.props.selectNote(note)
     }
   }
 
   baseLayerNotation(): string {
-    const ghostNotes = Array(this.props.question && this.props.question.bars)
+    const bars = (this.props.question && this.props.question.bars) || 4
+    const ghostNotes = Array(bars)
       .fill(':q #99# #99# #99# #99#')
 
     return ghostNotes.join(' | ') + '=||'
@@ -125,7 +141,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-
+    addNote: ((note) => dispatch(addNote(note))),
+    removeNote: ((note) => dispatch(removeNote(note))),
+    selectNote: ((note) => dispatch(selectNote(note))),
   }
 }
 
