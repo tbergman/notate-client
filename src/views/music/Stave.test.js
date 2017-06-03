@@ -1,5 +1,4 @@
 // // @flow
-// import type { Question } from 'modules/student-test'
 //
 // import React from 'react'
 // import { mount } from 'enzyme'
@@ -10,7 +9,7 @@
 //   getNamedItem: jest.fn()
 // }
 //
-// describe('stave component', () => {
+// xdescribe('stave component', () => {
 //   const question: Question = {
 //     id: 'question-id',
 //     index: '',

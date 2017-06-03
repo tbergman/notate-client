@@ -1,41 +1,54 @@
-// // @flow
-//
-// import reducer from './reducer'
-//
-// describe('grading reducer', () => {
-//   let question
-//   const questionId = 'question-id'
-//   const initialState = {
-//     questionGrades: [{
-//       questionId: questionId,
-//       correct: false,
-//     }]
-//   }
-//
-//   beforeEach(() => {
-//     question = {
-//       id: questionId,
-//       index: '1',
-//       statement: '',
-//       notation: '',
-//       answers: [],
-//       student: [],
-//     }
-//   })
-//
-//   it('grades an existing question', () => {
-//     const result = reducer(initialState, { type: 'GRADE_QUESTION', payload: question })
-//     const grade = result.questionGrades[0]
-//
-//     expect(grade.correct).toEqual(true)
-//   })
-//
-//   it('grades a new question', () => {
-//     question.id = 'new-question-id'
-//     const result = reducer(initialState, { type: 'GRADE_QUESTION', payload: question })
-//     const grade = result.questionGrades[1]
-//
-//     expect(grade.questionId).toEqual('new-question-id')
-//     expect(grade.correct).toEqual(true)
-//   })
-// })
+// @flow
+
+import { List } from 'immutable'
+import reducer from './reducer'
+import { GRADE_LAYERS, CLEAR_GRADING } from 'modules/grading/actions'
+
+describe('grading reducer', () => {
+  let initialState
+  const gradingId = 'grading-id'
+
+  beforeEach(() => {
+    initialState = {
+      questionGrades: List([{
+        gradingId: gradingId,
+        correct: false,
+      }])
+    }
+  })
+
+
+  it('re-grades an existing answers/student pair', () => {
+    const result = reducer(initialState, { type: GRADE_LAYERS, payload: {
+      gradingId: gradingId,
+      answers: [],
+      student: []
+    }})
+
+    const grade = result.questionGrades.get(0)
+
+    expect(grade.correct).toEqual(true)
+  })
+
+  it('grades a new answers/student pair', () => {
+    const newGradingId = 'new-grading-id'
+    const result = reducer(initialState, { type: GRADE_LAYERS, payload: {
+      gradingId: newGradingId,
+      answers: [],
+      student: []
+    }})
+
+    const grade = result.questionGrades.get(1)
+
+    expect(grade.gradingId).toEqual('new-grading-id')
+    expect(grade.correct).toEqual(true)
+  })
+
+  it('clears an answers/student pair', () => {
+    const result = reducer(initialState, { type: CLEAR_GRADING, payload: gradingId })
+
+    const grades = result.questionGrades
+
+    expect(grades.size).toEqual(0)
+  })
+})
