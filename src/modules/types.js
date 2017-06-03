@@ -1,6 +1,7 @@
 // @flow
 
 import type { AccidentalType, DurationType } from 'modules/toolbox'
+import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 
 export type StaveNote = {
   id: string,
@@ -15,4 +16,16 @@ export type StaveNote = {
 
 export type StaveAnswerNote = StaveNote & {
   validator: Function
+}
+
+export const DefaultNote = {
+  id: 'note-id',
+  staveLayerId: 'stave-layer-id',
+  pitch: 'C/4',
+  duration: DURATION.QUARTER,
+  accidental: ACCIDENTAL.NONE,
+  position: 0,
+  isRest: false,
+  isDotted: false,
+  validator: (() => true)
 }

@@ -2,20 +2,10 @@
 
 import Grader from './grader'
 import PitchComparison from './comparison.pitch'
-import { ACCIDENTAL, DURATION } from 'modules/toolbox'
+import { DefaultNote } from 'modules/types'
 
 describe('grader', () => {
-  const note = {
-    id: 'note-id',
-    staveLayerId: 'stave-layer-id',
-    pitch: 'C/4',
-    duration: DURATION.QUARTER,
-    accidental: ACCIDENTAL.NONE,
-    position: 0,
-    isRest: false,
-    isDotted: false,
-    validator: (() => true)
-  }
+  const note = DefaultNote
 
   const answers = [
     { ...note, validator: PitchComparison.equal('C/4'), duration: 'q', position: 0 },
