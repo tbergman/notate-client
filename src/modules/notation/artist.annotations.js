@@ -8,7 +8,7 @@ export default class ArtistAnnotation {
     this.artist = artist
 
     this.options = {
-      font_face: "Arial",
+      font_face: 'Arial',
       font_size: 10,
       font_style: null,
     }

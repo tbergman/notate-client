@@ -12,8 +12,8 @@ import { selectNote } from 'modules/toolbox/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 
 import { Flow } from 'vexflow'
-import VexTab from 'modules/music/notation/vextab'
-import Artist from 'modules/music/notation/artist'
+import VexTab from 'modules/notation/vextab'
+import Artist from 'modules/notation/artist'
 import StyledLayers from './StyledLayers'
 
 type Layer = {
