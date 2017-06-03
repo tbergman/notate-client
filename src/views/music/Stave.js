@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import _ from 'lodash'
 import uuid from 'uuid'
 
-import type { Question as QuestionType } from 'modules/student-test'
 import type { StaveNote } from 'modules/types'
 import type { ToolboxState } from 'modules/toolbox'
 import { addNote, removeNote } from 'modules/notes/actions'
@@ -31,7 +30,6 @@ type OwnProps = {
   description?: string,
   notes: string,
   annotations?: string,
-  question?: QuestionType,
   layers?: Array<Layer>,
   editingStaveId?: string,
   onBeforeAddingNote?: Function,
@@ -130,7 +128,7 @@ export class StaveUnconnected extends Component {
   }
 
   baseLayerNotation(): string {
-    const bars = (this.props.question && this.props.question.bars) || 4
+    const bars = 4
     const ghostNotes = Array(bars)
       .fill(':q #99# #99# #99# #99#')
 
