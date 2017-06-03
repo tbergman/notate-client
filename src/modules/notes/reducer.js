@@ -2,8 +2,7 @@
 
 import { List } from 'immutable'
 import type { NotesState } from 'modules/notes'
-import type { NotesActions } from 'modules/toolbox/actions'
-import type { StaveNote } from 'modules/types'
+import type { NotesActions } from 'modules/notes/actions'
 
 import {
   NOTE_ADDED,

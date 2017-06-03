@@ -3,7 +3,7 @@
 import { fromJS } from 'immutable'
 import type { FluxStandardAction } from 'Types'
 import type { QuestionGradesState } from 'modules/grading'
-import type { Question } from 'modules/student-test'
+import { GRADE_LAYERS, CLEAR_GRADING } from 'modules/grading/actions'
 import Grader from 'modules/grading/grader'
 
 const initialState: QuestionGradesState = {
@@ -15,7 +15,7 @@ export default function reducer(
   action: FluxStandardAction): QuestionGradesState {
 
   switch (action.type) {
-    case 'GRADE_LAYERS': {
+    case GRADE_LAYERS: {
       let newQuestionGradesState
       const gradingId = action.payload.gradingId
       const answers = action.payload.answers
@@ -39,7 +39,7 @@ export default function reducer(
       }
     }
 
-    case 'CLEAR_GRADING': {
+    case CLEAR_GRADING: {
       const gradingId = action.payload
 
       const index = state.questionGrades.findIndex(x => x.gradingId === gradingId)

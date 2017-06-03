@@ -1,6 +1,13 @@
-import { select, takeEvery, put } from 'redux-saga/effects'
+// @flow
 
+import { select, takeEvery, put } from 'redux-saga/effects'
+import type { Effect } from 'redux-saga/effects';
+
+import type { ToolboxState } from 'modules/toolbox'
+import type { NotesActions } from 'modules/notes/actions'
 import { NOTE_CHANGED } from 'modules/notes/actions'
+import { selectToolbox } from 'modules/reducers'
+
 import {
   SET_DURATION,
   SET_ACCIDENTAL,
@@ -8,7 +15,7 @@ import {
   TOGGLE_DOT
 } from 'modules/toolbox/actions'
 
-function* noteChanged(action, toolbox) {
+function* noteChanged(toolbox: ToolboxState) {
   const newNote = {
     ...toolbox.selectedNote,
     duration: toolbox.selectedDuration,
@@ -19,11 +26,19 @@ function* noteChanged(action, toolbox) {
   yield put({ type: NOTE_CHANGED, payload: newNote })
 }
 
-export default function* watchToolboxNoteEditing(){
-  yield takeEvery([SET_DURATION, SET_ACCIDENTAL, TOGGLE_REST, TOGGLE_DOT], function* (action) {
-    const toolboxState = yield select((state) => state.toolbox)
+export default function* watchToolboxNoteEditing(): Generator<Effect,void,*> {
+  const triggeringActions: Array<string> = [
+    SET_DURATION,
+    SET_ACCIDENTAL,
+    TOGGLE_REST,
+    TOGGLE_DOT
+  ]
+
+  yield takeEvery(triggeringActions, function* () {
+    const toolboxState = yield select(selectToolbox)
+
     if (!!toolboxState.selectedNote) {
-      yield noteChanged(action, toolboxState)
+      yield noteChanged(toolboxState)
     }
   })
 }

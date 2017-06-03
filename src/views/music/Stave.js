@@ -22,7 +22,7 @@ type Layer = {
   data: Array<StaveNote>,
 }
 
-type Props = {
+type OwnProps = {
   width?: number,
   height?: number,
   clef?: string,
@@ -33,10 +33,19 @@ type Props = {
   annotations?: string,
   question?: QuestionType,
   layers?: Array<Layer>,
-  toolbox?: ToolboxState,
   editingStaveId?: string,
   onBeforeAddingNote?: Function,
 }
+type StateProps = {
+  toolbox: ToolboxState,
+  selectStaveNotes: Function,
+}
+type DispatchProps = {
+  addNote: Function,
+  removeNote: Function,
+  selectNote: Function,
+}
+type Props = OwnProps & StateProps & DispatchProps
 
 export class StaveUnconnected extends Component {
   staveContainer: React.Element<any>
@@ -93,7 +102,7 @@ export class StaveUnconnected extends Component {
     this.drawLayers()
   }
 
-  addNote(position: number, pitch: string, staveLayerId: string) {
+  addNote(position: number, pitch: string) {
     let newNote = {
       id: uuid(),
       staveLayerId: this.props.editingStaveId,
@@ -102,7 +111,7 @@ export class StaveUnconnected extends Component {
       accidental: this.props.toolbox.selectedAccidental,
       position: position,
       isRest: this.props.toolbox.restSelected,
-      isDotted: this.props.toolbox.isDotted,
+      isDotted: this.props.toolbox.dotSelected,
     }
 
     if (this.props.onBeforeAddingNote) {

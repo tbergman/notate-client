@@ -12,3 +12,7 @@ export type StaveNote = {
   isRest: boolean,
   isDotted: boolean,
 }
+
+export type StaveAnswerNote = StaveNote & {
+  validator: Function
+}

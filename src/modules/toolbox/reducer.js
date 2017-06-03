@@ -30,7 +30,7 @@ export default (state: ToolboxState = initialState, action: ToolboxActions) => {
       return {
         ...state,
         selectedDuration: action.payload,
-        selectionTool: state.selectedNote,
+        selectionTool: !!state.selectedNote,
       }
 
     case SET_ACCIDENTAL:
