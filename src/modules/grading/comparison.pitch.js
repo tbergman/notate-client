@@ -1,5 +1,8 @@
 // @flow
 
+import _ from 'lodash'
+import type { StaveNote } from 'modules/types'
+
 const stringToNote = (notation) => {
   return {
     pitch: notation.split('/')[0],
@@ -8,39 +11,43 @@ const stringToNote = (notation) => {
 }
 
 const noteToInt = (note) => {
-  const value = {
-    'C': 0,
-    'D': 2,
-    'E': 4,
-    'F': 5,
-    'G': 7,
-    'A': 9,
-    'B': 11,
+  const values = {
+    0: 'C',
+    2: 'D',
+    4: 'E',
+    5: 'F',
+    7: 'G',
+    9: 'A',
+    11: 'B',
   }
 
-  return (value[note.pitch] + (note.octave * 12))
+  const key = _.findKey(values, (x) => (x.indexOf(note.pitch) !== -1))
+  const value = parseInt(key)
+
+  return (value + (note.octave * 12))
 }
 
 const PitchComparison = {
   equal: (answer: string) => {
-    return (student: string) => answer === student
+    return (student: StaveNote) =>
+      answer === student.pitch
   },
 
   equalOrHigher: (answer: string) => {
-    return (student: string) =>
-    noteToInt(stringToNote(student)) >=
-    noteToInt(stringToNote(answer))
+    return (student: StaveNote) =>
+      noteToInt(stringToNote(student.pitch)) >=
+      noteToInt(stringToNote(answer))
   },
 
   equalOrLower: (answer: string) => {
-    return (student: string) =>
-      noteToInt(stringToNote(student)) <=
+    return (student: StaveNote) =>
+      noteToInt(stringToNote(student.pitch)) <=
       noteToInt(stringToNote(answer))
   },
 
   sameKey: (answer: string) => {
-    return (student: string) =>
-      (noteToInt(stringToNote(student)) % 12) ===
+    return (student: StaveNote) =>
+      (noteToInt(stringToNote(student.pitch)) % 12) ===
       (noteToInt(stringToNote(answer)) % 12)
   },
 }
