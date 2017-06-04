@@ -20,7 +20,7 @@ const gradingId = 'create-question-grading'
 
 class CreateQuestionPage extends Component {
   onBeforeAddingNote(note) {
-    note.validators = [PitchComparison.equal(note)]
+    note.validators = [PitchComparison.equal]
     return note
   }
 

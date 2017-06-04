@@ -31,7 +31,7 @@ const noteValue = (note) => {
   accidentalsValues[ACCIDENTAL.DOUBLE_FLAT] = -2
 
   const pitchValue = pitchValues[note.pitch]
-  
+
   const accidentalValue = (note.accidental !== ACCIDENTAL.NONE)
     ? accidentalsValues[note.accidental]
     : 0

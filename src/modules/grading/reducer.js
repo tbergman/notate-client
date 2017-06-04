@@ -6,7 +6,7 @@ import type { QuestionGradesState } from 'modules/grading'
 import { GRADE_LAYERS, CLEAR_GRADING } from 'modules/grading/actions'
 import Grader from 'modules/grading/grader'
 
-const initialState: QuestionGradesState = {
+export const initialState: QuestionGradesState = {
   questionGrades: fromJS([])
 }
 
