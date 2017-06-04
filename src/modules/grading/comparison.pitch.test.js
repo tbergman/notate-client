@@ -24,7 +24,7 @@ describe('pitch comparison', () => {
       expect(pass({ ...note, pitch: 'C/5' })).toBe(false)
     })
 
-    xit('fails when accidentals are different ', () => {
+    it('fails when accidentals are different ', () => {
       expect(pass({ ...note, pitch: 'C/4', accidental: ACCIDENTAL.SHARP })).toBe(false)
     })
   })

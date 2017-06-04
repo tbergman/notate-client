@@ -2,53 +2,66 @@
 
 import _ from 'lodash'
 import type { StaveNote } from 'modules/types'
+import { ACCIDENTAL } from 'modules/toolbox'
 
-const stringToNote = (notation) => {
+const parseNote = (note) => {
   return {
-    pitch: notation.split('/')[0],
-    octave: parseInt(notation.split('/')[1], 10)
+    pitch: note.pitch.split('/')[0],
+    octave: parseInt(note.pitch.split('/')[1], 10),
+    accidental: note.accidental,
   }
 }
 
-const noteToInt = (note) => {
-  const values = {
-    0: 'C',
-    2: 'D',
-    4: 'E',
-    5: 'F',
-    7: 'G',
-    9: 'A',
-    11: 'B',
+const noteValue = (note) => {
+  const pitchValues = {
+    C: 0,
+    D: 2,
+    E: 4,
+    F: 5,
+    G: 7,
+    A: 9,
+    B: 11,
   }
 
-  const key = _.findKey(values, (x) => (x.indexOf(note.pitch) !== -1))
-  const value = parseInt(key)
+  const accidentalsValues = {}
+  accidentalsValues[ACCIDENTAL.NATURAL] = 0
+  accidentalsValues[ACCIDENTAL.SHARP] = 1
+  accidentalsValues[ACCIDENTAL.DOUBLE_SHARP] = 2
+  accidentalsValues[ACCIDENTAL.FLAT] = -1
+  accidentalsValues[ACCIDENTAL.DOUBLE_FLAT] = -2
 
-  return (value + (note.octave * 12))
+  const pitchValue = pitchValues[note.pitch]
+  
+  const accidentalValue = (note.accidental !== ACCIDENTAL.NONE)
+    ? accidentalsValues[note.accidental]
+    : 0
+
+  return (pitchValue + accidentalValue + (note.octave * 12))
 }
 
 const PitchComparison = {
   equal: (answer: StaveNote) => {
     return (student: StaveNote) =>
-      answer.pitch === student.pitch
+      noteValue(parseNote(student)) ===
+      noteValue(parseNote(answer))
   },
 
   equalOrHigher: (answer: StaveNote) => {
     return (student: StaveNote) =>
-      noteToInt(stringToNote(student.pitch)) >=
-      noteToInt(stringToNote(answer.pitch))
+      noteValue(parseNote(student)) >=
+      noteValue(parseNote(answer))
   },
 
   equalOrLower: (answer: StaveNote) => {
     return (student: StaveNote) =>
-      noteToInt(stringToNote(student.pitch)) <=
-      noteToInt(stringToNote(answer.pitch))
+      noteValue(parseNote(student)) <=
+      noteValue(parseNote(answer))
   },
 
   sameKey: (answer: StaveNote) => {
     return (student: StaveNote) =>
-      (noteToInt(stringToNote(student.pitch)) % 12) ===
-      (noteToInt(stringToNote(answer.pitch)) % 12)
+      (noteValue(parseNote(student)) % 12) ===
+      (noteValue(parseNote(answer)) % 12)
   },
 }
 
