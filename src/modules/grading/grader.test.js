@@ -8,8 +8,8 @@ describe('grader', () => {
   const note = DefaultNote
 
   const answers = [
-    { ...note, validator: PitchComparison.equal('C/4'), duration: 'q', position: 0 },
-    { ...note, validator: PitchComparison.equal('D/4'), duration: 'q', position: 1 },
+    { ...note, validators: [PitchComparison.equal('C/4')], duration: 'q', position: 0 },
+    { ...note, validators: [PitchComparison.equal('D/4')], duration: 'q', position: 1 },
   ]
 
   describe('correct answers', () => {

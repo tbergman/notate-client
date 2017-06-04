@@ -9,7 +9,7 @@ const Grader = {
     const result = _.every(answers, answerNote => {
       const studentNote = _.find(student, x => x.position === answerNote.position)
 
-      return studentNote && answerNote.validator(studentNote.pitch)
+      return studentNote && _.every(answerNote.validators, x => x(studentNote.pitch))
     })
 
     return result
