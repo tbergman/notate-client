@@ -9,7 +9,7 @@ describe('pitch comparison', () => {
 
   describe('equal pitch', () => {
     beforeEach(() => {
-      pass = PitchComparison.equal('C/4')
+      pass = PitchComparison.equal({ ...note, pitch: 'C/4' })
     })
 
     it('passes when pitch is exactly the same', () => {
@@ -31,7 +31,7 @@ describe('pitch comparison', () => {
 
   describe('equal or higher pitch', () => {
     beforeEach(() => {
-      pass = PitchComparison.equalOrHigher('E/4')
+      pass = PitchComparison.equalOrHigher({ ...note, pitch: 'E/4' })
     })
 
     it('passes when pitch is exactly the same', () => {
@@ -57,7 +57,7 @@ describe('pitch comparison', () => {
 
   describe('equal or lower pitch', () => {
     beforeEach(() => {
-      pass = PitchComparison.equalOrLower('E/4')
+      pass = PitchComparison.equalOrLower({ ...note, pitch: 'E/4' })
     })
 
     it('passes when pitch is exactly the same', () => {
@@ -83,7 +83,7 @@ describe('pitch comparison', () => {
 
   describe('same key', () => {
     beforeEach(() => {
-      pass = PitchComparison.sameKey('E/4')
+      pass = PitchComparison.sameKey({ ...note, pitch: 'E/4' })
     })
 
     it('passes when key and octave are the same', () => {

@@ -28,27 +28,27 @@ const noteToInt = (note) => {
 }
 
 const PitchComparison = {
-  equal: (answer: string) => {
+  equal: (answer: StaveNote) => {
     return (student: StaveNote) =>
-      answer === student.pitch
+      answer.pitch === student.pitch
   },
 
-  equalOrHigher: (answer: string) => {
+  equalOrHigher: (answer: StaveNote) => {
     return (student: StaveNote) =>
       noteToInt(stringToNote(student.pitch)) >=
-      noteToInt(stringToNote(answer))
+      noteToInt(stringToNote(answer.pitch))
   },
 
-  equalOrLower: (answer: string) => {
+  equalOrLower: (answer: StaveNote) => {
     return (student: StaveNote) =>
       noteToInt(stringToNote(student.pitch)) <=
-      noteToInt(stringToNote(answer))
+      noteToInt(stringToNote(answer.pitch))
   },
 
-  sameKey: (answer: string) => {
+  sameKey: (answer: StaveNote) => {
     return (student: StaveNote) =>
       (noteToInt(stringToNote(student.pitch)) % 12) ===
-      (noteToInt(stringToNote(answer)) % 12)
+      (noteToInt(stringToNote(answer.pitch)) % 12)
   },
 }
 
