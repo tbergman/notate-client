@@ -15,18 +15,7 @@ type Setup = {
 
 function setup(): Setup {
   const props = { }
-  const store = createMockStore({
-    studentTest: {
-      questions: fromJS([{
-        id: 'question-id',
-        index: '1',
-        statement: '',
-        notation:'',
-        student: [],
-        answers: [],
-      }])
-    }
-  })
+  const store = createMockStore({ })
   const enzymeWrapper: ShallowWrapper = shallowWithStore(<HomePage {...props} />, store)
 
   return {
@@ -40,11 +29,5 @@ describe('home page', () => {
     const { enzymeWrapper } = setup()
 
     expect(enzymeWrapper.find('.app')).toBeDefined()
-  })
-
-  it('renders questions without crashing', () => {
-    const { enzymeWrapper } = setup()
-
-    expect(enzymeWrapper.find('.question')).toBeDefined()
   })
 })

@@ -15,9 +15,7 @@ type Setup = {
 
 function setup(): Setup {
   const props = { }
-  const store = createMockStore({
-    questions: fromJS({ questions: [] })
-  })
+  const store = createMockStore({ })
   const enzymeWrapper: ShallowWrapper = shallowWithStore(<ExamplesPage {...props} />, store)
 
   return {

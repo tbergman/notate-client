@@ -18,7 +18,6 @@ import StyledLayers from './StyledLayers'
 
 type Layer = {
   id: string,
-  data: Array<StaveNote>,
 }
 
 type OwnProps = {

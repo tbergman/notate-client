@@ -2,6 +2,8 @@
 
 import { List } from 'immutable'
 import reducer from './reducer'
+import type { NotesState } from 'modules/notes'
+import { DefaultNote as note } from 'modules/types'
 
 import {
   NOTE_CHANGED,
@@ -13,17 +15,6 @@ import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 
 describe('notes reducer', () => {
   let initialState: NotesState
-  const note = {
-    id: 'note-id',
-    staveLayerId: 'stave-layer-id',
-    pitch: 'C/4',
-    duration: DURATION.QUARTER,
-    accidental: ACCIDENTAL.NONE,
-    position: 0,
-    isRest: false,
-    isDotted: false,
-    validator: (() => true)
-  }
 
   beforeEach(() => {
     initialState = {
