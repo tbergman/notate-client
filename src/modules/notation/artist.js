@@ -250,7 +250,7 @@ export default class Artist {
     this.rendered = true;
   }
 
-  drawLayer(notes, layerId) {
+  drawLayer(layerId, notes) {
     this.layers.drawLayer(this.renderer_context, this.staves[0].note, notes, layerId)
   }
 

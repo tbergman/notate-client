@@ -1,12 +1,13 @@
 // @flow
 
+import { fromJS } from 'immutable'
 import type { FluxStandardAction } from 'Types'
 import type { QuestionGradesState } from 'modules/grading'
-import type { Question } from 'modules/student-test'
+import { GRADE_LAYERS, CLEAR_GRADING } from 'modules/grading/actions'
 import Grader from 'modules/grading/grader'
 
-const initialState: QuestionGradesState = {
-  questionGrades: []
+export const initialState: QuestionGradesState = {
+  questionGrades: fromJS([])
 }
 
 export default function reducer(
@@ -14,26 +15,39 @@ export default function reducer(
   action: FluxStandardAction): QuestionGradesState {
 
   switch (action.type) {
-    case 'GRADE_QUESTION': {
+    case GRADE_LAYERS: {
       let newQuestionGradesState
-      const question: Question = action.payload;
+      const gradingId = action.payload.gradingId
+      const answers = action.payload.answers
+      const student = action.payload.student
 
       const gradeResult = {
-        questionId: question.id,
-        correct: Grader.grade(question),
-        graded: true,
+        gradingId: gradingId,
+        correct: Grader.grade(answers, student),
       }
 
-      const questionIndex = state.questionGrades.findIndex(x => x.questionId === gradeResult.questionId)
+      const questionIndex = state.questionGrades.findIndex(x => x.gradingId === gradeResult.gradingId)
       if (questionIndex >= 0) {
-        state.questionGrades[questionIndex] = gradeResult
+        newQuestionGradesState = state.questionGrades.update(questionIndex, () => gradeResult)
       } else {
-        state.questionGrades.push(gradeResult)
+        newQuestionGradesState = state.questionGrades.push(gradeResult)
       }
 
       return {
         ...state,
-        questionGrades: state.questionGrades
+        questionGrades: newQuestionGradesState
+      }
+    }
+
+    case CLEAR_GRADING: {
+      const gradingId = action.payload
+
+      const index = state.questionGrades.findIndex(x => x.gradingId === gradingId)
+      const questionGrades = state.questionGrades.remove(index)
+
+      return {
+        ...state,
+        questionGrades: questionGrades
       }
     }
 

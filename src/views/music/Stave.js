@@ -3,21 +3,24 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { Flow } from 'vexflow'
-import type { Question as QuestionType } from 'modules/student-test'
+import uuid from 'uuid'
+
 import type { StaveNote } from 'modules/types'
 import type { ToolboxState } from 'modules/toolbox'
+import { addNote, removeNote } from 'modules/notes/actions'
+import { selectNote } from 'modules/toolbox/actions'
+import { selectStaveNotes } from 'modules/notes/selectors'
 
-import VexTab from 'modules/music/notation/vextab'
-import Artist from 'modules/music/notation/artist'
+import { Flow } from 'vexflow'
+import VexTab from 'modules/notation/vextab'
+import Artist from 'modules/notation/artist'
 import StyledLayers from './StyledLayers'
 
 type Layer = {
   id: string,
-  data: Array<StaveNote>,
 }
 
-type Props = {
+type OwnProps = {
   width?: number,
   height?: number,
   clef?: string,
@@ -26,13 +29,20 @@ type Props = {
   description?: string,
   notes: string,
   annotations?: string,
-  question?: QuestionType,
   layers?: Array<Layer>,
-  toolbox?: ToolboxState,
-  addNote?: Function,
-  eraseNote?: Function,
-  selectNote?: Function,
+  editingStaveId?: string,
+  onBeforeAddingNote?: Function,
 }
+type StateProps = {
+  toolbox: ToolboxState,
+  selectStaveNotes: Function,
+}
+type DispatchProps = {
+  addNote: Function,
+  removeNote: Function,
+  selectNote: Function,
+}
+type Props = OwnProps & StateProps & DispatchProps
 
 export class StaveUnconnected extends Component {
   staveContainer: React.Element<any>
@@ -49,7 +59,7 @@ export class StaveUnconnected extends Component {
 
     this.artist.drawOptions()
 
-    _.each(layers, x => { this.artist.drawLayer(x.data, x.id) })
+    _.each(layers, x => { this.artist.drawLayer(x.id, this.props.selectStaveNotes(x.id)) })
   }
 
   componentDidUpdate() {
@@ -76,7 +86,7 @@ export class StaveUnconnected extends Component {
       ${text}
     `
     this.artist = new Artist(10, 10, width, {
-      addNote: (position, pitch) => this.props.addNote && this.props.addNote(position, pitch),
+      addNote: (position, pitch) => this.addNote(position, pitch),
       selectNote: (note) => this.selectNote(note),
     })
 
@@ -89,16 +99,36 @@ export class StaveUnconnected extends Component {
     this.drawLayers()
   }
 
+  addNote(position: number, pitch: string) {
+    let newNote = {
+      id: uuid(),
+      staveLayerId: this.props.editingStaveId,
+      pitch: pitch,
+      duration: this.props.toolbox.selectedDuration,
+      accidental: this.props.toolbox.selectedAccidental,
+      position: position,
+      isRest: this.props.toolbox.restSelected,
+      isDotted: this.props.toolbox.dotSelected,
+    }
+
+    if (this.props.onBeforeAddingNote) {
+      newNote = this.props.onBeforeAddingNote(newNote)
+    }
+
+    this.props.addNote(newNote)
+  }
+
   selectNote(note: StaveNote) {
     if (!!(this.props.toolbox && this.props.toolbox.eraserSelected)) {
-      this.props.eraseNote && this.props.eraseNote(note)
+      this.props.removeNote && this.props.removeNote(note)
     } else {
       this.props.selectNote && this.props.selectNote(note)
     }
   }
 
   baseLayerNotation(): string {
-    const ghostNotes = Array(this.props.question && this.props.question.bars)
+    const bars = 4
+    const ghostNotes = Array(bars)
       .fill(':q #99# #99# #99# #99#')
 
     return ghostNotes.join(' | ') + '=||'
@@ -119,13 +149,16 @@ export class StaveUnconnected extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    toolbox: state.toolbox
+    toolbox: state.toolbox,
+    selectStaveNotes: selectStaveNotes(state),
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-
+    addNote: ((note) => dispatch(addNote(note))),
+    removeNote: ((note) => dispatch(removeNote(note))),
+    selectNote: ((note) => dispatch(selectNote(note))),
   }
 }
 

@@ -6,10 +6,45 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
-import ProfessorQuestionStave from 'views/music/ProfessorQuestionStave'
-import ProfessorAnswersStave from 'views/music/ProfessorAnswersStave'
+import Stave from 'views/music/Stave'
+import PitchComparison from 'modules/grading/comparison.pitch'
+import DurationComparison from 'modules/grading/comparison.duration'
+import { gradeLayers, clearGrading } from 'modules/grading/actions'
+import { clearLayer } from 'modules/notes/actions'
+import { selectStaveNotes } from 'modules/notes/selectors'
+import { selectGradingById } from 'modules/grading/selectors'
+import type { StaveNote, StaveAnswerNote } from 'modules/types'
+
+const questionLayerId = 'question'
+const answersLayerId = 'answer'
+const studentLayerId = 'student'
+const gradingId = 'create-question-grading'
 
 class CreateQuestionPage extends Component {
+  onBeforeAddingAnswerNote(note: StaveNote): StaveAnswerNote {
+    const newNote = {
+      ...note,
+      validators: [PitchComparison.equal, DurationComparison.equal]
+    }
+    return newNote
+  }
+
+  clearStudentLayer() {
+    this.props.clearLayer(studentLayerId)
+    this.props.clearGrading(gradingId)
+  }
+
+  renderGrade(): React.Element<any>|null {
+    if (this.props.grade) {
+      return (
+        <StyledGrade correct={this.props.grade.correct}>
+          {this.props.grade.correct ? 'CORRECT' : 'FAIL'}
+        </StyledGrade>
+      )
+    }
+    return null
+  }
+
   render(): React.Element<any> {
     return (
       <Layout className="app">
@@ -23,9 +58,44 @@ class CreateQuestionPage extends Component {
           </ToolboxContainer>
 
           <QuestionContainer>
-            <ProfessorQuestionStave description={'What will the question look like?'} />
+            <Stave description={'What will the question look like?'}
+              editingStaveId={questionLayerId}
+              layers={[
+                { id: questionLayerId }
+              ]}
+            />
 
-            <ProfessorAnswersStave description={'What would the answers be?'} />
+            <Stave description={'What would the answers be?'}
+              editingStaveId={answersLayerId}
+              onBeforeAddingNote={(note) => this.onBeforeAddingAnswerNote(note) }
+              layers={[
+                { id: questionLayerId },
+                { id: answersLayerId }
+              ]}
+            />
+
+            <Stave description={'Answer here as a student would'}
+              editingStaveId={studentLayerId}
+              layers={[
+                { id: questionLayerId },
+                { id: studentLayerId }
+              ]}
+            />
+
+            <input type="button" value="Clear Student's Answers"
+              onClick={() => this.clearStudentLayer()}
+            />
+
+            <input type="button" value="Grade"
+              onClick={() => this.props.gradeLayers(
+                gradingId,
+                this.props.selectStaveNotes(answersLayerId),
+                this.props.selectStaveNotes(studentLayerId),
+              )}
+            />
+
+            {this.renderGrade()}
+
           </QuestionContainer>
         </PageContainer>
       </Layout>
@@ -47,4 +117,20 @@ const QuestionContainer = styled.div`
   flex: 7;
   padding: 30px;
 `
-export default connect(state => ({}))(CreateQuestionPage)
+const StyledGrade = styled.span`
+  color: ${props => props.correct ? 'green' : 'red'};
+`
+const mapStateToProps = (state) => {
+  return {
+    selectStaveNotes: selectStaveNotes(state),
+    grade: selectGradingById(state, gradingId)
+  }
+}
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+  return {
+    gradeLayers: ((gradingId, answers, student) => dispatch(gradeLayers(gradingId, answers, student))),
+    clearGrading: ((gradingId) => dispatch(clearGrading(gradingId))),
+    clearLayer: ((layerId) => dispatch(clearLayer(layerId))),
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(CreateQuestionPage)

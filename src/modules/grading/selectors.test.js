@@ -1,63 +1,29 @@
 // @flow
 
 import { List } from 'immutable'
-import { selectQuestionGrade } from './selectors'
-import { initialState as createState } from 'modules/create/reducer'
+import { selectGradingById } from './selectors'
+import { initialState as toolboxInitialState } from 'modules/toolbox/reducer'
+import { initialState as notesInitialState } from 'modules/notes/reducer'
 
 describe('grading selectors', () => {
-  it('selects a single question grade by question id', () => {
-    const state = {
-      studentTest: {
-        questions: new List(),
-      },
-      toolbox: {
-        selectedDuration: '1',
-        selectedAccidental: '#',
-        selectionTool: false,
-        restSelected: false,
-        dotSelected: false,
-        eraserSelected: false,
-        selectedNote: null,
-      },
+  let state
+
+  beforeEach(() => {
+    state = {
+      notes: notesInitialState,
+      toolbox: toolboxInitialState,
       grading: {
-        questionGrades: [{
-          questionId: 'question-id',
-          graded: true,
+        questionGrades: List([{
+          gradingId: 'grading-id',
           correct: true,
-        }]
+        }])
       },
-      create: createState,
     }
-
-    const result = selectQuestionGrade(state, 'question-id')
-
-    expect(result.correct).toEqual(true)
-    expect(result.graded).toEqual(true)
   })
 
-  it('returns a default question not yet graded when nothing is found in the state', () => {
-    const state = {
-      studentTest: {
-        questions: new List(),
-      },
-      toolbox: {
-        selectedDuration: '1',
-        selectedAccidental: '#',
-        selectionTool: false,
-        restSelected: false,
-        dotSelected: false,
-        eraserSelected: false,
-        selectedNote: null,
-      },
-      grading: {
-        questionGrades: []
-      },
-      create: createState,
-    }
+  it('selects a single question grade by question id', () => {
+    const result = selectGradingById(state, 'grading-id')
 
-    const result = selectQuestionGrade(state, 'question-id')
-
-    expect(result.correct).toEqual(false)
-    expect(result.graded).toEqual(false)
+    expect(result.correct).toEqual(true)
   })
 })

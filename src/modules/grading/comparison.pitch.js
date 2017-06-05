@@ -1,47 +1,67 @@
 // @flow
 
-const stringToNote = (notation) => {
+import _ from 'lodash'
+import type { StaveNote } from 'modules/types'
+import { ACCIDENTAL } from 'modules/toolbox'
+
+const parseNote = (note) => {
   return {
-    pitch: notation.split('/')[0],
-    octave: parseInt(notation.split('/')[1], 10)
+    pitch: note.pitch.split('/')[0],
+    octave: parseInt(note.pitch.split('/')[1], 10),
+    accidental: note.accidental,
   }
 }
 
-const noteToInt = (note) => {
-  const value = {
-    'C': 0,
-    'D': 2,
-    'E': 4,
-    'F': 5,
-    'G': 7,
-    'A': 9,
-    'B': 11,
+const noteValue = (note) => {
+  const pitchValues = {
+    C: 0,
+    D: 2,
+    E: 4,
+    F: 5,
+    G: 7,
+    A: 9,
+    B: 11,
   }
 
-  return (value[note.pitch] + (note.octave * 12))
+  const accidentalsValues = {}
+  accidentalsValues[ACCIDENTAL.NATURAL] = 0
+  accidentalsValues[ACCIDENTAL.SHARP] = 1
+  accidentalsValues[ACCIDENTAL.DOUBLE_SHARP] = 2
+  accidentalsValues[ACCIDENTAL.FLAT] = -1
+  accidentalsValues[ACCIDENTAL.DOUBLE_FLAT] = -2
+
+  const pitchValue = pitchValues[note.pitch]
+
+  const accidentalValue = (note.accidental !== ACCIDENTAL.NONE)
+    ? accidentalsValues[note.accidental]
+    : 0
+
+  return (pitchValue + accidentalValue + (note.octave * 12))
 }
 
 const PitchComparison = {
-  equal: (answer: string) => {
-    return (student: string) => answer === student
+  equal: (answer: StaveNote) => {
+    return (student: StaveNote) =>
+      noteValue(parseNote(student)) ===
+      noteValue(parseNote(answer))
   },
 
-  equalOrHigher: (answer: string) => {
-    return (student: string) =>
-    noteToInt(stringToNote(student)) >=
-    noteToInt(stringToNote(answer))
+  equalOrHigher: (answer: StaveNote) => {
+    return (student: StaveNote) =>
+      noteValue(parseNote(student)) >=
+      noteValue(parseNote(answer))
   },
 
-  equalOrLower: (answer: string) => {
-    return (student: string) =>
-      noteToInt(stringToNote(student)) <=
-      noteToInt(stringToNote(answer))
+  equalOrLower: (answer: StaveNote) => {
+    return (student: StaveNote) =>
+      noteValue(parseNote(student)) <=
+      noteValue(parseNote(answer))
   },
 
-  sameKey: (answer: string) => {
-    return (student: string) =>
-      (noteToInt(stringToNote(student)) % 12) ===
-      (noteToInt(stringToNote(answer)) % 12)
+  sameKey: (answer: StaveNote) => {
+    return (student: StaveNote) =>
+      (noteValue(parseNote(student)) % 12) ===
+      (noteValue(parseNote(answer)) % 12)
   },
 }
 

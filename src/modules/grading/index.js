@@ -3,11 +3,10 @@
 import type { List } from 'immutable'
 
 export type QuestionGrade = {
-  questionId: string,
+  gradingId: string,
   correct: boolean,
-  graded: boolean,
 }
 
 export type QuestionGradesState = {
-  questionGrades: Array<QuestionGrade>,
+  questionGrades: List<QuestionGrade>,
 }

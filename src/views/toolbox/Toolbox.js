@@ -80,11 +80,6 @@ const ToolboxContainer = styled.div`
   display: flex;
   height: 30px;
 `
-const ToolboxSeparator = styled.div`
-  border-right: 1px solid #008489;
-  margin: -10px 0;
-`
-
 const mapStateToProps = (state) => {
   return {
     selectedDuration: state.toolbox.selectedDuration,

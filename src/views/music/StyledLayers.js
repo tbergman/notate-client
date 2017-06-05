@@ -19,13 +19,15 @@ export default styled.div`
   }
 
   .note-layer {
-    stroke: black;
-    fill: black;
-
     &.note-selected {
       stroke: pink;
       fill: pink;
     }
+  }
+
+  .note-question {
+    stroke: black;
+    fill: black;
   }
 
   .note-student {

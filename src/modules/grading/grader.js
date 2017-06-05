@@ -1,17 +1,15 @@
 // @flow
 
 import _ from 'lodash'
-import type { Question } from '../student-test'
+import type { StaveNote, StaveAnswerNote } from 'modules/types'
 
 const Grader = {
-  grade(question: Question): boolean {
-    const answers = question.answers
-    const student = question.student
-
+  grade(answers: Array<StaveAnswerNote>, student: Array<StaveNote>): boolean {
     const result = _.every(answers, answerNote => {
+
       const studentNote = _.find(student, x => x.position === answerNote.position)
 
-      return studentNote && answerNote.pitch(studentNote.pitch)
+      return studentNote && _.every(answerNote.validators, x => x(answerNote)(studentNote))
     })
 
     return result
