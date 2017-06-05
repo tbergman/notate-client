@@ -4,7 +4,6 @@ import type { ShallowWrapper } from 'enzyme'
 import React from 'react'
 import { shallowWithStore } from 'enzyme-redux'
 import { createMockStore } from 'redux-test-utils'
-import { fromJS } from 'immutable'
 
 import HomePage from './HomePage'
 

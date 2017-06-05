@@ -13,6 +13,7 @@ import { gradeLayers, clearGrading } from 'modules/grading/actions'
 import { clearLayer } from 'modules/notes/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 import { selectGradingById } from 'modules/grading/selectors'
+import type { StaveNote, StaveAnswerNote } from 'modules/types'
 
 const questionLayerId = 'question'
 const answersLayerId = 'answer'
@@ -20,9 +21,12 @@ const studentLayerId = 'student'
 const gradingId = 'create-question-grading'
 
 class CreateQuestionPage extends Component {
-  onBeforeAddingNote(note) {
-    note.validators = [PitchComparison.equal, DurationComparison.equal]
-    return note
+  onBeforeAddingAnswerNote(note: StaveNote): StaveAnswerNote {
+    const newNote = {
+      ...note,
+      validators: [PitchComparison.equal, DurationComparison.equal]
+    }
+    return newNote
   }
 
   clearStudentLayer() {
@@ -63,7 +67,7 @@ class CreateQuestionPage extends Component {
 
             <Stave description={'What would the answers be?'}
               editingStaveId={answersLayerId}
-              onBeforeAddingNote={(note) => this.onBeforeAddingNote(note) }
+              onBeforeAddingNote={(note) => this.onBeforeAddingAnswerNote(note) }
               layers={[
                 { id: questionLayerId },
                 { id: answersLayerId }

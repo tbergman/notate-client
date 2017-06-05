@@ -1,9 +1,7 @@
 // @flow
 
-import { select, take, takeEvery, put } from 'redux-saga/effects'
-
+import { select, take, put } from 'redux-saga/effects'
 import type { ToolboxState } from 'modules/toolbox'
-import type { NotesActions } from 'modules/notes/actions'
 import { NOTE_CHANGED } from 'modules/notes/actions'
 import { selectToolbox } from 'modules/reducers'
 
@@ -14,7 +12,7 @@ import {
   TOGGLE_DOT
 } from 'modules/toolbox/actions'
 
-function* noteChanged(toolbox: ToolboxState) {
+function* noteChanged(toolbox: ToolboxState): Generator<*, *, *> {
   const newNote = {
     ...toolbox.selectedNote,
     duration: toolbox.selectedDuration,

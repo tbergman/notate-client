@@ -13,7 +13,6 @@ import {
   NOTE_REMOVED,
   CLEAR_LAYER
 } from 'modules/notes/actions'
-import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 
 describe('notes reducer', () => {
   let initialState: NotesState
