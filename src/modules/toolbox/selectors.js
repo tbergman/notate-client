@@ -11,7 +11,7 @@ export const selectToolboxItems = createSelector(
       (!toolbox.selectionTool && !toolbox.eraserSelected)
       || !!toolbox.selectedNote
 
-    const durationButton  = (duration) => {
+    const durationButton = (duration) => {
       return {
         duration: duration,
         enabled: !toolbox.eraserSelected,

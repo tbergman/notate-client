@@ -1,5 +1,7 @@
 // @flow
 
+import type { CLearLayerAction, NoteAddedAction, NoteChangedAction, NoteRemovedAction } from './actions'
+
 import { List } from 'immutable'
 import reducer from './reducer'
 import type { NotesState } from 'modules/notes'
@@ -23,7 +25,8 @@ describe('notes reducer', () => {
   })
 
   it('adds a new note', () => {
-    const result = reducer(initialState, { type: NOTE_ADDED, payload: { ...note, id: 'new-note' } })
+    const action: NoteAddedAction = { type: NOTE_ADDED, payload: { ...note, id: 'new-note' } }
+    const result = reducer(initialState, action)
 
     const notes = result.notes
 
@@ -31,7 +34,8 @@ describe('notes reducer', () => {
   })
 
   it('changes an existing note', () => {
-    const result = reducer(initialState, { type: NOTE_CHANGED, payload: { ...note, position: 100 } })
+    const action: NoteChangedAction = { type: NOTE_CHANGED, payload: { ...note, position: 100 } }
+    const result = reducer(initialState, action)
 
     const notes = result.notes
 
@@ -40,7 +44,8 @@ describe('notes reducer', () => {
   })
 
   it('removes an existing note', () => {
-    const result = reducer(initialState, { type: NOTE_REMOVED, payload: { ...note } })
+    const action: NoteRemovedAction = { type: NOTE_REMOVED, payload: { ...note } }
+    const result = reducer(initialState, action)
 
     const notes = result.notes
 
@@ -48,7 +53,8 @@ describe('notes reducer', () => {
   })
 
   it('clears an existing layer', () => {
-    const result = reducer(initialState, { type: CLEAR_LAYER, payload: note.staveLayerId })
+    const action: CLearLayerAction = { type: CLEAR_LAYER, payload: note.staveLayerId }
+    const result = reducer(initialState, action)
 
     const notes = result.notes
 
