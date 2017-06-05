@@ -27,7 +27,7 @@ export const ACCIDENTAL = {
 
 export const DURATION = {
   EIGHTH: '8',
-  QUARTER: 'q',
-  HALF: 'h',
-  WHOLE: 'w',
+  QUARTER: '4',
+  HALF: '2',
+  WHOLE: '1',
 }

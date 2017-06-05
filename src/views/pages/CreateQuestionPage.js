@@ -8,6 +8,7 @@ import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import PitchComparison from 'modules/grading/comparison.pitch'
+import DurationComparison from 'modules/grading/comparison.duration'
 import { gradeLayers, clearGrading } from 'modules/grading/actions'
 import { clearLayer } from 'modules/notes/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
@@ -20,7 +21,7 @@ const gradingId = 'create-question-grading'
 
 class CreateQuestionPage extends Component {
   onBeforeAddingNote(note) {
-    note.validators = [PitchComparison.equal]
+    note.validators = [PitchComparison.equal, DurationComparison.equal]
     return note
   }
 
