@@ -11,7 +11,7 @@ class HomePage extends Component {
     return (
       <Layout className="app">
         <div className="header">
-          <h2>Homework Exercises</h2>
+          Homework Exercises
         </div>
 
         <QuestionsContainer>

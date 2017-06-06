@@ -2,6 +2,7 @@
 
 import type { AccidentalType, DurationType } from 'modules/toolbox'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
+import uuid from 'uuid'
 
 export type StaveNote = {
   id: string,
@@ -19,7 +20,7 @@ export type StaveAnswerNote = StaveNote & {
 }
 
 export const DefaultNote = {
-  id: 'note-id',
+  id: uuid(),
   staveLayerId: 'stave-layer-id',
   pitch: 'C/4',
   duration: DURATION.QUARTER,
@@ -28,4 +29,18 @@ export const DefaultNote = {
   isRest: false,
   isDotted: false,
   validators: [(() => true)]
+}
+
+export type Question = {
+  id: string,
+  description: string,
+  questionNotes: Array<StaveNote>,
+  answerNotes: Array<StaveAnswerNote>,
+}
+
+export const DefaultQuestion = {
+  id: uuid(),
+  description: '',
+  questionNotes: [],
+  answerNotes: [],
 }

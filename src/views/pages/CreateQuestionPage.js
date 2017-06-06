@@ -12,6 +12,7 @@ import PitchComparison from 'modules/grading/comparison.pitch'
 import DurationComparison from 'modules/grading/comparison.duration'
 import { gradeLayers, clearGrading } from 'modules/grading/actions'
 import { clearLayer } from 'modules/notes/actions'
+import { saveQuestion } from 'modules/create/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 import { selectGradingById } from 'modules/grading/selectors'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
@@ -36,6 +37,19 @@ class CreateQuestionPage extends Component {
     this.props.clearGrading(gradingId)
   }
 
+  onDescriptionChange(evt) {
+    this.setState({ description: evt.target.value });
+  }
+
+  saveQuestion() {
+    this.props.saveQuestion({
+      ...this.props.question,
+      questionNotes: this.props.selectStaveNotes(questionLayerId),
+      answerNotes: this.props.selectStaveNotes(answersLayerId),
+      description: this.state.description,
+    })
+  }
+
   renderGrade(): React.Element<any>|null {
     if (this.props.grade) {
       return (
@@ -57,14 +71,14 @@ class CreateQuestionPage extends Component {
         <PageContainer>
           <ToolboxContainer>
             <Label>Enter the question description below</Label>
-            <QuestionTextarea />
+            <QuestionTextarea onChange={(evt) => this.onDescriptionChange(evt)}/>
 
             <Label>Notation Toolbox</Label>
             <Toolbox />
 
             <Actions>
               <SaveButton type="button" value="Save"
-                onClick={() => console.log('not yet saving')}
+                onClick={() => this.saveQuestion()}
               />
             </Actions>
           </ToolboxContainer>
@@ -211,14 +225,14 @@ const StyledGrade = styled.span`
 const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
-    grade: selectGradingById(state, gradingId)
+    grade: selectGradingById(state, gradingId),
+    question: state.create.question.toJS()
   }
 }
-const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-  return {
-    gradeLayers: ((gradingId, answers, student) => dispatch(gradeLayers(gradingId, answers, student))),
-    clearGrading: ((gradingId) => dispatch(clearGrading(gradingId))),
-    clearLayer: ((layerId) => dispatch(clearLayer(layerId))),
-  }
-}
+const mapDispatchToProps = ({
+  gradeLayers,
+  clearGrading,
+  clearLayer,
+  saveQuestion,
+})
 export default connect(mapStateToProps, mapDispatchToProps)(CreateQuestionPage)
