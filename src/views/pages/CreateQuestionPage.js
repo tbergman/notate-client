@@ -2,6 +2,7 @@
 
 import _ from 'lodash'
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
@@ -65,7 +66,8 @@ class CreateQuestionPage extends Component {
     return (
       <Layout className="app">
         <div className="header">
-          Create Questions
+          Create Questions >
+          <Link to={'/questions'}>See questions</Link>
         </div>
 
         <PageContainer>
