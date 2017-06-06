@@ -151,6 +151,7 @@ const QuestionTextarea = styled.textarea`
   background-color: ${colors.white};
   color: ${colors.grey};
   margin-bottom: 15px;
+  font-size: 14px;
 `
 const ToolboxContainer = styled.div`
   flex: 3;

@@ -1,11 +1,13 @@
 // @flow
 
 import styled from 'styled-components'
+import colors from 'views/styles/colors'
+import { lighten } from 'polished'
 
 export default styled.div`
   .layer-base {
-    stroke: black;
-    fill: black;
+    stroke: ${colors.black};
+    fill: ${colors.black};
   }
 
   .note-option {
@@ -20,23 +22,28 @@ export default styled.div`
 
   .note-layer {
     &.note-selected {
-      stroke: pink;
-      fill: pink;
+      stroke: ${colors.mustard};
+      fill: ${colors.mustard};
+    }
+
+    &:hover:not(.note-selected) {
+      stroke: ${lighten(0.1, colors.mustard)};
+      fill: ${lighten(0.1, colors.mustard)};
     }
   }
 
   .note-question {
-    stroke: black;
-    fill: black;
+    stroke: ${colors.black};
+    fill: ${colors.black};
   }
 
   .note-student {
-    stroke: green;
-    fill: green;
+    stroke: ${colors.darkSeaGreen};
+    fill: ${colors.darkSeaGreen};
   }
 
   .note-answer {
-    stroke: blue;
-    fill: blue;
+    stroke: ${colors.teal};
+    fill: ${colors.teal};
   }
 `
