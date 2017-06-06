@@ -7,6 +7,7 @@ import { selectToolboxItems } from 'modules/toolbox/selectors'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 import * as Icons from 'views/toolbox/ToolboxIcons'
 import ToolboxItem from 'views/toolbox/ToolboxItem'
+import colors from 'views/styles/colors'
 
 import {
   toggleRest,
@@ -73,7 +74,8 @@ class Toolbox extends Component {
 }
 
 const ToolboxContainer = styled.div`
-  border: 1px solid #008489;
+  border: 1px solid;
+  border-color: ${colors.teal};
   border-radius: 4px;
   padding: 10px 2px;
   margin-bottom: 10px;

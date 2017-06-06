@@ -1,6 +1,7 @@
 // @flow
 
 import styled from 'styled-components'
+import colors from 'views/styles/colors'
 
 export default styled.div`
   text-align: center;
@@ -10,10 +11,12 @@ export default styled.div`
   align-items: stretch;
 
   .header {
-    background-color: white;
-    height: 60px;
-    padding: 20px;
-    color: #008489;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2)
+    background-color: ${colors.white};
+    height: 2rem;
+    padding: 15px;
+    color: ${colors.teal};
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    font-size: 1.5rem;
+    font-weight: 700;
   }
 `
