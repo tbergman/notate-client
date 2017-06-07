@@ -18,13 +18,19 @@ import { selectStaveNotes } from 'modules/notes/selectors'
 import { selectGradingById } from 'modules/grading/selectors'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
 import { lighten } from 'polished'
+import uuid from 'uuid'
 
-const questionLayerId = 'question'
-const answersLayerId = 'answer'
-const studentLayerId = 'student'
+const questionLayerId = uuid()
+const answerLayerId = uuid()
+const studentLayerId = uuid()
 const gradingId = 'create-question-grading'
 
 class CreateQuestionPage extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { description: '' }
+  }
+
   onBeforeAddingAnswerNote(note: StaveNote): StaveAnswerNote {
     const newNote = {
       ...note,
@@ -39,16 +45,26 @@ class CreateQuestionPage extends Component {
   }
 
   onDescriptionChange(evt) {
-    this.setState({ description: evt.target.value });
+    this.setState({ description: evt.target.value })
   }
 
   saveQuestion() {
     this.props.saveQuestion({
       ...this.props.question,
+      id: uuid(),
+      questionLayerId: questionLayerId,
+      answerLayerId: answerLayerId,
+      studentLayerId: studentLayerId,
       questionNotes: this.props.selectStaveNotes(questionLayerId),
-      answerNotes: this.props.selectStaveNotes(answersLayerId),
+      answerNotes: this.props.selectStaveNotes(answerLayerId),
       description: this.state.description,
     })
+
+    this.setState({ description: '' })
+    this.props.clearLayer(questionLayerId)
+    this.props.clearLayer(answerLayerId)
+    this.props.clearLayer(studentLayerId)
+    this.props.clearGrading(gradingId)
   }
 
   renderGrade(): React.Element<any>|null {
@@ -73,7 +89,7 @@ class CreateQuestionPage extends Component {
         <PageContainer>
           <ToolboxContainer>
             <Label>Enter the question description below</Label>
-            <QuestionTextarea onChange={(evt) => this.onDescriptionChange(evt)}/>
+            <QuestionTextarea value={this.state.description} onChange={(evt) => this.onDescriptionChange(evt)}/>
 
             <Label>Notation Toolbox</Label>
             <Toolbox />
@@ -92,7 +108,7 @@ class CreateQuestionPage extends Component {
               <Stave
                 editingStaveId={questionLayerId}
                 layers={[
-                  { id: questionLayerId }
+                  { id: questionLayerId, className: 'question' }
                 ]}
               />
             </StaveContainer>
@@ -100,11 +116,11 @@ class CreateQuestionPage extends Component {
             <StaveContainer>
               <Label>Enter the answers below</Label>
               <Stave
-                editingStaveId={answersLayerId}
+                editingStaveId={answerLayerId}
                 onBeforeAddingNote={(note) => this.onBeforeAddingAnswerNote(note) }
                 layers={[
-                  { id: questionLayerId },
-                  { id: answersLayerId }
+                  { id: questionLayerId, className: 'question' },
+                  { id: answerLayerId, className: 'answer' }
                 ]}
               />
             </StaveContainer>
@@ -114,8 +130,8 @@ class CreateQuestionPage extends Component {
               <Stave
                 editingStaveId={studentLayerId}
                 layers={[
-                  { id: questionLayerId },
-                  { id: studentLayerId }
+                  { id: questionLayerId, className: 'question' },
+                  { id: studentLayerId, className: 'student' }
                 ]}
               />
 
@@ -126,7 +142,7 @@ class CreateQuestionPage extends Component {
               <Button type="button" value="Grade"
                 onClick={() => this.props.gradeLayers(
                   gradingId,
-                  this.props.selectStaveNotes(answersLayerId),
+                  this.props.selectStaveNotes(answerLayerId),
                   this.props.selectStaveNotes(studentLayerId),
                 )}
               />

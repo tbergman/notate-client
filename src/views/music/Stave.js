@@ -18,6 +18,7 @@ import StyledLayers from './StyledLayers'
 
 type Layer = {
   id: string,
+  className: string,
 }
 
 type OwnProps = {
@@ -59,7 +60,7 @@ export class StaveUnconnected extends Component {
 
     this.artist.drawOptions()
 
-    _.each(layers, x => { this.artist.drawLayer(x.id, this.props.selectStaveNotes(x.id)) })
+    _.each(layers, x => { this.artist.drawLayer(x, this.props.selectStaveNotes(x.id)) })
   }
 
   componentDidUpdate() {

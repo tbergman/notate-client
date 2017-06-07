@@ -15,32 +15,32 @@ import { selectStaveNotes } from 'modules/notes/selectors'
 import { selectGradingById } from 'modules/grading/selectors'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
 import { lighten } from 'polished'
-
-const questionLayerId = 'question'
-const answersLayerId = 'answer'
-const studentLayerId = 'student'
-const gradingId = 'question-grading'
+import uuid from 'uuid'
 
 class QuestionsPage extends Component {
-  clearStudentLayer() {
-    this.props.clearLayer(studentLayerId)
+  clearStudentLayer(id, gradingId) {
+    this.props.clearLayer(id)
     this.props.clearGrading(gradingId)
   }
 
-  saveQuestion() {
+  saveQuestion(question) {
+    const questionLayerId = question.questionNotes[0].staveLayerId
+    const answersLayerId = question.answerNotes[0].staveLayerId
+
     this.props.saveQuestion({
-      ...this.props.question,
+      ...question,
       questionNotes: this.props.selectStaveNotes(questionLayerId),
       answerNotes: this.props.selectStaveNotes(answersLayerId),
       description: this.state.description,
     })
   }
 
-  renderGrade(): React.Element<any>|null {
-    if (this.props.grade) {
+  renderGrade(question): React.Element<any>|null {
+    const grade = this.props.grade(question.id)
+    if (grade) {
       return (
-        <StyledGrade correct={this.props.grade.correct}>
-          {this.props.grade.correct ? 'CORRECT' : 'FAIL'}
+        <StyledGrade correct={grade.correct}>
+          {grade.correct ? 'CORRECT' : 'FAIL'}
         </StyledGrade>
       )
     }
@@ -60,39 +60,49 @@ class QuestionsPage extends Component {
             <Toolbox />
 
             <Actions>
-              <ActionButton type="button" value="Clear Student's Answers"
-                onClick={() => this.clearStudentLayer()}
-              />
-
-              <ActionButton type="button" value="Grade"
-                onClick={() => this.props.gradeLayers(
-                  gradingId,
-                  this.props.selectStaveNotes(answersLayerId),
-                  this.props.selectStaveNotes(studentLayerId),
-                )}
-              />
             </Actions>
           </ToolboxContainer>
 
           <QuestionContainer>
-
-            <StaveContainer>
-              <Label>{this.props.question.description}</Label>
-              <Stave
-                editingStaveId={studentLayerId}
-                layers={[
-                  { id: questionLayerId },
-                  { id: studentLayerId }
-                ]}
-              />
-
-              {this.renderGrade()}
-
-            </StaveContainer>
-
+            {_.map(this.props.questions, x => this.renderQuestion(x))}
           </QuestionContainer>
         </PageContainer>
       </Layout>
+    )
+  }
+
+  renderQuestion(question) {
+    const questionLayerId = question.questionLayerId
+    const answersLayerId = question.answerLayerId
+    const studentLayerId = question.studentLayerId
+    const gradingId = question.id
+
+    return (
+      <StaveContainer key={question.id}>
+        <Label>{question.description}</Label>
+        <Stave
+          editingStaveId={studentLayerId}
+          layers={[
+            { id: questionLayerId, className: 'question' },
+            { id: studentLayerId, className: 'student' }
+          ]}
+        />
+
+        <Button type="button" value="Clear Student's Answers"
+          onClick={() => this.clearStudentLayer(studentLayerId, gradingId)}
+        />
+
+        <Button type="button" value="Grade"
+          onClick={() => this.props.gradeLayers(
+            gradingId,
+            this.props.selectStaveNotes(answersLayerId),
+            this.props.selectStaveNotes(studentLayerId),
+          )}
+        />
+
+        {this.renderGrade(question)}
+
+      </StaveContainer>
     )
   }
 }
@@ -186,8 +196,8 @@ const StyledGrade = styled.span`
 const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
-    grade: selectGradingById(state, gradingId),
-    question: state.create.question.toJS()
+    grade: (gradingId) => { return selectGradingById(state, gradingId) },
+    questions: state.documents.questions.toJS()
   }
 }
 const mapDispatchToProps = ({

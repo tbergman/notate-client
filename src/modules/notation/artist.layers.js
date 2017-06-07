@@ -39,7 +39,7 @@ export default class ArtistLayers {
 
     // if toolbox changed, clear and redraw options, otherwise do nothing
     if (this.toolboxChanged(this.artist.toolbox)) {
-      this.clearLayer(context.parent, 'option')
+      this.clearLayer(context.parent, { id: 'option' })
 
       if (!this.artist.toolbox.selectionTool && !this.artist.toolbox.eraserSelected) {
         const optionLayer = context.openGroup()
@@ -94,15 +94,15 @@ export default class ArtistLayers {
     }
   }
 
-  clearLayer(parent, layerId) {
-    const elements = parent.getElementsByClassName('layer-' + layerId)
+  clearLayer(parent, layer) {
+    const elements = parent.getElementsByClassName('layer-' + layer.id)
     while(elements.length > 0){
       elements[0].parentNode.removeChild(elements[0])
     }
   }
 
-  drawLayer(context, stave, notes, layerId) {
-    this.clearLayer(context.parent, layerId)
+  drawLayer(context, stave, notes, layer) {
+    this.clearLayer(context.parent, layer)
 
     const rememberParent = context.parent
     context.parent = this.staveLayers
@@ -113,7 +113,7 @@ export default class ArtistLayers {
     _.each(notes, note => {
       const noteGroup = context.openGroup()
       noteGroup.classList.add('note-layer')
-      noteGroup.classList.add('note-' + layerId)
+      noteGroup.classList.add('note-' + layer.className)
       if (this.artist.toolbox.selectedNote && this.artist.toolbox.selectedNote.id === note.id) {
         noteGroup.classList.add('note-selected')
       }
@@ -134,7 +134,7 @@ export default class ArtistLayers {
       }
     })
 
-    group.classList.add('layer-' + layerId)
+    group.classList.add('layer-' + layer.id)
     context.closeGroup()
 
     context.parent = rememberParent

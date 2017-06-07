@@ -13,6 +13,7 @@ export type StaveNote = {
   position: number,
   isRest: boolean,
   isDotted: boolean,
+  className: string,
 }
 
 export type StaveAnswerNote = StaveNote & {
@@ -28,6 +29,7 @@ export const DefaultNote = {
   position: 0,
   isRest: false,
   isDotted: false,
+  className: 'question',
   validators: [(() => true)]
 }
 
@@ -36,6 +38,9 @@ export type Question = {
   description: string,
   questionNotes: Array<StaveNote>,
   answerNotes: Array<StaveAnswerNote>,
+  questionLayerId: string,
+  answerLayerId: string,
+  studentLayerId: string,
 }
 
 export const DefaultQuestion = {
@@ -43,4 +48,7 @@ export const DefaultQuestion = {
   description: '',
   questionNotes: [],
   answerNotes: [],
+  questionLayerId: uuid(),
+  answerLayerId: uuid(),
+  studentLayerId: uuid(),
 }
