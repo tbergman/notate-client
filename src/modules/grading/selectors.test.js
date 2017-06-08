@@ -4,6 +4,8 @@ import { List } from 'immutable'
 import { selectGradingById } from './selectors'
 import { initialState as toolboxInitialState } from 'modules/toolbox/reducer'
 import { initialState as notesInitialState } from 'modules/notes/reducer'
+import { initialState as createInitialState } from 'modules/create/reducer'
+import { initialState as documentsInitialState } from 'modules/documents/reducer'
 
 describe('grading selectors', () => {
   let state
@@ -12,6 +14,8 @@ describe('grading selectors', () => {
     state = {
       notes: notesInitialState,
       toolbox: toolboxInitialState,
+      documents: documentsInitialState,
+      create: createInitialState,
       grading: {
         questionGrades: List([{
           gradingId: 'grading-id',

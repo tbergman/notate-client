@@ -11,8 +11,8 @@ export const initialState: DocumentsState = {
 }
 
 export default function reducer(
-  state: CreateState = initialState,
-  action: FluxStandardAction): CreateState {
+  state: DocumentsState = initialState,
+  action: FluxStandardAction): DocumentsState {
 
   switch (action.type) {
     case ADD_QUESTION: {

@@ -22,18 +22,6 @@ class QuestionsPage extends Component {
     this.props.clearGrading(gradingId)
   }
 
-  saveQuestion(question: Question) {
-    const questionLayerId = question.questionNotes[0].staveLayerId
-    const answersLayerId = question.answerNotes[0].staveLayerId
-
-    this.props.saveQuestion({
-      ...question,
-      questionNotes: this.props.selectStaveNotes(questionLayerId),
-      answerNotes: this.props.selectStaveNotes(answersLayerId),
-      description: this.state.description,
-    })
-  }
-
   renderGrade(question: Question): React.Element<any>|null {
     const grade = this.props.grade(question.id)
     if (grade) {
@@ -67,7 +55,7 @@ class QuestionsPage extends Component {
     )
   }
 
-  renderQuestion(question: Question) {
+  renderQuestion(question: Question): React.Element<any> {
     const questionLayerId = question.questionLayerId
     const answersLayerId = question.answerLayerId
     const studentLayerId = question.studentLayerId

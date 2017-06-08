@@ -25,6 +25,10 @@ const answerLayerId: string = uuid()
 const studentLayerId: string = uuid()
 const gradingId: string = 'create-question-grading'
 
+type State = {
+  description: string
+}
+
 type OwnProps = {}
 type StateProps = {
   selectStaveNotes: any,
@@ -42,6 +46,7 @@ type Props = OwnProps & StateProps & DispatchProps
 class CreateQuestionPage extends Component {
 
   props: Props
+  state: State
 
   constructor(props: Props) {
     super(props)
@@ -61,8 +66,10 @@ class CreateQuestionPage extends Component {
     this.props.clearGrading(gradingId)
   }
 
-  onDescriptionChange(evt: Event) {
-    this.setState({ description: evt.target.value })
+  onDescriptionChange(e: Event) {
+    if (e.target instanceof HTMLTextAreaElement) {
+      this.setState({ description: e.target.value })
+    }
   }
 
   saveQuestion() {
@@ -261,7 +268,7 @@ const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
     grade: selectGradingById(state, gradingId),
-    question: state.create.question.toJS()
+    question: state.create.question
   }
 }
 const mapDispatchToProps = ({

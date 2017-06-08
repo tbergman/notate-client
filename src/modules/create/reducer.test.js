@@ -11,7 +11,7 @@ describe('create question reducer', () => {
       description: 'new description'
     }})
 
-    const newQuestion = result.question.toJS()
+    const newQuestion = result.question
 
     expect(newQuestion.description).toEqual('new description')
   })
