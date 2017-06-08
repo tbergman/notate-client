@@ -1,18 +1,17 @@
 // @flow
 
-import { List } from 'immutable'
 import reducer, { initialState } from './reducer'
-import { SAVE_QUESTION } from 'modules/create/actions'
+import { ADD_QUESTION } from 'modules/documents/actions'
 import { DefaultQuestion as question } from 'modules/types'
 
 describe('create question reducer', () => {
   it('saves a question', () => {
-    const result = reducer(initialState, { type: SAVE_QUESTION, payload: {
+    const result = reducer(initialState, { type: ADD_QUESTION, payload: {
       ...question,
       description: 'new description'
     }})
 
-    const newQuestion = result.question.toJS()
+    const newQuestion = result.questions.toJS()[0]
 
     expect(newQuestion.description).toEqual('new description')
   })

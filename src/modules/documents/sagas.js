@@ -2,12 +2,13 @@
 
 import _ from 'lodash'
 import uuid from 'uuid'
-import { takeEvery, put, fork } from 'redux-saga/effects'
+import { takeEvery, put } from 'redux-saga/effects'
 import { SAVE_QUESTION } from 'modules/create/actions'
 import { ADD_QUESTION } from 'modules/documents/actions'
 import { NOTE_ADDED } from 'modules/notes/actions'
+import type { SaveQuestionAction } from 'modules/create/actions'
 
-function* addQuestion(action): Generator<*, *, *> {
+function* addQuestion(action: SaveQuestionAction): Generator<*, *, *> {
   const question = action.payload
   const questionLayerId = uuid()
   const answerLayerId = uuid()

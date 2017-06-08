@@ -13,17 +13,16 @@ import { gradeLayers, clearGrading } from 'modules/grading/actions'
 import { clearLayer } from 'modules/notes/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 import { selectGradingById } from 'modules/grading/selectors'
-import type { StaveNote, StaveAnswerNote } from 'modules/types'
 import { lighten } from 'polished'
-import uuid from 'uuid'
+import type { Question } from 'modules/types'
 
 class QuestionsPage extends Component {
-  clearStudentLayer(id, gradingId) {
+  clearStudentLayer(id: string, gradingId: string) {
     this.props.clearLayer(id)
     this.props.clearGrading(gradingId)
   }
 
-  saveQuestion(question) {
+  saveQuestion(question: Question) {
     const questionLayerId = question.questionNotes[0].staveLayerId
     const answersLayerId = question.answerNotes[0].staveLayerId
 
@@ -35,7 +34,7 @@ class QuestionsPage extends Component {
     })
   }
 
-  renderGrade(question): React.Element<any>|null {
+  renderGrade(question: Question): React.Element<any>|null {
     const grade = this.props.grade(question.id)
     if (grade) {
       return (
@@ -58,9 +57,6 @@ class QuestionsPage extends Component {
         <PageContainer>
           <ToolboxContainer>
             <Toolbox />
-
-            <Actions>
-            </Actions>
           </ToolboxContainer>
 
           <QuestionContainer>
@@ -71,7 +67,7 @@ class QuestionsPage extends Component {
     )
   }
 
-  renderQuestion(question) {
+  renderQuestion(question: Question) {
     const questionLayerId = question.questionLayerId
     const answersLayerId = question.answerLayerId
     const studentLayerId = question.studentLayerId
@@ -122,22 +118,6 @@ const Label = styled.div`
   margin-bottom: 15px;
   text-align: left;
 `
-const QuestionDescription = Label.extend`
-  border-bottom: 1px dashed ${colors.teal};
-`
-const QuestionTextarea = styled.textarea`
-  display: block;
-  padding: 10px;
-  height: 50px;
-  resize: vertical;
-  line-height: inherit;
-  border: 1px solid #aaa;
-  border-radius: 2px;
-  background-color: ${colors.white};
-  color: ${colors.grey};
-  margin-bottom: 15px;
-  font-size: 14px;
-`
 const ToolboxContainer = styled.div`
   flex: 3;
   box-shadow: 2px 0 5px -2px rgba(0, 0, 0, 0.2);
@@ -181,14 +161,6 @@ const Button = styled.input`
   &:hover {
     background-color: ${lighten(0.05, colors.teal)};
   }
-`
-const Actions = styled.div`
-  padding: 10px 0;
-  margin-top: 20px;
-`
-const ActionButton = Button.extend`
-  float: right;
-  margin-right: 0;
 `
 const StyledGrade = styled.span`
   color: ${props => props.correct ? 'green' : 'red'};

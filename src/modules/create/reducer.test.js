@@ -1,6 +1,5 @@
 // @flow
 
-import { List } from 'immutable'
 import reducer, { initialState } from './reducer'
 import { SAVE_QUESTION } from 'modules/create/actions'
 import { DefaultQuestion as question } from 'modules/types'
