@@ -2,7 +2,7 @@
 
 import _ from 'lodash'
 import uuid from 'uuid'
-import { takeEvery, put } from 'redux-saga/effects'
+import { take, fork, put } from 'redux-saga/effects'
 import { SAVE_QUESTION } from 'modules/create/actions'
 import { ADD_QUESTION } from 'modules/documents/actions'
 import { NOTE_ADDED } from 'modules/notes/actions'
@@ -44,5 +44,8 @@ function* addQuestion(action: SaveQuestionAction): Generator<*, *, *> {
 }
 
 export function* watchQuestionCreated(): Generator<*, *, *> {
-  yield takeEvery(SAVE_QUESTION, addQuestion)
+  while(true) {
+    const action: SaveQuestionAction = yield take(SAVE_QUESTION)
+    yield fork(addQuestion, action)
+  }
 }
