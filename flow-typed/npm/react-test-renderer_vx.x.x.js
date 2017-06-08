@@ -1,4 +1,4 @@
-// flow-typed signature: ae3c3f1b143070e47ab9a7ffc1d47327
+// flow-typed signature: 6dc8442efca1c3800ae6598bf4f12938
 // flow-typed version: <<STUB>>/react-test-renderer_v^15.5.4/flow_v0.47.0
 
 /**
@@ -8,8 +8,8 @@
  *
  * Fill this stub out by replacing all the `any` types.
  *
- * Once filled out, we encourage you to share your work with the 
- * community by sending a pull request to: 
+ * Once filled out, we encourage you to share your work with the
+ * community by sending a pull request to:
  * https://github.com/flowtype/flow-typed
  */
 

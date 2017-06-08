@@ -1,4 +1,4 @@
-// flow-typed signature: 2d732707bfb1b2aba367ec9e9c95753d
+// flow-typed signature: 309c980dd9aac7d8c5500d5fe0249bef
 // flow-typed version: <<STUB>>/enzyme-redux_v^0.1.6/flow_v0.47.0
 
 /**
@@ -8,8 +8,8 @@
  *
  * Fill this stub out by replacing all the `any` types.
  *
- * Once filled out, we encourage you to share your work with the 
- * community by sending a pull request to: 
+ * Once filled out, we encourage you to share your work with the
+ * community by sending a pull request to:
  * https://github.com/flowtype/flow-typed
  */
 

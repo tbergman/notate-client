@@ -1,4 +1,4 @@
-// flow-typed signature: fac979adc424143af2efac7f89fe90fd
+// flow-typed signature: 0296f4922b8bd1e56c239568a0058259
 // flow-typed version: <<STUB>>/vexflow_v^1.2.83/flow_v0.47.0
 
 /**
@@ -8,8 +8,8 @@
  *
  * Fill this stub out by replacing all the `any` types.
  *
- * Once filled out, we encourage you to share your work with the 
- * community by sending a pull request to: 
+ * Once filled out, we encourage you to share your work with the
+ * community by sending a pull request to:
  * https://github.com/flowtype/flow-typed
  */
 

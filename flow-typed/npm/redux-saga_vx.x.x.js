@@ -1,4 +1,4 @@
-// flow-typed signature: 9eaba5d6fa2e582bc0586dac360316ee
+// flow-typed signature: f1bfddbd6b69b8f2da802f6952eb06ad
 // flow-typed version: <<STUB>>/redux-saga_v^0.14.8/flow_v0.47.0
 
 /**
@@ -8,8 +8,8 @@
  *
  * Fill this stub out by replacing all the `any` types.
  *
- * Once filled out, we encourage you to share your work with the 
- * community by sending a pull request to: 
+ * Once filled out, we encourage you to share your work with the
+ * community by sending a pull request to:
  * https://github.com/flowtype/flow-typed
  */
 
