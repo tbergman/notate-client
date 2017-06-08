@@ -20,13 +20,30 @@ import type { StaveNote, StaveAnswerNote } from 'modules/types'
 import { lighten } from 'polished'
 import uuid from 'uuid'
 
-const questionLayerId = uuid()
-const answerLayerId = uuid()
-const studentLayerId = uuid()
-const gradingId = 'create-question-grading'
+const questionLayerId: string = uuid()
+const answerLayerId: string = uuid()
+const studentLayerId: string = uuid()
+const gradingId: string = 'create-question-grading'
+
+type OwnProps = {}
+type StateProps = {
+  selectStaveNotes: any,
+  grade: any,
+  question: any,
+}
+type DispatchProps = {
+  gradeLayers: any,
+  clearGrading: any,
+  clearLayer: any,
+  saveQuestion: any,
+}
+type Props = OwnProps & StateProps & DispatchProps
 
 class CreateQuestionPage extends Component {
-  constructor(props) {
+
+  props: Props
+
+  constructor(props: Props) {
     super(props)
     this.state = { description: '' }
   }
@@ -44,7 +61,7 @@ class CreateQuestionPage extends Component {
     this.props.clearGrading(gradingId)
   }
 
-  onDescriptionChange(evt) {
+  onDescriptionChange(evt: Event) {
     this.setState({ description: evt.target.value })
   }
 
