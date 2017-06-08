@@ -2,6 +2,8 @@
 
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import colors from 'views/styles/colors'
+import { darken } from 'polished'
 
 export default class ToolboxItem extends Component {
   render(): React.Element<any> {
@@ -21,12 +23,13 @@ const StyledToolboxItem = styled.div`
   align-items: center;
   justify-content: center;
   display: flex;
-  border-right: ${props => props.bar ? '1px solid #dce0e0' : 'none'};
-  background-color: ${props => props.selected ? '#dce0e0' : 'transparent' };
+  border-right: ${props => props.bar ? '1px solid' : 'none'};
+  border-color: ${colors.lightGrey};
+  background-color: ${props => props.selected ? colors.lightGrey : 'transparent' };
   opacity: ${props => props.disabled ? '0.25': '1'};
   cursor: pointer;
 
   &:hover {
-    background-color: #dce0e0;
+    background-color: ${darken(0.1, colors.lightGrey)};
   }
 `

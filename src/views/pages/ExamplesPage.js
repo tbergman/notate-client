@@ -10,7 +10,7 @@ export default class ExamplesPage extends Component {
     return (
       <Layout className="app">
         <div className="header">
-          <h2>Examples</h2>
+          Examples
         </div>
 
         <ExamplesContainer>

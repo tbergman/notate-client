@@ -3,6 +3,7 @@
 <PROJECT_ROOT>/node_modules/flow-runtime/.*
 .*/redux-saga-test-plan/.*
 .*/node_modules/styled-components/.*
+.*/node_modules/polished/.*
 
 [libs]
 ./node_modules/fbjs/flow/lib

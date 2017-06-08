@@ -1,4 +1,4 @@
-// flow-typed signature: 8ebbbff58d468b1117b6cd82e0925ac2
+// flow-typed signature: b2adc8e2750f92555b6dbef2ab42dfab
 // flow-typed version: <<STUB>>/react-docgen_v^2.14.1/flow_v0.47.0
 
 /**
@@ -8,8 +8,8 @@
  *
  * Fill this stub out by replacing all the `any` types.
  *
- * Once filled out, we encourage you to share your work with the 
- * community by sending a pull request to: 
+ * Once filled out, we encourage you to share your work with the
+ * community by sending a pull request to:
  * https://github.com/flowtype/flow-typed
  */
 

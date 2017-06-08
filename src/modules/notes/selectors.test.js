@@ -4,6 +4,8 @@ import { List } from 'immutable'
 import { selectStaveNotes } from './selectors'
 import { initialState as toolboxInitialState } from 'modules/toolbox/reducer'
 import { initialState as gradingInitialState } from 'modules/grading/reducer'
+import { initialState as createInitialState } from 'modules/create/reducer'
+import { initialState as documentsInitialState } from 'modules/documents/reducer'
 import { DefaultNote as note } from 'modules/types'
 
 describe('notes selectors', () => {
@@ -13,6 +15,8 @@ describe('notes selectors', () => {
     state = {
       toolbox: toolboxInitialState,
       grading: gradingInitialState,
+      documents: documentsInitialState,
+      create: createInitialState,
       notes: {
         notes: List([
           { ...note, staveLayerId: 'stave-id' },
