@@ -2,8 +2,8 @@
 <PROJECT_ROOT>/node_modules/fbjs/.*
 <PROJECT_ROOT>/node_modules/flow-runtime/.*
 .*/redux-saga-test-plan/.*
-.*/styled-components/src/.*
-.*/styled-components/lib/models/StyleSheet.js.flow
+.*/node_modules/styled-components/.*
+.*/node_modules/polished/.*
 
 [libs]
 ./node_modules/fbjs/flow/lib
@@ -25,6 +25,8 @@ module.name_mapper='^App' -> '<PROJECT_ROOT>/src/App.js'
 module.name_mapper='^Types$' -> '<PROJECT_ROOT>/src/Types.js.flow'
 module.name_mapper='^modules\/\(.*\)$' -> '<PROJECT_ROOT>/src/modules/\1'
 module.name_mapper='^modules$' -> '<PROJECT_ROOT>/src/modules'
+module.name_mapper='^styles\/\(.*\)$' -> '<PROJECT_ROOT>/src/styles/\1'
+module.name_mapper='^styles' -> '<PROJECT_ROOT>/src/styles'
 module.name_mapper='^views\/\(.*\)$' -> '<PROJECT_ROOT>/src/views/\1'
 module.name_mapper='^views$' -> '<PROJECT_ROOT>/src/views'
 
