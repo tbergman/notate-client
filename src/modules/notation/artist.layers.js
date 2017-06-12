@@ -11,22 +11,19 @@ export default class ArtistLayers {
   drawBaseLayer(context, stave, notesVoice, beams, textNotesVoice) {
     this.rootElement = context.parent
 
-    const group = context.openGroup()
-    group.classList.add('layer-base');
+    this.withinGroup(context, ['layer-base'], group => {
+      _.each(notesVoice, voice => {
+        voice.draw(context, stave)
+      })
 
-    _.each(notesVoice, voice => {
-      voice.draw(context, stave)
+      _.each(beams, beam => {
+        beam.setContext(context).draw()
+      })
+
+      _.each(textNotesVoice, voice => {
+        voice.draw(context, stave)
+      })
     })
-
-    _.each(beams, beam => {
-      beam.setContext(context).draw()
-    })
-
-    _.each(textNotesVoice, voice => {
-      voice.draw(context, stave)
-    })
-
-    context.closeGroup();
 
     this.staveLayers = context.openGroup()
     this.staveLayers.classList.add('layers')
@@ -68,30 +65,63 @@ export default class ArtistLayers {
       ]
 
       _(availableOptions).each(x => {
-        const group = context.openGroup()
-        group.classList.add('note-option')
+        this.withinGroup(context, ['note-option'], group => {
+          const optionNote = {
+            pitch: x,
+            duration: this.artist.toolbox.selectedDuration,
+            accidental: this.artist.toolbox.selectedAccidental,
+            isRest: this.artist.toolbox.restSelected,
+            isDotted: this.artist.toolbox.dotSelected
+          }
+          const newNote = this.drawableNote(optionNote)
 
-        const optionNote = {
-          pitch: x,
-          duration: this.artist.toolbox.selectedDuration,
-          accidental: this.artist.toolbox.selectedAccidental,
-          isRest: this.artist.toolbox.restSelected,
-          isDotted: this.artist.toolbox.dotSelected
-        }
-        const newNote = this.drawableNote(optionNote)
+          note.tickContext.addTickable(newNote)
+          note.tickContext.preFormat()
+          newNote.setContext(context).setStave(stave)
+          newNote.draw()
 
-        note.tickContext.addTickable(newNote)
-        note.tickContext.preFormat()
-        newNote.setContext(context).setStave(stave)
-        newNote.draw()
+          const clickableArea = this.drawClickableAreaForOption(group, context)
 
-        context.closeGroup()
+          clickableArea.addEventListener('click', () => {
+            this.artist.options.addNote(newNote.tickContext.getX(), x)
+          })
 
-        group.addEventListener('click', () => {
-          this.artist.options.addNote(newNote.tickContext.getX(), x)
+          const staveNote = group.getElementsByClassName('vf-stavenote')[0]
+
+          clickableArea.addEventListener('mouseover', () => {
+            staveNote.classList.add('hovered')
+          })
+
+          clickableArea.addEventListener('mouseout', () => {
+            staveNote.classList.remove('hovered')
+          })
         })
       })
     }
+  }
+
+  drawClickableAreaForOption(group, context) {
+    let rect
+
+    this.withinGroup(context, ['clickable-area'], clickableArea => {
+      const notehead = group
+        .getElementsByClassName('vf-notehead')[0]
+        .getElementsByTagName('path')[0]
+
+      const bbox = !!notehead.getBBox && notehead.getBBox()
+
+      const svgns = "http://www.w3.org/2000/svg"
+      rect = document.createElementNS(svgns, 'rect')
+      rect.setAttributeNS(null, 'x', bbox.x - bbox.width)
+      rect.setAttributeNS(null, 'y', bbox.y)
+      rect.setAttributeNS(null, 'height', bbox.height)
+      rect.setAttributeNS(null, 'width', bbox.width * 3)
+      rect.setAttributeNS(null, 'fill', 'transparent')
+      rect.setAttributeNS(null, 'stroke', 'transparent')
+      clickableArea.appendChild(rect)
+    })
+
+    return rect
   }
 
   clearLayer(parent, layer) {
@@ -107,35 +137,31 @@ export default class ArtistLayers {
     const rememberParent = context.parent
     context.parent = this.staveLayers
 
-    const group = context.openGroup()
-    const tickContext = new Vex.Flow.TickContext()
+    this.withinGroup(context, ['layer-' + layer.id], group => {
+      const tickContext = new Vex.Flow.TickContext()
 
-    _.each(notes, note => {
-      const noteGroup = context.openGroup()
-      noteGroup.classList.add('note-layer')
-      noteGroup.classList.add('note-' + layer.className)
-      if (this.artist.toolbox.selectedNote && this.artist.toolbox.selectedNote.id === note.id) {
-        noteGroup.classList.add('note-selected')
-      }
+      _.each(notes, note => {
 
-      const newNote = this.drawableNote(note)
+        this.withinGroup(context, ['note-layer', 'note-' + layer.className], noteGroup => {
+          if (this.artist.toolbox.selectedNote && this.artist.toolbox.selectedNote.id === note.id) {
+            noteGroup.classList.add('note-selected')
+          }
 
-      tickContext.addTickable(newNote)
-      tickContext.preFormat().setX(note.position)
-      newNote.setContext(context).setStave(stave)
-      newNote.draw()
+          const newNote = this.drawableNote(note)
 
-      context.closeGroup()
+          tickContext.addTickable(newNote)
+          tickContext.preFormat().setX(note.position)
+          newNote.setContext(context).setStave(stave)
+          newNote.draw()
 
-      if (this.artist.toolbox.selectionTool || this.artist.toolbox.eraserSelected) {
-        noteGroup.addEventListener('click', () => {
-          this.artist.options.selectNote(note)
+          if (this.artist.toolbox.selectionTool || this.artist.toolbox.eraserSelected) {
+            noteGroup.addEventListener('click', () => {
+              this.artist.options.selectNote(note)
+            })
+          }
         })
-      }
+      })
     })
-
-    group.classList.add('layer-' + layer.id)
-    context.closeGroup()
 
     context.parent = rememberParent
   }
@@ -150,6 +176,15 @@ export default class ArtistLayers {
       newNote.addDot(0)
     }
     return newNote
+  }
+
+  withinGroup(context, classes, callback) {
+    const group = context.openGroup()
+    _.each(classes, x => group.classList.add(x))
+
+    callback(group)
+
+    context.closeGroup()
   }
 
   toolboxChanged(toolbox) {
