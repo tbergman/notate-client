@@ -10,4 +10,6 @@ export default {
   eggShell: '#EDEAD0',
   grey: '#484848',
   lightGrey: '#dce0e0',
+  red: '#E00F00',
+  brightGreen: '#00E00E',
 }

@@ -33,6 +33,11 @@ export type NoteChangedAction = {
   payload: StaveNote,
 }
 
+export const changeNote: (note: StaveNote) => NoteChangedAction = (note) =>({
+  type: NOTE_CHANGED,
+  payload: note
+})
+
 // CLEAR LAYER
 export type CLearLayerAction = {
   type: 'notes/CLEAR_LAYER',

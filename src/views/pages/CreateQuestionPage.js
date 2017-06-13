@@ -23,6 +23,8 @@ import uuid from 'uuid'
 const questionLayerId: string = uuid()
 const answerLayerId: string = uuid()
 const studentLayerId: string = uuid()
+const correctLayerId: string = uuid()
+const incorrectLayerId: string = uuid()
 const gradingId: string = 'create-question-grading'
 
 type State = {
@@ -155,7 +157,9 @@ class CreateQuestionPage extends Component {
                 editingStaveId={studentLayerId}
                 layers={[
                   { id: questionLayerId, className: 'question' },
-                  { id: studentLayerId, className: 'student' }
+                  { id: studentLayerId, className: 'student' },
+                  { id: correctLayerId, className: 'correct'},
+                  { id: incorrectLayerId, className: 'incorrect'},
                 ]}
               />
 

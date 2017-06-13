@@ -46,4 +46,14 @@ export default styled.div`
     stroke: ${colors.teal};
     fill: ${colors.teal};
   }
+  
+  .note-correct {
+    stroke: ${colors.brightGreen};
+    fill: ${colors.brightGreen};
+  }
+  
+  .note-incorrect {
+    stroke: ${colors.red};
+    fill: ${colors.red};
+  }
 `

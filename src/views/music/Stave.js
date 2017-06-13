@@ -7,7 +7,7 @@ import uuid from 'uuid'
 
 import type { StaveNote } from 'modules/types'
 import type { ToolboxState } from 'modules/toolbox'
-import { addNote, removeNote } from 'modules/notes/actions'
+import { addNote, removeNote, changeNote } from 'modules/notes/actions'
 import { selectNote } from 'modules/toolbox/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 
@@ -42,6 +42,7 @@ type DispatchProps = {
   addNote: Function,
   removeNote: Function,
   selectNote: Function,
+  changeNote: Function,
 }
 type Props = OwnProps & StateProps & DispatchProps
 
@@ -110,7 +111,9 @@ export class StaveUnconnected extends Component {
       position: position,
       isRest: this.props.toolbox.restSelected,
       isDotted: this.props.toolbox.dotSelected,
+      isCorrected: 1,
     }
+
 
     if (this.props.onBeforeAddingNote) {
       newNote = this.props.onBeforeAddingNote(newNote)
@@ -125,6 +128,10 @@ export class StaveUnconnected extends Component {
     } else {
       this.props.selectNote && this.props.selectNote(note)
     }
+  }
+
+  changeNote(note: StaveNote){
+    this.props.changeNote(note);
   }
 
   baseLayerNotation(): string {
@@ -160,6 +167,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     addNote: ((note) => dispatch(addNote(note))),
     removeNote: ((note) => dispatch(removeNote(note))),
     selectNote: ((note) => dispatch(selectNote(note))),
+    changeNote: ((note) => dispatch(changeNote(note))),
   }
 }
 

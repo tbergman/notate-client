@@ -4,7 +4,7 @@ import { fromJS } from 'immutable'
 import type { FluxStandardAction } from 'Types'
 import type { QuestionGradesState } from 'modules/grading'
 import { GRADE_LAYERS, CLEAR_GRADING } from 'modules/grading/actions'
-import Grader from 'modules/grading/grader'
+import Grader from 'modules/grading/grader.reporter'
 
 export const initialState: QuestionGradesState = {
   questionGrades: fromJS([])
