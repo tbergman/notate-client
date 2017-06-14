@@ -16,3 +16,17 @@ export const selectGradingById = (state: AppState, gradingId: string) => {
     }
   )(state)
 }
+
+export const selectIncorrectAnswers = (state: AppState) => {
+  return createSelector(
+    selectGrading,
+    (state) => {
+      //console.log(state.incorrectAnswers.length);
+      return state.incorrectAnswers;
+    }
+  )(state)
+};
+// export const selectIncorrectAnswers = createSelector(
+//   selectGrading,
+//   state => state.incorrectAnswers
+// )

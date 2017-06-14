@@ -3,8 +3,16 @@
 import _ from 'lodash'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
 
+type Result ={
+  correct: boolean,
+  incorrectAnswers: Array<StaveNote>,
+  correctAnswers: Array<StaveNote>,
+  emptyAnswers: Array<StaveNote>,
+}
+
 const Grader = {
-    grade(answers: Array<StaveAnswerNote>, student: Array<StaveNote>): boolean {
+
+    grade(answers: Array<StaveAnswerNote>, student: Array<StaveNote>): Result {
         var incorrectAnswers = [];
         var emptyAnswers = [];
         var correctAnswers = [];
@@ -37,7 +45,14 @@ const Grader = {
         console.log("The final grade is:");
         console.log(correctAnswers.length+"/"+answers.length);
 
-        return incorrectAnswers.length === 0 && emptyAnswers.length === 0
+        const result={
+          correct: incorrectAnswers.length === 0 && emptyAnswers.length === 0,
+          incorrectAnswers: incorrectAnswers,
+          correctAnswers: correctAnswers,
+          emptyAnswers: emptyAnswers,
+        }
+
+        return result;
     }
 }
 

@@ -15,10 +15,11 @@ import { gradeLayers, clearGrading } from 'modules/grading/actions'
 import { clearLayer } from 'modules/notes/actions'
 import { saveQuestion } from 'modules/create/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
-import { selectGradingById } from 'modules/grading/selectors'
+import { selectGradingById, selectIncorrectAnswers } from 'modules/grading/selectors'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
 import { lighten } from 'polished'
 import uuid from 'uuid'
+import { changeNote } from 'modules/notes/actions'
 
 const questionLayerId: string = uuid()
 const answerLayerId: string = uuid()
@@ -36,12 +37,14 @@ type StateProps = {
   selectStaveNotes: any,
   grade: any,
   question: any,
+  incorrectAnswers: any,
 }
 type DispatchProps = {
   gradeLayers: any,
   clearGrading: any,
   clearLayer: any,
   saveQuestion: any,
+  changeNote: any,
 }
 type Props = OwnProps & StateProps & DispatchProps
 
@@ -65,6 +68,7 @@ class CreateQuestionPage extends Component {
 
   clearStudentLayer() {
     this.props.clearLayer(studentLayerId)
+    this.props.clearLayer(incorrectLayerId)
     this.props.clearGrading(gradingId)
   }
 
@@ -102,6 +106,16 @@ class CreateQuestionPage extends Component {
       )
     }
     return null
+  }
+  changeCorrectedNotes(){
+    const incorrectAnswers = this.props.incorrectAnswers;
+    if(typeof incorrectAnswers.length !== 'undefined'){
+      //console.log(incorrectAnswers.length);
+      incorrectAnswers.forEach(note =>{
+        note.staveLayerId = incorrectLayerId;
+        this.props.changeNote(note);
+      })
+    }
   }
 
   render(): React.Element<any> {
@@ -168,13 +182,16 @@ class CreateQuestionPage extends Component {
               />
 
               <Button type="button" value="Grade"
-                onClick={() => this.props.gradeLayers(
-                  gradingId,
-                  this.props.selectStaveNotes(answerLayerId),
-                  this.props.selectStaveNotes(studentLayerId),
-                )}
+                onClick={() => {
+                  this.props.gradeLayers(
+                    gradingId,
+                    this.props.selectStaveNotes(answerLayerId),
+                    this.props.selectStaveNotes(studentLayerId),
+                  );
+                  this.render();
+                  this.changeCorrectedNotes();
+                }}
               />
-
               {this.renderGrade()}
             </StaveContainer>
 
@@ -272,7 +289,8 @@ const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
     grade: selectGradingById(state, gradingId),
-    question: state.create.question
+    question: state.create.question,
+    incorrectAnswers: selectIncorrectAnswers(state),
   }
 }
 const mapDispatchToProps = ({
@@ -280,5 +298,16 @@ const mapDispatchToProps = ({
   clearGrading,
   clearLayer,
   saveQuestion,
+  changeNote,
+
 })
+// const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+//   return {
+//     gradeLayers: ((id,answers,student)=>dispatch(gradeLayers(id,answers,student))),
+//     clearGrading: ((id)=>dispatch(clearGrading(id))),
+//     clearLayer: ((id)=>dispatch(clearLayer(id))),
+//     saveQuestion: ((question)=>dispatch(saveQuestion(question))),
+//     changeNote: ((note) => dispatch(changeNote(note))),
+//   }
+// }
 export default connect(mapStateToProps, mapDispatchToProps)(CreateQuestionPage)

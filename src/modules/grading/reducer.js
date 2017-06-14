@@ -7,7 +7,9 @@ import { GRADE_LAYERS, CLEAR_GRADING } from 'modules/grading/actions'
 import Grader from 'modules/grading/grader.reporter'
 
 export const initialState: QuestionGradesState = {
-  questionGrades: fromJS([])
+  questionGrades: fromJS([]),
+  emptyAnswers: fromJS([]),
+  incorrectAnswers: fromJS([]),
 }
 
 export default function reducer(
@@ -21,9 +23,11 @@ export default function reducer(
       const answers = action.payload.answers
       const student = action.payload.student
 
+      const result = Grader.grade(answers,student);
+
       const gradeResult = {
         gradingId: gradingId,
-        correct: Grader.grade(answers, student),
+        correct: result.correct,
       }
 
       const questionIndex = state.questionGrades.findIndex(x => x.gradingId === gradeResult.gradingId)
@@ -33,9 +37,11 @@ export default function reducer(
         newQuestionGradesState = state.questionGrades.push(gradeResult)
       }
 
+
       return {
         ...state,
-        questionGrades: newQuestionGradesState
+        questionGrades: newQuestionGradesState,
+        incorrectAnswers: result.incorrectAnswers
       }
     }
 
@@ -47,7 +53,9 @@ export default function reducer(
 
       return {
         ...state,
-        questionGrades: questionGrades
+        questionGrades: questionGrades,
+        emptyAnswers: fromJS([]),
+        incorrectAnswers: fromJS([]),
       }
     }
 
