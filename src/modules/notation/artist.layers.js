@@ -131,6 +131,13 @@ export default class ArtistLayers {
     }
   }
 
+  clearAllUserLayers() {
+    const elements = this.staveLayers.children
+    while(elements.length > 0){
+      elements[0].parentNode.removeChild(elements[0])
+    }
+  }
+
   drawLayer(context, stave, notes, layer) {
     this.clearLayer(context.parent, layer)
 

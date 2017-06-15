@@ -60,6 +60,8 @@ export class StaveUnconnected extends Component {
 
     this.artist.drawOptions()
 
+    this.artist.clearLayers()
+
     _.each(layers, x => { this.artist.drawLayer(x, this.props.selectStaveNotes(x.id)) })
   }
 
