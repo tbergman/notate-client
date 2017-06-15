@@ -36,6 +36,9 @@ const store = composeEnhancers(
 
 sagaMiddleware.run(rootSaga)
 
-persistStore(store, {transforms: [immutableTransform()]})
+persistStore(store, {
+  blacklist: ['routing'],
+  transforms: [immutableTransform()],
+})
 
 export default store
