@@ -1,15 +1,15 @@
 // @flow
 
 import Grader from './grader'
-import PitchComparison from './comparison.pitch'
+import { PITCH_EQUAL } from 'modules/grading'
 import { DefaultNote } from 'modules/types'
 
 describe('grader', () => {
   const note = DefaultNote
 
   const answers = [
-    { ...note, validators: [PitchComparison.equal], pitch: 'C/4', duration: 'q', position: 0 },
-    { ...note, validators: [PitchComparison.equal], pitch: 'D/4', duration: 'q', position: 1 },
+    { ...note, validators: [PITCH_EQUAL], pitch: 'C/4', duration: 'q', position: 0 },
+    { ...note, validators: [PITCH_EQUAL], pitch: 'D/4', duration: 'q', position: 1 },
   ]
 
   describe('correct answers', () => {

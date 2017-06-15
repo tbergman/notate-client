@@ -30,6 +30,8 @@
     "react-router-redux": "^4.0.8",
     "redux": "^3.6.0",
     "redux-logger": "^3.0.1",
+    "redux-persist": "^4.8.0",
+    "redux-persist-transform-immutable": "^4.3.0",
     "redux-saga": "^0.15.3",
     "redux-saga-test-plan": "^3.1.0",
     "redux-test-utils": "^0.1.2",

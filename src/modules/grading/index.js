@@ -10,3 +10,6 @@ export type QuestionGrade = {
 export type QuestionGradesState = {
   questionGrades: List<QuestionGrade>,
 }
+
+export const PITCH_EQUAL = 'pitch/equal'
+export const DURATION_EQUAL = 'duration/equal'

@@ -17,7 +17,7 @@ export type StaveNote = {
 }
 
 export type StaveAnswerNote = StaveNote & {
-  validators: Array<Function>,
+  validators: Array<string>,
 }
 
 export const DefaultNote = {
@@ -30,7 +30,7 @@ export const DefaultNote = {
   isRest: false,
   isDotted: false,
   className: 'question',
-  validators: [(() => true)]
+  validators: []
 }
 
 export type Question = {
