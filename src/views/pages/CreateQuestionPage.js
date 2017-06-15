@@ -10,14 +10,13 @@ import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import { Button, Textarea, Label } from 'views/components'
-import PitchComparison from 'modules/grading/comparison.pitch'
-import DurationComparison from 'modules/grading/comparison.duration'
 import { gradeLayers, clearGrading } from 'modules/grading/actions'
 import { clearLayer } from 'modules/notes/actions'
 import { saveQuestion } from 'modules/create/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 import { selectGradingById } from 'modules/grading/selectors'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
+import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
 import uuid from 'uuid'
 
 const questionLayerId: string = uuid();
@@ -56,7 +55,7 @@ class CreateQuestionPage extends Component {
   onBeforeAddingAnswerNote(note: StaveNote): StaveAnswerNote {
     const newNote = {
       ...note,
-      validators: [PitchComparison.equal, DurationComparison.equal]
+      validators: [PITCH_EQUAL, DURATION_EQUAL]
     }
     return newNote
   }
