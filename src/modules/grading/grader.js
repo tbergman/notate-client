@@ -6,12 +6,12 @@ import PitchComparison from 'modules/grading/comparison.pitch'
 import DurationComparison from 'modules/grading/comparison.duration'
 import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
 
-const getValidatorFunction = (validator: string) => {
+const getValidatorFunction = (validator: string): Function => {
   switch (validator) {
-    case PITCH_EQUAL: { return PitchComparison.equal }
-    case DURATION_EQUAL: { return DurationComparison.equal }
+    case PITCH_EQUAL: return PitchComparison.equal
+    case DURATION_EQUAL: return DurationComparison.equal
+    default: return PitchComparison.equal
   }
-  return (() => () => false)
 }
 
 const Grader = {

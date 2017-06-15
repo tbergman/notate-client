@@ -30,7 +30,7 @@ export const DefaultNote = {
   isRest: false,
   isDotted: false,
   className: 'question',
-  validators: [(() => true)]
+  validators: []
 }
 
 export type Question = {
