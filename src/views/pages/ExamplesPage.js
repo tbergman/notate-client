@@ -8,11 +8,7 @@ import styled from 'styled-components'
 export default class ExamplesPage extends Component {
   render(): React.Element<any> {
     return (
-      <Layout className="app">
-        <div className="header">
-          Examples
-        </div>
-
+      <Layout title="Examples">
         <ExamplesContainer>
           <Stave description={'Notes'} notes={`
             C-D-E-F-G-A-B/4 C/5`

@@ -2,7 +2,6 @@
 
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
@@ -36,12 +35,7 @@ class QuestionsPage extends Component {
 
   render(): React.Element<any> {
     return (
-      <Layout className="app">
-        <div className="header">
-          Questions >
-          <Link to={'/document'}>Document</Link>
-        </div>
-
+      <Layout title="Questions">
         <PageContainer>
           <ToolboxContainer>
             <Toolbox />

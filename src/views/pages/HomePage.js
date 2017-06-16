@@ -9,11 +9,7 @@ import Layout from './Layout'
 class HomePage extends Component {
   render(): React.Element<any> {
     return (
-      <Layout className="app">
-        <div className="header">
-          Homework Exercises
-        </div>
-
+      <Layout title="Home">
         <QuestionsContainer>
           Work in progress
         </QuestionsContainer>

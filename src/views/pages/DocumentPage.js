@@ -47,12 +47,7 @@ class DocumentPage extends Component {
 
   render(): React.Element<any> {
     return (
-      <Layout className="app">
-        <div className="header">
-          Document
-          <Link to={'/questions'}>See questions</Link>
-        </div>
-
+      <Layout title="Document">
         <PageContainer>
           <Sidebar>
             <Label>Document</Label>
