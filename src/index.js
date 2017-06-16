@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom'
 import { injectGlobal } from 'styled-components'
 import Router from './router'
 
+import 'react-select/dist/react-select.css'
+
 const configureGlobalStyledComponents = () => {
   return injectGlobal`
     body {

@@ -10,6 +10,7 @@ import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import { Button, Textarea, Label } from 'views/components'
+import Select from 'react-select'
 import { saveQuestion } from 'modules/documents/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
@@ -36,7 +37,7 @@ class DocumentPageEditQuestion extends Component {
 
   constructor(props: Props) {
     super(props)
-    this.state = { description: '' }
+    this.state = { description: '', clef: 'treble' }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,6 +73,10 @@ class DocumentPageEditQuestion extends Component {
     })
   }
 
+  changeClef(option) {
+    this.setState({ clef: option.value })
+  }
+
   render(): React.Element<any> {
     return (
       <QuestionContainer>
@@ -83,7 +88,20 @@ class DocumentPageEditQuestion extends Component {
 
           <QuestionTextarea value={this.state.description} onChange={(evt) => this.onDescriptionChange(evt)}/>
 
+          <StaveProperties>
+            <Select
+              name="clef"
+              value={this.state.clef}
+              options={[
+                { value: 'treble', label: 'Treble' },
+                { value: 'bass', label: 'Bass' },
+              ]}
+              onChange={(option) => this.changeClef(option)}
+              />
+          </StaveProperties>
+
           <Stave
+            clef={this.state.clef}
             editingStaveId={this.props.question.questionLayerId}
             layers={[
               { id: this.props.question.questionLayerId, className: 'question' }
@@ -95,6 +113,7 @@ class DocumentPageEditQuestion extends Component {
         <StaveContainer>
           <Label>Enter the answers below</Label>
           <Stave
+            clef={this.state.clef}
             editingStaveId={this.props.question.answerLayerId}
             onBeforeAddingNote={(note) => this.onBeforeAddingAnswerNote(note) }
             layers={[
@@ -138,6 +157,8 @@ const StaveContainer = styled.div`
 const Actions = styled.div`
   padding: 10px 0;
   margin-top: 20px;
+`
+const StaveProperties = styled.div`
 `
 const mapStateToProps = (state) => {
   return {

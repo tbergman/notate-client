@@ -65,11 +65,13 @@ export class StaveUnconnected extends Component {
     _.each(layers, x => { this.artist.drawLayer(x, this.props.selectStaveNotes(x.id)) })
   }
 
-  componentDidUpdate() {
-    this.drawLayers()
+  clearStave() {
+    while (this.staveContainer.firstChild) {
+      this.staveContainer.removeChild(this.staveContainer.firstChild)
+    }
   }
 
-  componentDidMount() {
+  renderStave() {
     const {
       width = 800,
       clef = 'treble',
@@ -91,6 +93,7 @@ export class StaveUnconnected extends Component {
     this.artist = new Artist(10, 10, width, {
       addNote: (position, pitch) => this.addNote(position, pitch),
       selectNote: (note) => this.selectNote(note),
+      clef: clef,
     })
 
     const vextab = new VexTab(this.artist)
@@ -100,6 +103,15 @@ export class StaveUnconnected extends Component {
     this.artist.render(renderer)
 
     this.drawLayers()
+  }
+
+  componentDidUpdate() {
+    this.clearStave()
+    this.renderStave()
+  }
+
+  componentDidMount() {
+    this.renderStave()
   }
 
   addNote(position: number, pitch: string) {
