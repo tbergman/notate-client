@@ -49,8 +49,15 @@ export default function reducer(
     }
 
     case REMOVE_QUESTION: {
+      const questionId = action.payload
+      const index = state.questions.findIndex(x => x.id === questionId)
+      const questions = index >= 0
+        ? state.questions.remove(index)
+        : state.questions
+
       return {
         ...state,
+        questions: questions
       }
     }
 

@@ -35,8 +35,10 @@ class DocumentPage extends Component {
     return (
       <QuestionItem key={question.id}>
         <Label>{question.description}</Label>
+
         <Button type="button" value="Edit"
           onClick={() => this.props.editQuestion(question.id)} />
+
         <Button type="button" value="Remove"
           onClick={() => this.props.removeQuestion(question.id)} />
       </QuestionItem>
