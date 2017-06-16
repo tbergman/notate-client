@@ -10,8 +10,7 @@ import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import { Button, Textarea, Label } from 'views/components'
-import { clearLayer } from 'modules/notes/actions'
-import { saveQuestion, editQuestion } from 'modules/create/actions'
+import { saveQuestion } from 'modules/documents/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
 import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
@@ -27,7 +26,6 @@ type StateProps = {
   question: any,
 }
 type DispatchProps = {
-  clearLayer: any,
   saveQuestion: any,
 }
 type Props = OwnProps & StateProps & DispatchProps
@@ -42,7 +40,7 @@ class DocumentPageEditQuestion extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.question) {
+    if (nextProps.question.id !== this.props.question.id) {
       this.setState({ description: nextProps.question.description })
     }
   }
@@ -64,16 +62,14 @@ class DocumentPageEditQuestion extends Component {
   saveQuestion() {
     this.props.saveQuestion({
       ...this.props.question,
-      id: uuid(),
+      id: this.props.question.id || uuid(),
+      questionLayerId: this.props.question.questionLayerId || uuid(),
+      answerLayerId: this.props.question.answerLayerId || uuid(),
+      studentLayerId: this.props.question.studentLayerId || uuid(),
       questionNotes: this.props.selectStaveNotes(this.props.question.questionLayerId),
       answerNotes: this.props.selectStaveNotes(this.props.question.answerLayerId),
       description: this.state.description,
     })
-
-    this.setState({ description: '' })
-    this.props.clearLayer(this.props.question.questionLayerId)
-    this.props.clearLayer(this.props.question.answerLayerId)
-    this.props.clearLayer(this.props.question.studentLayerId)
   }
 
   render(): React.Element<any> {
@@ -150,8 +146,6 @@ const mapStateToProps = (state) => {
   }
 }
 const mapDispatchToProps = ({
-  clearLayer,
   saveQuestion,
-  editQuestion,
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentPageEditQuestion)

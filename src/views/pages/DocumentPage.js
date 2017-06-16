@@ -11,7 +11,7 @@ import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import { Button, Textarea, Label } from 'views/components'
-import { editQuestion } from 'modules/documents/actions'
+import { editQuestion, removeQuestion, newQuestion } from 'modules/documents/actions'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
 import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
 import EditQuestion from 'views/pages/DocumentPageEditQuestion'
@@ -22,6 +22,8 @@ type StateProps = {
 }
 type DispatchProps = {
   editQuestion: any,
+  removeQuestion: any,
+  newQuestion: any,
 }
 type Props = StateProps & DispatchProps
 
@@ -35,6 +37,8 @@ class DocumentPage extends Component {
         <Label>{question.description}</Label>
         <Button type="button" value="Edit"
           onClick={() => this.props.editQuestion(question.id)} />
+        <Button type="button" value="Remove"
+          onClick={() => this.props.removeQuestion(question.id)} />
       </QuestionItem>
     )
   }
@@ -54,6 +58,10 @@ class DocumentPage extends Component {
             <QuestionContainer>
               {_.map(this.props.questions, x => this.renderQuestion(x))}
             </QuestionContainer>
+
+            <Button type="button" value="+ New Question"
+              onClick={() => this.props.newQuestion()}
+            />
           </Sidebar>
 
           <EditQuestion />
@@ -95,5 +103,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = ({
   editQuestion,
+  removeQuestion,
+  newQuestion,
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentPage)

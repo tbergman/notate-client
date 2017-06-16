@@ -43,7 +43,7 @@ export type Question = {
   studentLayerId: string,
 }
 
-export const DefaultQuestion = {
+export const DefaultQuestion = () => ({
   id: uuid(),
   description: '',
   questionNotes: [],
@@ -51,4 +51,4 @@ export const DefaultQuestion = {
   questionLayerId: uuid(),
   answerLayerId: uuid(),
   studentLayerId: uuid(),
-}
+})
