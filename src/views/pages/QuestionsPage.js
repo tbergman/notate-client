@@ -39,7 +39,7 @@ class QuestionsPage extends Component {
       <Layout className="app">
         <div className="header">
           Questions >
-          <Link to={'/create'}>Create question</Link>
+          <Link to={'/document'}>Document</Link>
         </div>
 
         <PageContainer>
