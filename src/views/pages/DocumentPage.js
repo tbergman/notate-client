@@ -34,12 +34,12 @@ class DocumentPage extends Component {
   renderQuestion(question: Question): React.Element<any> {
     return (
       <QuestionItem key={question.id}>
-        <Label>{question.description}</Label>
+        <QuestionItemLabel>{question.description}</QuestionItemLabel>
 
-        <Button type="button" value="Edit"
+        <QuestionItemButton type="button" value="Edit"
           onClick={() => this.props.editQuestion(question.id)} />
 
-        <Button type="button" value="Remove"
+        <QuestionItemButton type="button" value="Remove"
           onClick={() => this.props.removeQuestion(question.id)} />
       </QuestionItem>
     )
@@ -57,9 +57,9 @@ class DocumentPage extends Component {
           <Sidebar>
             <Label>Document</Label>
 
-            <QuestionContainer>
+            <QuestionsContainer>
               {_.map(this.props.questions, x => this.renderQuestion(x))}
-            </QuestionContainer>
+            </QuestionsContainer>
 
             <Button type="button" value="+ New Question"
               onClick={() => this.props.newQuestion()}
@@ -79,14 +79,31 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: row;
 `
-const QuestionContainer = styled.div`
-  flex: 7;
-  padding: 30px;
+const QuestionsContainer = styled.div`
   text-align: left;
   display: flex;
   flex-direction: column;
 `
-const QuestionItem = styled.div``
+const QuestionItem = styled.div`
+  padding: 10px;
+  border: 1px solid ${colors.lightGrey};
+  margin-bottom: 5px;
+  border-radius: 5px;
+`
+const QuestionItemLabel = Label.extend`
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 0;
+  margin-bottom: 5px;
+  display: inline-block;
+`
+const QuestionItemButton = Button.extend`
+  padding: 5px 10px;
+  font-weight: 500;
+  line-height: 1;
+  float: right;
+`
 const QuestionTextarea = styled(Textarea)`
   margin-bottom: 15px;
   width: 400px;
