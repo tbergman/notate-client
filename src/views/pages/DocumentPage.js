@@ -33,7 +33,7 @@ class DocumentPage extends Component {
 
   renderQuestion(question: Question): React.Element<any> {
     return (
-      <QuestionItem key={question.id}>
+      <QuestionItem key={question.id} active={question.id === this.props.question.id}>
         <QuestionItemLabel>{question.description}</QuestionItemLabel>
 
         <QuestionItemButton type="button" value="Edit"
@@ -80,10 +80,14 @@ const QuestionsContainer = styled.div`
   flex-direction: column;
 `
 const QuestionItem = styled.div`
-  padding: 10px;
   border: 1px solid ${colors.lightGrey};
-  margin-bottom: 5px;
   border-radius: 5px;
+  margin-bottom: 5px;
+
+  border: ${props => !!props.active ? '2px solid' : '1px solid'};
+  border-color: ${props => !!props.active ? colors.mustard : colors.lightGrey};
+  box-shadow: ${props => !!props.active ? '0px 0px 7px 0px #FFCF56' : 'none'};
+  padding: ${props => !!props.active ? '9px' : '10px'};
 `
 const QuestionItemLabel = Label.extend`
   font-weight: 500;
@@ -112,7 +116,8 @@ const Sidebar = styled.div`
 `
 const mapStateToProps = (state) => {
   return {
-    questions: state.documents.questions.toJS()
+    questions: state.documents.questions.toJS(),
+    question: state.documents.editing.toJS(),
   }
 }
 const mapDispatchToProps = ({
