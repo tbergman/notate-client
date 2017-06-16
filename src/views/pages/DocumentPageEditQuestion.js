@@ -37,7 +37,12 @@ class DocumentPageEditQuestion extends Component {
 
   constructor(props: Props) {
     super(props)
-    this.state = { description: '', clef: 'treble' }
+    this.state = {
+      description: '',
+      clef: 'treble',
+      timeSignature: '4/4',
+      keySignature: 'C',
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -77,6 +82,14 @@ class DocumentPageEditQuestion extends Component {
     this.setState({ clef: option.value })
   }
 
+  changeTimeSignature(option) {
+    this.setState({ timeSignature: option.value })
+  }
+
+  changeKeySignature(option) {
+    this.setState({ keySignature: option.value })
+  }
+
   render(): React.Element<any> {
     return (
       <QuestionContainer>
@@ -89,19 +102,32 @@ class DocumentPageEditQuestion extends Component {
           <QuestionTextarea value={this.state.description} onChange={(evt) => this.onDescriptionChange(evt)}/>
 
           <StaveProperties>
-            <Select
-              name="clef"
-              value={this.state.clef}
+            <Select name="clef" value={this.state.clef}
+              onChange={(option) => this.changeClef(option)}
               options={[
                 { value: 'treble', label: 'Treble' },
                 { value: 'bass', label: 'Bass' },
-              ]}
-              onChange={(option) => this.changeClef(option)}
-              />
+              ]}/>
+
+            <Select name="time-signature" value={this.state.timeSignature}
+              onChange={(option) => this.changeTimeSignature(option)}
+              options={[
+                { value: '4/4', label: '4/4' },
+                { value: '3/4', label: '3/4' },
+              ]}/>
+
+            <Select name="key-signature" value={this.state.keySignature}
+              onChange={(option) => this.changeKeySignature(option)}
+              options={[
+                { value: 'C', label: 'C' },
+                { value: 'A', label: 'A' },
+              ]}/>
           </StaveProperties>
 
           <Stave
             clef={this.state.clef}
+            keySignature={this.state.keySignature}
+            time={this.state.timeSignature}
             editingStaveId={this.props.question.questionLayerId}
             layers={[
               { id: this.props.question.questionLayerId, className: 'question' }
@@ -114,6 +140,8 @@ class DocumentPageEditQuestion extends Component {
           <Label>Enter the answers below</Label>
           <Stave
             clef={this.state.clef}
+            keySignature={this.state.keySignature}
+            time={this.state.timeSignature}
             editingStaveId={this.props.question.answerLayerId}
             onBeforeAddingNote={(note) => this.onBeforeAddingAnswerNote(note) }
             layers={[
