@@ -104,13 +104,17 @@ class DocumentPageEditQuestion extends Component {
           <StaveProperties>
             <Select name="clef" value={this.state.clef}
               onChange={(option) => this.changeClef(option)}
+              clearable={false}
               options={[
                 { value: 'treble', label: 'Treble' },
                 { value: 'bass', label: 'Bass' },
+                { value: 'alto', label: 'Alto' },
+                { value: 'tenor', label: 'Tenor' },
               ]}/>
 
             <Select name="time-signature" value={this.state.timeSignature}
               onChange={(option) => this.changeTimeSignature(option)}
+              clearable={false}
               options={[
                 { value: '4/4', label: '4/4' },
                 { value: '3/4', label: '3/4' },
@@ -118,9 +122,38 @@ class DocumentPageEditQuestion extends Component {
 
             <Select name="key-signature" value={this.state.keySignature}
               onChange={(option) => this.changeKeySignature(option)}
+              clearable={false}
               options={[
                 { value: 'C', label: 'C' },
+                { value: 'Am', label: 'Am' },
+                { value: 'F', label: 'F' },
+                { value: 'Dm', label: 'Dm' },
+                { value: 'Bb', label: 'Bb' },
+                { value: 'Gm', label: 'Gm' },
+                { value: 'Eb', label: 'Eb' },
+                { value: 'Cm', label: 'Cm' },
+                { value: 'Ab', label: 'Ab' },
+                { value: 'Fm', label: 'Fm' },
+                { value: 'Db', label: 'Db' },
+                { value: 'Bbm', label: 'Bbm' },
+                { value: 'Gb', label: 'Gb' },
+                { value: 'Ebm', label: 'Ebm' },
+                { value: 'Cb', label: 'Cb' },
+                { value: 'Abm', label: 'Abm' },
+                { value: 'G', label: 'G' },
+                { value: 'Em', label: 'Em' },
+                { value: 'D', label: 'D' },
+                { value: 'Bm', label: 'Bm' },
                 { value: 'A', label: 'A' },
+                { value: 'F#m', label: 'F#m' },
+                { value: 'E', label: 'E' },
+                { value: 'C#m', label: 'C#m' },
+                { value: 'B', label: 'B' },
+                { value: 'G#m', label: 'G#m' },
+                { value: 'F#', label: 'F#' },
+                { value: 'D#m', label: 'D#m' },
+                { value: 'C#', label: 'C#' },
+                { value: 'A#m', label: 'A#m' },
               ]}/>
           </StaveProperties>
 
@@ -170,8 +203,9 @@ const QuestionContainer = styled.div`
   flex-direction: column;
 `
 const QuestionTextarea = styled(Textarea)`
+  display: inline-block;
   margin-bottom: 15px;
-  width: 400px;
+  width: 50%;
 `
 const StaveContainer = styled.div`
   flex: 1;
@@ -187,6 +221,10 @@ const Actions = styled.div`
   margin-top: 20px;
 `
 const StaveProperties = styled.div`
+  display: inline-block;
+  width: 20%;
+  margin-left: 10px;
+
 `
 const mapStateToProps = (state) => {
   return {
