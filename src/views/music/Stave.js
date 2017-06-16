@@ -105,9 +105,17 @@ export class StaveUnconnected extends Component {
     this.drawLayers()
   }
 
-  componentDidUpdate() {
-    this.clearStave()
-    this.renderStave()
+  componentDidUpdate(nextProps) {
+    const clefChanged = nextProps.clef !== this.props.clef
+    const keyChanged = nextProps.keySignature !== this.props.keySignature
+    const timeChanged = nextProps.time !== this.props.time
+
+    if (clefChanged || keyChanged || timeChanged) {
+      this.clearStave()
+      this.renderStave()
+    } else {
+      this.drawLayers()
+    }
   }
 
   componentDidMount() {
