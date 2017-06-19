@@ -47,7 +47,12 @@ class DocumentPageEditQuestion extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.question.id !== this.props.question.id) {
-      this.setState({ description: nextProps.question.description })
+      this.setState({
+        description: nextProps.question.description,
+        clef: nextProps.question.clef,
+        timeSignature: nextProps.question.timeSignature,
+        keySignature: nextProps.question.keySignature,
+      })
     }
   }
 
@@ -57,12 +62,6 @@ class DocumentPageEditQuestion extends Component {
       validators: [PITCH_EQUAL, DURATION_EQUAL]
     }
     return newNote
-  }
-
-  onDescriptionChange(e: Event) {
-    if (e.target instanceof HTMLTextAreaElement) {
-      this.setState({ description: e.target.value })
-    }
   }
 
   saveQuestion() {
@@ -75,7 +74,16 @@ class DocumentPageEditQuestion extends Component {
       questionNotes: this.props.selectStaveNotes(this.props.question.questionLayerId),
       answerNotes: this.props.selectStaveNotes(this.props.question.answerLayerId),
       description: this.state.description,
+      clef: this.state.clef,
+      keySignature: this.state.keySignature,
+      timeSignature: this.state.timeSignature,
     })
+  }
+
+  onDescriptionChange(e: Event) {
+    if (e.target instanceof HTMLTextAreaElement) {
+      this.setState({ description: e.target.value })
+    }
   }
 
   changeClef(option) {

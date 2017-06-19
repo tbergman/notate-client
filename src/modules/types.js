@@ -41,6 +41,9 @@ export type Question = {
   questionLayerId: string,
   answerLayerId: string,
   studentLayerId: string,
+  clef: string,
+  timeSignature: string,
+  keySignature: string,
 }
 
 export const DefaultQuestion = () => ({
@@ -51,4 +54,7 @@ export const DefaultQuestion = () => ({
   questionLayerId: uuid(),
   answerLayerId: uuid(),
   studentLayerId: uuid(),
+  clef: 'treble',
+  timeSignature: '4/4',
+  keySignature: 'C',
 })

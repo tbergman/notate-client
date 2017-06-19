@@ -59,6 +59,9 @@ class QuestionsPage extends Component {
       <StaveContainer key={question.id}>
         <Label>{question.description}</Label>
         <Stave
+          clef={question.clef}
+          keySignature={question.keySignature}
+          time={question.timeSignature}
           editingStaveId={studentLayerId}
           layers={[
             { id: questionLayerId, className: 'question' },
