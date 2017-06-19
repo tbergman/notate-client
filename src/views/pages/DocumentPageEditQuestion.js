@@ -98,67 +98,14 @@ class DocumentPageEditQuestion extends Component {
           <Toolbox />
 
           <Label>Enter the question text below</Label>
+          <QuestionProperties>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <QuestionTextarea value={this.state.description} onChange={(evt) => this.onDescriptionChange(evt)}/>
+            </div>
 
-          <QuestionTextarea value={this.state.description} onChange={(evt) => this.onDescriptionChange(evt)}/>
+            {this.renderStaveProperties()}
+          </QuestionProperties>
 
-          <StaveProperties>
-            <Select name="clef" value={this.state.clef}
-              onChange={(option) => this.changeClef(option)}
-              clearable={false}
-              options={[
-                { value: 'treble', label: 'Treble' },
-                { value: 'bass', label: 'Bass' },
-                { value: 'alto', label: 'Alto' },
-                { value: 'tenor', label: 'Tenor' },
-              ]}/>
-
-            <Select name="time-signature" value={this.state.timeSignature}
-              onChange={(option) => this.changeTimeSignature(option)}
-              clearable={false}
-              options={[
-                { value: '4/4', label: '4/4' },
-                { value: '3/4', label: '3/4' },
-                { value: '2/4', label: '2/4' },
-                { value: '6/8', label: '6/8' },
-                { value: 'C|', label: 'C |' },
-              ]}/>
-
-            <Select name="key-signature" value={this.state.keySignature}
-              onChange={(option) => this.changeKeySignature(option)}
-              clearable={false}
-              options={[
-                { value: 'C', label: 'C' },
-                { value: 'Am', label: 'Am' },
-                { value: 'F', label: 'F' },
-                { value: 'Dm', label: 'Dm' },
-                { value: 'Bb', label: 'Bb' },
-                { value: 'Gm', label: 'Gm' },
-                { value: 'Eb', label: 'Eb' },
-                { value: 'Cm', label: 'Cm' },
-                { value: 'Ab', label: 'Ab' },
-                { value: 'Fm', label: 'Fm' },
-                { value: 'Db', label: 'Db' },
-                { value: 'Bbm', label: 'Bbm' },
-                { value: 'Gb', label: 'Gb' },
-                { value: 'Ebm', label: 'Ebm' },
-                { value: 'Cb', label: 'Cb' },
-                { value: 'Abm', label: 'Abm' },
-                { value: 'G', label: 'G' },
-                { value: 'Em', label: 'Em' },
-                { value: 'D', label: 'D' },
-                { value: 'Bm', label: 'Bm' },
-                { value: 'A', label: 'A' },
-                { value: 'F#m', label: 'F#m' },
-                { value: 'E', label: 'E' },
-                { value: 'C#m', label: 'C#m' },
-                { value: 'B', label: 'B' },
-                { value: 'G#m', label: 'G#m' },
-                { value: 'F#', label: 'F#' },
-                { value: 'D#m', label: 'D#m' },
-                { value: 'C#', label: 'C#' },
-                { value: 'A#m', label: 'A#m' },
-              ]}/>
-          </StaveProperties>
 
           <Stave
             clef={this.state.clef}
@@ -196,6 +143,78 @@ class DocumentPageEditQuestion extends Component {
       </QuestionContainer>
     )
   }
+
+  renderStaveProperties() {
+    return (
+      <StaveProperties>
+        <StaveProperty>
+          <StavePropertyLabel>Clef: </StavePropertyLabel>
+          <StavePropertySelect name="clef" value={this.state.clef}
+            onChange={(option) => this.changeClef(option)}
+            clearable={false}
+            options={[
+              { value: 'treble', label: 'Treble' },
+              { value: 'bass', label: 'Bass' },
+              { value: 'alto', label: 'Alto' },
+              { value: 'tenor', label: 'Tenor' },
+            ]}/>
+        </StaveProperty>
+
+        <StaveProperty>
+          <StavePropertyLabel>Time: </StavePropertyLabel>
+          <StavePropertySelect name="time-signature" value={this.state.timeSignature}
+            onChange={(option) => this.changeTimeSignature(option)}
+            clearable={false}
+            options={[
+              { value: '4/4', label: '4/4' },
+              { value: '3/4', label: '3/4' },
+              { value: '2/4', label: '2/4' },
+              { value: '6/8', label: '6/8' },
+              { value: 'C|', label: 'C |' },
+            ]}/>
+        </StaveProperty>
+
+        <StaveProperty>
+          <StavePropertyLabel>Key: </StavePropertyLabel>
+          <StavePropertySelect name="key-signature" value={this.state.keySignature}
+            onChange={(option) => this.changeKeySignature(option)}
+            clearable={false}
+            options={[
+              { value: 'C', label: 'C' },
+              { value: 'Am', label: 'Am' },
+              { value: 'F', label: 'F' },
+              { value: 'Dm', label: 'Dm' },
+              { value: 'Bb', label: 'Bb' },
+              { value: 'Gm', label: 'Gm' },
+              { value: 'Eb', label: 'Eb' },
+              { value: 'Cm', label: 'Cm' },
+              { value: 'Ab', label: 'Ab' },
+              { value: 'Fm', label: 'Fm' },
+              { value: 'Db', label: 'Db' },
+              { value: 'Bbm', label: 'Bbm' },
+              { value: 'Gb', label: 'Gb' },
+              { value: 'Ebm', label: 'Ebm' },
+              { value: 'Cb', label: 'Cb' },
+              { value: 'Abm', label: 'Abm' },
+              { value: 'G', label: 'G' },
+              { value: 'Em', label: 'Em' },
+              { value: 'D', label: 'D' },
+              { value: 'Bm', label: 'Bm' },
+              { value: 'A', label: 'A' },
+              { value: 'F#m', label: 'F#m' },
+              { value: 'E', label: 'E' },
+              { value: 'C#m', label: 'C#m' },
+              { value: 'B', label: 'B' },
+              { value: 'G#m', label: 'G#m' },
+              { value: 'F#', label: 'F#' },
+              { value: 'D#m', label: 'D#m' },
+              { value: 'C#', label: 'C#' },
+              { value: 'A#m', label: 'A#m' },
+            ]}/>
+        </StaveProperty>
+      </StaveProperties>
+    )
+  }
 }
 
 const QuestionContainer = styled.div`
@@ -208,7 +227,7 @@ const QuestionContainer = styled.div`
 const QuestionTextarea = styled(Textarea)`
   display: inline-block;
   margin-bottom: 15px;
-  width: 50%;
+  flex: 1;
 `
 const StaveContainer = styled.div`
   flex: 1;
@@ -223,12 +242,38 @@ const Actions = styled.div`
   padding: 10px 0;
   margin-top: 20px;
 `
-const StaveProperties = styled.div`
-  display: inline-block;
-  width: 20%;
-  margin-left: 10px;
-
+const QuestionProperties = styled.div`
+  display: flex;
 `
+const StaveProperties = styled.div`
+  flex: 1;
+  display: inline-block;
+  margin-left: 10px;
+`
+const StaveProperty = styled.div`
+  display: flex;
+`
+const StavePropertyLabel = Label.extend`
+  display: inline-block;
+  font-size: 14px;
+  width: 30px;
+  margin-left: 20px;
+`
+const StavePropertySelect = styled(Select)`
+  display: inline-block;
+  font-size: 13px;
+  flex: 1;
+  margin-left: 15px;
+
+  .Select-control, .Select-input {
+    height: 28px;
+  }
+
+  &.Select--single .Select-control .Select-value {
+    line-height: 29px;
+  }
+`
+
 const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
