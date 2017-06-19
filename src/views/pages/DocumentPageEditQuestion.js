@@ -145,6 +145,11 @@ class DocumentPageEditQuestion extends Component {
   }
 
   renderStaveProperties() {
+    const propsDisabled = (
+      this.props.selectStaveNotes(this.props.question.questionLayerId).length > 0 ||
+      this.props.selectStaveNotes(this.props.question.answerLayerId).length > 0
+    )
+
     return (
       <StaveProperties>
         <StaveProperty>
@@ -152,6 +157,7 @@ class DocumentPageEditQuestion extends Component {
           <StavePropertySelect name="clef" value={this.state.clef}
             onChange={(option) => this.changeClef(option)}
             clearable={false}
+            disabled={propsDisabled}
             options={[
               { value: 'treble', label: 'Treble' },
               { value: 'bass', label: 'Bass' },
@@ -165,6 +171,7 @@ class DocumentPageEditQuestion extends Component {
           <StavePropertySelect name="time-signature" value={this.state.timeSignature}
             onChange={(option) => this.changeTimeSignature(option)}
             clearable={false}
+            disabled={propsDisabled}
             options={[
               { value: '4/4', label: '4/4' },
               { value: '3/4', label: '3/4' },
@@ -179,6 +186,7 @@ class DocumentPageEditQuestion extends Component {
           <StavePropertySelect name="key-signature" value={this.state.keySignature}
             onChange={(option) => this.changeKeySignature(option)}
             clearable={false}
+            disabled={propsDisabled}
             options={[
               { value: 'C', label: 'C' },
               { value: 'Am', label: 'Am' },
@@ -264,6 +272,7 @@ const StavePropertySelect = styled(Select)`
   font-size: 13px;
   flex: 1;
   margin-left: 15px;
+  cursor: pointer;
 
   .Select-control, .Select-input {
     height: 28px;
