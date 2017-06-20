@@ -2,19 +2,14 @@
 
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
-import uuid from 'uuid'
 import Layout from './Layout'
-import Toolbox from 'views/toolbox/Toolbox'
-import Stave from 'views/music/Stave'
-import { Button, Textarea, Label } from 'views/components'
+import { Button, Label } from 'views/components'
 import { editQuestion, removeQuestion, newQuestion } from 'modules/documents/actions'
-import type { StaveNote, StaveAnswerNote } from 'modules/types'
-import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
 import EditQuestion from 'views/pages/DocumentPageEditQuestion'
+import type { Question } from 'modules/types'
 
 type StateProps = {
   questions: any,
@@ -29,7 +24,6 @@ type Props = StateProps & DispatchProps
 
 class DocumentPage extends Component {
   props: Props
-  state: State
 
   renderQuestion(question: Question): React.Element<any> {
     return (
@@ -102,10 +96,6 @@ const QuestionItemButton = Button.extend`
   font-weight: 500;
   line-height: 1;
   float: right;
-`
-const QuestionTextarea = styled(Textarea)`
-  margin-bottom: 15px;
-  width: 400px;
 `
 const Sidebar = styled.div`
   flex: 3;

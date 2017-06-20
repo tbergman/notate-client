@@ -1,5 +1,5 @@
 // @flow
-import { Iterable } from 'immutable'
+
 import { applyMiddleware, createStore, compose } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { persistStore, autoRehydrate } from 'redux-persist'

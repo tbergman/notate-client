@@ -1,12 +1,11 @@
 // @flow
 
 import _ from 'lodash'
+import uuid from 'uuid'
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
-import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import { Button, Textarea, Label } from 'views/components'
@@ -15,10 +14,12 @@ import { saveQuestion } from 'modules/documents/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
 import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
-import uuid from 'uuid'
 
 type State = {
-  description: string
+  description: string,
+  clef: string,
+  timeSignature: string,
+  keySignature: string
 }
 
 type OwnProps = {}
@@ -32,8 +33,8 @@ type DispatchProps = {
 type Props = OwnProps & StateProps & DispatchProps
 
 class DocumentPageEditQuestion extends Component {
-  props: Props
-  state: State
+  props: Props;
+  state: State;
 
   constructor(props: Props) {
     super(props)
@@ -45,7 +46,7 @@ class DocumentPageEditQuestion extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.question.id !== this.props.question.id) {
       this.setState({
         description: nextProps.question.description,
@@ -86,15 +87,15 @@ class DocumentPageEditQuestion extends Component {
     }
   }
 
-  changeClef(option) {
+  changeClef(option: any) {
     this.setState({ clef: option.value })
   }
 
-  changeTimeSignature(option) {
+  changeTimeSignature(option: any) {
     this.setState({ timeSignature: option.value })
   }
 
-  changeKeySignature(option) {
+  changeKeySignature(option: any) {
     this.setState({ keySignature: option.value })
   }
 
@@ -152,7 +153,7 @@ class DocumentPageEditQuestion extends Component {
     )
   }
 
-  renderStaveProperties() {
+  renderStaveProperties(): React.Element<any> {
     const propsDisabled = (
       this.props.selectStaveNotes(this.props.question.questionLayerId).length > 0 ||
       this.props.selectStaveNotes(this.props.question.answerLayerId).length > 0

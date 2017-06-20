@@ -1,7 +1,6 @@
 // @flow
 
 import _ from 'lodash'
-import uuid from 'uuid'
 import { fromJS, List } from 'immutable'
 import type { FluxStandardAction } from 'Types'
 import type { DocumentsState } from 'modules/documents'

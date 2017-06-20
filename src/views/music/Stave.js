@@ -44,9 +44,13 @@ type DispatchProps = {
   selectNote: Function,
 }
 type Props = OwnProps & StateProps & DispatchProps
+type ReactEnhancedElement = React.Element<any> & {
+  removeChild: Function,
+  firstChild: ReactEnhancedElement,
+}
 
 export class StaveUnconnected extends Component {
-  staveContainer: React.Element<any>
+  staveContainer: ReactEnhancedElement
   artist: Artist
   props: Props
 
@@ -105,7 +109,7 @@ export class StaveUnconnected extends Component {
     this.drawLayers()
   }
 
-  componentDidUpdate(nextProps) {
+  componentDidUpdate(nextProps: Props) {
     const clefChanged = nextProps.clef !== this.props.clef
     const keyChanged = nextProps.keySignature !== this.props.keySignature
     const timeChanged = nextProps.time !== this.props.time
