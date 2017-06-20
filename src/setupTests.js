@@ -1,6 +1,7 @@
 // @flow
 
 import { JSDOM } from 'jsdom'
+import JasmineExpect from 'jasmine-expect'
 
 const exposedProperties = ['window', 'navigator', 'document']
 global.window = new JSDOM('<!DOCTYPE html><div id="root"/>').window
