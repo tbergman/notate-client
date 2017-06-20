@@ -186,7 +186,8 @@ class DocumentPageEditQuestion extends Component {
               { value: '3/4', label: '3/4' },
               { value: '2/4', label: '2/4' },
               { value: '6/8', label: '6/8' },
-              { value: 'C|', label: 'C |' },
+              { value: 'C|', label: 'Cut' },
+              { value: 'C', label: 'Common' },
             ]}/>
         </StaveProperty>
 
