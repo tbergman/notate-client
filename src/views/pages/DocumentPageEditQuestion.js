@@ -20,6 +20,7 @@ type State = {
   clef: string,
   timeSignature: string,
   keySignature: string,
+  measures: string,
   validators: string,
 }
 
@@ -44,6 +45,7 @@ class DocumentPageEditQuestion extends Component {
       clef: 'treble',
       timeSignature: '4/4',
       keySignature: 'C',
+      measures: 4,
       validators: VALIDATE_PITCH_DURATION,
     }
   }
@@ -55,6 +57,7 @@ class DocumentPageEditQuestion extends Component {
         clef: nextProps.question.clef,
         timeSignature: nextProps.question.timeSignature,
         keySignature: nextProps.question.keySignature,
+        measures: nextProps.question.measures,
         validators: nextProps.question.validators,
       })
     }
@@ -73,6 +76,7 @@ class DocumentPageEditQuestion extends Component {
       clef: this.state.clef,
       keySignature: this.state.keySignature,
       timeSignature: this.state.timeSignature,
+      measures: this.state.measures,
       validators: this.state.validators,
     })
   }
@@ -81,6 +85,10 @@ class DocumentPageEditQuestion extends Component {
     if (e.target instanceof HTMLTextAreaElement) {
       this.setState({ description: e.target.value })
     }
+  }
+
+  changeMeasures(option: any) {
+    this.setState({ measures: option.value })
   }
 
   changeClef(option: any) {
@@ -115,17 +123,16 @@ class DocumentPageEditQuestion extends Component {
             {this.renderStaveProperties()}
           </QuestionProperties>
 
-
           <Stave
             clef={this.state.clef}
             keySignature={this.state.keySignature}
             time={this.state.timeSignature}
+            measures={this.state.measures}
             editingStaveId={this.props.question.questionLayerId}
             layers={[
               { id: this.props.question.questionLayerId, className: 'question' }
             ]}
           />
-
         </StaveContainer>
 
         <StaveContainer>
@@ -142,6 +149,7 @@ class DocumentPageEditQuestion extends Component {
             clef={this.state.clef}
             keySignature={this.state.keySignature}
             time={this.state.timeSignature}
+            measures={this.state.measures}
             editingStaveId={this.props.question.answerLayerId}
             layers={[
               { id: this.props.question.questionLayerId, className: 'question' },
@@ -168,75 +176,93 @@ class DocumentPageEditQuestion extends Component {
 
     return (
       <StaveProperties>
-        <StaveProperty>
-          <StavePropertyLabel>Clef: </StavePropertyLabel>
-          <StavePropertySelect name="clef" value={this.state.clef}
-            onChange={(option) => this.changeClef(option)}
-            clearable={false}
-            disabled={propsDisabled}
-            options={[
-              { value: 'treble', label: 'Treble' },
-              { value: 'bass', label: 'Bass' },
-              { value: 'alto', label: 'Alto' },
-              { value: 'tenor', label: 'Tenor' },
-            ]}/>
-        </StaveProperty>
+        <StavePropertyColumn>
+          <StaveProperty>
+            <StavePropertyLabel>Measures: </StavePropertyLabel>
+            <StavePropertySelect name="measures" value={this.state.measures}
+              onChange={(option) => this.changeMeasures(option)}
+              clearable={false}
+              disabled={propsDisabled}
+              options={[
+                { value: 1, label: '1' },
+                { value: 2, label: '2' },
+                { value: 3, label: '3' },
+                { value: 4, label: '4' },
+              ]}/>
+          </StaveProperty>
 
-        <StaveProperty>
-          <StavePropertyLabel>Time: </StavePropertyLabel>
-          <StavePropertySelect name="time-signature" value={this.state.timeSignature}
-            onChange={(option) => this.changeTimeSignature(option)}
-            clearable={false}
-            disabled={propsDisabled}
-            options={[
-              { value: '4/4', label: '4/4' },
-              { value: '3/4', label: '3/4' },
-              { value: '2/4', label: '2/4' },
-              { value: '6/8', label: '6/8' },
-              { value: 'C|', label: 'Cut' },
-              { value: 'C', label: 'Common' },
-            ]}/>
-        </StaveProperty>
+          <StaveProperty>
+            <StavePropertyLabel>Time: </StavePropertyLabel>
+            <StavePropertySelect name="time-signature" value={this.state.timeSignature}
+              onChange={(option) => this.changeTimeSignature(option)}
+              clearable={false}
+              disabled={propsDisabled}
+              options={[
+                { value: '4/4', label: '4/4' },
+                { value: '3/4', label: '3/4' },
+                { value: '2/4', label: '2/4' },
+                { value: '6/8', label: '6/8' },
+                { value: 'C|', label: 'Cut' },
+                { value: 'C', label: 'Common' },
+              ]}/>
+          </StaveProperty>
+        </StavePropertyColumn>
 
-        <StaveProperty>
-          <StavePropertyLabel>Key: </StavePropertyLabel>
-          <StavePropertySelect name="key-signature" value={this.state.keySignature}
-            onChange={(option) => this.changeKeySignature(option)}
-            clearable={false}
-            disabled={propsDisabled}
-            options={[
-              { value: 'C', label: 'C' },
-              { value: 'Am', label: 'Am' },
-              { value: 'F', label: 'F' },
-              { value: 'Dm', label: 'Dm' },
-              { value: 'Bb', label: 'Bb' },
-              { value: 'Gm', label: 'Gm' },
-              { value: 'Eb', label: 'Eb' },
-              { value: 'Cm', label: 'Cm' },
-              { value: 'Ab', label: 'Ab' },
-              { value: 'Fm', label: 'Fm' },
-              { value: 'Db', label: 'Db' },
-              { value: 'Bbm', label: 'Bbm' },
-              { value: 'Gb', label: 'Gb' },
-              { value: 'Ebm', label: 'Ebm' },
-              { value: 'Cb', label: 'Cb' },
-              { value: 'Abm', label: 'Abm' },
-              { value: 'G', label: 'G' },
-              { value: 'Em', label: 'Em' },
-              { value: 'D', label: 'D' },
-              { value: 'Bm', label: 'Bm' },
-              { value: 'A', label: 'A' },
-              { value: 'F#m', label: 'F#m' },
-              { value: 'E', label: 'E' },
-              { value: 'C#m', label: 'C#m' },
-              { value: 'B', label: 'B' },
-              { value: 'G#m', label: 'G#m' },
-              { value: 'F#', label: 'F#' },
-              { value: 'D#m', label: 'D#m' },
-              { value: 'C#', label: 'C#' },
-              { value: 'A#m', label: 'A#m' },
-            ]}/>
-        </StaveProperty>
+        <StavePropertyColumn>
+          <StaveProperty>
+            <StavePropertyLabel>Clef: </StavePropertyLabel>
+            <StavePropertySelect name="clef" value={this.state.clef}
+              onChange={(option) => this.changeClef(option)}
+              clearable={false}
+              disabled={propsDisabled}
+              options={[
+                { value: 'treble', label: 'Treble' },
+                { value: 'bass', label: 'Bass' },
+                { value: 'alto', label: 'Alto' },
+                { value: 'tenor', label: 'Tenor' },
+              ]}/>
+          </StaveProperty>
+
+          <StaveProperty>
+            <StavePropertyLabel>Key: </StavePropertyLabel>
+            <StavePropertySelect name="key-signature" value={this.state.keySignature}
+              onChange={(option) => this.changeKeySignature(option)}
+              clearable={false}
+              disabled={propsDisabled}
+              options={[
+                { value: 'C', label: 'C' },
+                { value: 'Am', label: 'Am' },
+                { value: 'F', label: 'F' },
+                { value: 'Dm', label: 'Dm' },
+                { value: 'Bb', label: 'Bb' },
+                { value: 'Gm', label: 'Gm' },
+                { value: 'Eb', label: 'Eb' },
+                { value: 'Cm', label: 'Cm' },
+                { value: 'Ab', label: 'Ab' },
+                { value: 'Fm', label: 'Fm' },
+                { value: 'Db', label: 'Db' },
+                { value: 'Bbm', label: 'Bbm' },
+                { value: 'Gb', label: 'Gb' },
+                { value: 'Ebm', label: 'Ebm' },
+                { value: 'Cb', label: 'Cb' },
+                { value: 'Abm', label: 'Abm' },
+                { value: 'G', label: 'G' },
+                { value: 'Em', label: 'Em' },
+                { value: 'D', label: 'D' },
+                { value: 'Bm', label: 'Bm' },
+                { value: 'A', label: 'A' },
+                { value: 'F#m', label: 'F#m' },
+                { value: 'E', label: 'E' },
+                { value: 'C#m', label: 'C#m' },
+                { value: 'B', label: 'B' },
+                { value: 'G#m', label: 'G#m' },
+                { value: 'F#', label: 'F#' },
+                { value: 'D#m', label: 'D#m' },
+                { value: 'C#', label: 'C#' },
+                { value: 'A#m', label: 'A#m' },
+              ]}/>
+          </StaveProperty>
+        </StavePropertyColumn>
       </StaveProperties>
     )
   }
@@ -275,14 +301,19 @@ const StaveProperties = styled.div`
   display: inline-block;
   margin-left: 10px;
 `
+const StavePropertyColumn = styled.div`
+  display: inline-block;
+  width: 50%;
+`
 const StaveProperty = styled.div`
   display: flex;
 `
 const StavePropertyLabel = Label.extend`
   display: inline-block;
   font-size: 14px;
-  width: 30px;
+  width: 65px;
   margin-left: 20px;
+  text-align: right;
 `
 const StavePropertySelect = styled(Select)`
   display: inline-block;

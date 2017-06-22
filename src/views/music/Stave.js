@@ -30,6 +30,7 @@ type OwnProps = {
   description?: string,
   notes: string,
   annotations?: string,
+  measures?: number,
   layers?: Array<Layer>,
   editingStaveId?: string,
   onBeforeAddingNote?: Function,
@@ -113,8 +114,9 @@ export class StaveUnconnected extends Component {
     const clefChanged = nextProps.clef !== this.props.clef
     const keyChanged = nextProps.keySignature !== this.props.keySignature
     const timeChanged = nextProps.time !== this.props.time
+    const measuresChanged = nextProps.measures !== this.props.measures
 
-    if (clefChanged || keyChanged || timeChanged) {
+    if (clefChanged || keyChanged || timeChanged || measuresChanged) {
       this.clearStave()
       this.renderStave()
     } else {
@@ -154,7 +156,7 @@ export class StaveUnconnected extends Component {
   }
 
   baseLayerNotation(): string {
-    const bars = 4
+    const bars = this.props.measures || 4
     const ghostNotes = Array(bars)
       .fill(':q #99# #99# #99# #99#')
 
