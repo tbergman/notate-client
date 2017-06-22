@@ -43,9 +43,13 @@ export default function reducer(
     }
 
     case NEW_QUESTION: {
+      const question = DefaultQuestion()
+      const questions = state.questions.push(question)
+
       return {
         ...state,
-        editing: DefaultQuestion()
+        editing: question,
+        questions: questions,
       }
     }
 
