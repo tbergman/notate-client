@@ -2,7 +2,9 @@
 
 import reducer, { initialState } from './reducer'
 import { SAVE_QUESTION, NEW_QUESTION, REMOVE_QUESTION } from 'modules/documents/actions'
-import { DefaultQuestion } from 'modules/types'
+import { DefaultQuestion, DefaultNote } from 'modules/types'
+import { VALIDATE_PITCH_ONLY } from 'modules/grading'
+import { PITCH_EQUAL } from 'modules/grading'
 
 describe('documents reducer', () => {
   it('saves a new question', () => {
@@ -14,6 +16,21 @@ describe('documents reducer', () => {
     const newQuestion = result.questions.toJS()[0]
 
     expect(newQuestion.description).toEqual('new description')
+  })
+
+  it('sets each answers validators upon question save', () => {
+    const question = {
+      ...DefaultQuestion(),
+      answerNotes: [{ ...DefaultNote, validators: [] }],
+      validators: VALIDATE_PITCH_ONLY,
+    }
+
+    const result = reducer(initialState, { type: SAVE_QUESTION, payload: question })
+
+    const newQuestion = result.questions.toJS()[0]
+
+    expect(newQuestion.answerNotes[0].validators.length).toEqual(1)
+    expect(newQuestion.answerNotes[0].validators[0]).toEqual(PITCH_EQUAL)
   })
 
   it('adds a new question', () => {

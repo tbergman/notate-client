@@ -2,6 +2,7 @@
 
 import type { AccidentalType, DurationType } from 'modules/toolbox'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
+import { VALIDATE_PITCH_DURATION } from 'modules/grading'
 import uuid from 'uuid'
 
 export type StaveNote = {
@@ -57,4 +58,5 @@ export const DefaultQuestion = () => ({
   clef: 'treble',
   timeSignature: '4/4',
   keySignature: 'C',
+  validators: VALIDATE_PITCH_DURATION,
 })
