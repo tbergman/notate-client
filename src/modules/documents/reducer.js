@@ -6,6 +6,8 @@ import type { FluxStandardAction } from 'Types'
 import type { DocumentsState } from 'modules/documents'
 import { SAVE_QUESTION, EDIT_QUESTION, NEW_QUESTION, REMOVE_QUESTION } from 'modules/documents/actions'
 import { DefaultQuestion } from 'modules/types'
+import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
+import { VALIDATE_PITCH_ONLY, VALIDATE_DURATION_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
 
 export const initialState: DocumentsState = {
   questions: List([]),
@@ -19,6 +21,17 @@ export default function reducer(
   switch (action.type) {
     case SAVE_QUESTION: {
       const question = action.payload
+
+      question.answerNotes = question.answerNotes.map(x => {
+        if (question.validators === VALIDATE_PITCH_ONLY) {
+          x.validators = [PITCH_EQUAL]
+        } else if (question.validators === VALIDATE_DURATION_ONLY) {
+          x.validators = [DURATION_EQUAL]
+        } else if (question.validators === VALIDATE_PITCH_DURATION) {
+          x.validators = [PITCH_EQUAL, DURATION_EQUAL]
+        }
+        return x
+      })
 
       const index = state.questions.findIndex(x => x.id === question.id)
       const questions = index >= 0

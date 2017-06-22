@@ -13,8 +13,6 @@ import Select from 'react-select'
 import { RadioGroup, Radio } from 'react-radio-group'
 import { saveQuestion } from 'modules/documents/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
-import type { StaveNote, StaveAnswerNote } from 'modules/types'
-import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
 import { VALIDATE_PITCH_ONLY, VALIDATE_DURATION_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
 
 type State = {
@@ -60,25 +58,6 @@ class DocumentPageEditQuestion extends Component {
         validators: nextProps.question.validators,
       })
     }
-  }
-
-  onBeforeAddingAnswerNote(note: StaveNote): StaveAnswerNote {
-    const validators = []
-
-    if (this.state.validators === VALIDATE_PITCH_ONLY) {
-      validators.push(PITCH_EQUAL)
-    } else if (this.state.validators === VALIDATE_DURATION_ONLY) {
-      validators.push(DURATION_EQUAL)
-    } else if (this.state.validators === VALIDATE_PITCH_DURATION) {
-      validators.push(PITCH_EQUAL)
-      validators.push(DURATION_EQUAL)
-    }
-
-    const newNote = {
-      ...note,
-      validators: validators
-    }
-    return newNote
   }
 
   saveQuestion() {
@@ -164,7 +143,6 @@ class DocumentPageEditQuestion extends Component {
             keySignature={this.state.keySignature}
             time={this.state.timeSignature}
             editingStaveId={this.props.question.answerLayerId}
-            onBeforeAddingNote={(note) => this.onBeforeAddingAnswerNote(note) }
             layers={[
               { id: this.props.question.questionLayerId, className: 'question' },
               { id: this.props.question.answerLayerId, className: 'answer' }
