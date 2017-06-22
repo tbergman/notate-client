@@ -107,7 +107,7 @@ const Sidebar = styled.div`
 const mapStateToProps = (state) => {
   return {
     questions: state.documents.questions.toJS(),
-    question: state.documents.editing.toJS(),
+    question: state.documents.editing,
   }
 }
 const mapDispatchToProps = ({

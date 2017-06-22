@@ -1,7 +1,7 @@
 // @flow
 
 import _ from 'lodash'
-import { fromJS, List } from 'immutable'
+import { List } from 'immutable'
 import type { FluxStandardAction } from 'Types'
 import type { DocumentsState } from 'modules/documents'
 import { SAVE_QUESTION, EDIT_QUESTION, NEW_QUESTION, REMOVE_QUESTION } from 'modules/documents/actions'
@@ -9,7 +9,7 @@ import { DefaultQuestion } from 'modules/types'
 
 export const initialState: DocumentsState = {
   questions: List([]),
-  editing: fromJS(DefaultQuestion()),
+  editing: DefaultQuestion(),
 }
 
 export default function reducer(
@@ -33,17 +33,19 @@ export default function reducer(
 
     case EDIT_QUESTION: {
       const question = state.questions.find(x => x.id === action.payload)
-
+      if (!question) {
+        throw new Error(`Question not found: ${action.payload}`)
+      }
       return {
         ...state,
-        editing: fromJS(question)
+        editing: question
       }
     }
 
     case NEW_QUESTION: {
       return {
         ...state,
-        editing: fromJS(DefaultQuestion())
+        editing: DefaultQuestion()
       }
     }
 

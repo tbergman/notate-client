@@ -19,16 +19,16 @@ describe('documents reducer', () => {
   it('adds a new question', () => {
     const result = reducer(initialState, { type: NEW_QUESTION, payload: {} })
 
-    const newQuestion = result.editing.toJS()
+    const newQuestion = result.editing
 
-    expect(newQuestion.description).toBeEmptyString()
-    expect(newQuestion.answerNotes).toBeEmptyArray()
-    expect(newQuestion.questionNotes).toBeEmptyArray()
+    expect(newQuestion.description.length).toEqual(0)
+    expect(newQuestion.answerNotes.length).toEqual(0)
+    expect(newQuestion.questionNotes.length).toEqual(0)
 
-    expect(newQuestion.id).toBeNonEmptyString()
-    expect(newQuestion.questionLayerId).toBeNonEmptyString()
-    expect(newQuestion.answerLayerId).toBeNonEmptyString()
-    expect(newQuestion.studentLayerId).toBeNonEmptyString()
+    expect(newQuestion.id.length).toBeTruthy()
+    expect(newQuestion.questionLayerId).toBeTruthy()
+    expect(newQuestion.answerLayerId).toBeTruthy()
+    expect(newQuestion.studentLayerId).toBeTruthy()
 
     expect(newQuestion.clef).toEqual('treble')
     expect(newQuestion.timeSignature).toEqual('4/4')
@@ -47,7 +47,7 @@ describe('documents reducer', () => {
 
     const questions = result.questions.toJS()
 
-    expect(questions).toBeEmptyArray()
+    expect(questions.length).toEqual(0)
   })
 
   it('edits an existing question', () => {

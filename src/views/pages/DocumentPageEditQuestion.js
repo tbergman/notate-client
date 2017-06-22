@@ -296,7 +296,7 @@ const StavePropertySelect = styled(Select)`
 const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
-    question: state.documents.editing.toJS(),
+    question: state.documents.editing,
   }
 }
 const mapDispatchToProps = ({
