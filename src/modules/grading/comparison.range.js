@@ -1,24 +1,27 @@
 // @flow
+
 import Utils from 'modules/grading/note.string.utils'
 import PitchComparison from 'modules/grading/comparison.pitch'
 
-const RangeComparor = {
+const RangeComparison = {
   check(input: string): boolean{
-    const commaSplit = input.split(",");
-    const noteString = commaSplit[0].replace(" ","");
-    const rangeString = commaSplit[1].replace(" ","");
-    const rangeSplit = rangeString.split(":");
-    const lowerNoteString = rangeSplit[0].replace(" ","");
-    const upperNoteString = rangeSplit[1].replace(" ","");
+    const commaSplit = input.split(',')
+    const noteString = commaSplit[0].trim()
+    const rangeString = commaSplit[1].trim()
+    const rangeSplit = rangeString.split(':')
+    const lowerNoteString = rangeSplit[0].trim()
+    const upperNoteString = rangeSplit[1].trim()
 
-    const note = Utils.stringToNote(noteString);
-    const lowerNote = Utils.stringToNote(lowerNoteString);
-    const upperNote = Utils.stringToNote(upperNoteString);
-    if(PitchComparison.equalOrHigher(lowerNote)(note) && PitchComparison.equalOrLower(upperNote)(note)){
-      return true;
+    const note = Utils.stringToNote(noteString)
+    const lowerNote = Utils.stringToNote(lowerNoteString)
+    const upperNote = Utils.stringToNote(upperNoteString)
+
+    if (PitchComparison.equalOrHigher(lowerNote)(note) && PitchComparison.equalOrLower(upperNote)(note)){
+      return true
     }
-    return false;
+
+    return false
   }
 }
 
-export default RangeComparor;
+export default RangeComparison
