@@ -10,16 +10,19 @@ import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import { Button, Textarea, Label } from 'views/components'
 import Select from 'react-select'
+import { RadioGroup, Radio } from 'react-radio-group'
 import { saveQuestion } from 'modules/documents/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 import type { StaveNote, StaveAnswerNote } from 'modules/types'
 import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
+import { VALIDATE_PITCH_ONLY, VALIDATE_DURATION_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
 
 type State = {
   description: string,
   clef: string,
   timeSignature: string,
-  keySignature: string
+  keySignature: string,
+  validators: string,
 }
 
 type OwnProps = {}
@@ -43,6 +46,7 @@ class DocumentPageEditQuestion extends Component {
       clef: 'treble',
       timeSignature: '4/4',
       keySignature: 'C',
+      validators: VALIDATE_PITCH_DURATION,
     }
   }
 
@@ -53,14 +57,26 @@ class DocumentPageEditQuestion extends Component {
         clef: nextProps.question.clef,
         timeSignature: nextProps.question.timeSignature,
         keySignature: nextProps.question.keySignature,
+        validators: nextProps.question.validators,
       })
     }
   }
 
   onBeforeAddingAnswerNote(note: StaveNote): StaveAnswerNote {
+    const validators = []
+
+    if (this.state.validators === VALIDATE_PITCH_ONLY) {
+      validators.push(PITCH_EQUAL)
+    } else if (this.state.validators === VALIDATE_DURATION_ONLY) {
+      validators.push(DURATION_EQUAL)
+    } else if (this.state.validators === VALIDATE_PITCH_DURATION) {
+      validators.push(PITCH_EQUAL)
+      validators.push(DURATION_EQUAL)
+    }
+
     const newNote = {
       ...note,
-      validators: [PITCH_EQUAL, DURATION_EQUAL]
+      validators: validators
     }
     return newNote
   }
@@ -78,6 +94,7 @@ class DocumentPageEditQuestion extends Component {
       clef: this.state.clef,
       keySignature: this.state.keySignature,
       timeSignature: this.state.timeSignature,
+      validators: this.state.validators,
     })
   }
 
@@ -97,6 +114,10 @@ class DocumentPageEditQuestion extends Component {
 
   changeKeySignature(option: any) {
     this.setState({ keySignature: option.value })
+  }
+
+  changeValidators(value: string) {
+    this.setState({ validators: value })
   }
 
   render(): React.Element<any> {
@@ -130,6 +151,14 @@ class DocumentPageEditQuestion extends Component {
 
         <StaveContainer>
           <Label>Enter the answers below</Label>
+
+          <RadioGroup name="validators" selectedValue={this.state.validators}
+            onChange={(value) => this.changeValidators(value)}>
+            <div><Radio value={VALIDATE_PITCH_ONLY} />Validate pitch only</div>
+            <div><Radio value={VALIDATE_DURATION_ONLY} />Validate duration only</div>
+            <div><Radio value={VALIDATE_PITCH_DURATION} />Validate pitch & duration</div>
+          </RadioGroup>
+
           <Stave
             clef={this.state.clef}
             keySignature={this.state.keySignature}
