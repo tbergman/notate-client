@@ -43,9 +43,8 @@ class Toolbox extends Component {
           <ToolboxItem item={items.durations.whole} icon={<Icons.DurationWhole />}
             onClick={() => this.props.setDuration(DURATION.WHOLE)}/>
 
-        </ToolboxContainer>
+          <ToolboxSeparator />
 
-        <ToolboxContainer>
           <ToolboxItem bar item={items.accidentals.natural} icon={<Icons.AccidentalNatural />}
             onClick={() => this.props.setAccidental(ACCIDENTAL.NATURAL)}/>
 
@@ -82,6 +81,11 @@ const ToolboxContainer = styled.div`
   display: flex;
   height: 30px;
 `
+const ToolboxSeparator = styled.div`
+  border-right: 1px solid #008489;
+  margin: -10px 0;
+`
+
 const mapStateToProps = (state) => {
   return {
     selectedDuration: state.toolbox.selectedDuration,

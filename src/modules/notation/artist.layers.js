@@ -57,12 +57,7 @@ export default class ArtistLayers {
 
   drawOptionsColumn(context, stave, note) {
     if (note.attrs.type === 'StaveNote') {
-      const availableOptions = [
-        'E/3', 'F/3', 'G/3', 'A/3', 'B/3',
-        'C/4', 'D/4', 'E/4', 'F/4', 'G/4', 'A/4', 'B/4',
-        'C/5', 'D/5', 'E/5', 'F/5', 'G/5', 'A/5', 'B/5',
-        'C/6', 'D/6',
-      ]
+      const availableOptions = this.availableNotesForClef(this.artist.options.clef)
 
       _(availableOptions).each(x => {
         this.withinGroup(context, ['note-option'], group => {
@@ -131,6 +126,13 @@ export default class ArtistLayers {
     }
   }
 
+  clearAllUserLayers() {
+    const elements = this.staveLayers.children
+    while(elements.length > 0){
+      elements[0].parentNode.removeChild(elements[0])
+    }
+  }
+
   drawLayer(context, stave, notes, layer) {
     this.clearLayer(context.parent, layer)
 
@@ -168,7 +170,7 @@ export default class ArtistLayers {
 
   drawableNote(note) {
     const duration = note.duration + (note.isRest ? 'r' : '')
-    const newNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: duration, stem_direction: 1 })
+    const newNote = new Vex.Flow.StaveNote({ keys: [note.pitch], duration: duration, stem_direction: 1, clef: this.artist.options.clef })
     if (note.accidental && !note.isRest) {
       newNote.addAccidental(0, new Vex.Flow.Accidental(note.accidental))
     }
@@ -189,5 +191,41 @@ export default class ArtistLayers {
 
   toolboxChanged(toolbox) {
     return !_.isEqual(toolbox, this.previousToolbox);
+  }
+
+  availableNotesForClef(clef) {
+    let availableOptions
+
+    if (clef === 'treble') {
+      availableOptions = [
+        'E/3', 'F/3', 'G/3', 'A/3', 'B/3',
+        'C/4', 'D/4', 'E/4', 'F/4', 'G/4', 'A/4', 'B/4',
+        'C/5', 'D/5', 'E/5', 'F/5', 'G/5', 'A/5', 'B/5',
+        'C/6', 'D/6',
+      ]
+    } else if (clef === 'bass') {
+      availableOptions = [
+        'E/2', 'F/2', 'G/2', 'A/2', 'B/2',
+        'C/3', 'D/3', 'E/3', 'F/3', 'G/3', 'A/3', 'B/3',
+        'C/4', 'D/4', 'E/4', 'F/4', 'G/4', 'A/4', 'B/4',
+        'C/5', 'D/5',
+      ]
+    } else if (clef === 'alto') {
+      availableOptions = [
+        'E/2', 'F/2', 'G/2', 'A/2', 'B/2',
+        'C/3', 'D/3', 'E/3', 'F/3', 'G/3', 'A/3', 'B/3',
+        'C/4', 'D/4', 'E/4', 'F/4', 'G/4', 'A/4', 'B/4',
+        'C/5', 'D/5',
+      ]
+    } else if (clef === 'tenor') {
+      availableOptions = [
+        'E/2', 'F/2', 'G/2', 'A/2', 'B/2',
+        'C/3', 'D/3', 'E/3', 'F/3', 'G/3', 'A/3', 'B/3',
+        'C/4', 'D/4', 'E/4', 'F/4', 'G/4', 'A/4', 'B/4',
+        'C/5', 'D/5',
+      ]
+    }
+
+    return availableOptions
   }
 }

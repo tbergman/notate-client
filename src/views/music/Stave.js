@@ -44,9 +44,13 @@ type DispatchProps = {
   selectNote: Function,
 }
 type Props = OwnProps & StateProps & DispatchProps
+type ReactEnhancedElement = React.Element<any> & {
+  removeChild: Function,
+  firstChild: ReactEnhancedElement,
+}
 
 export class StaveUnconnected extends Component {
-  staveContainer: React.Element<any>
+  staveContainer: ReactEnhancedElement
   artist: Artist
   props: Props
 
@@ -60,14 +64,18 @@ export class StaveUnconnected extends Component {
 
     this.artist.drawOptions()
 
+    this.artist.clearLayers()
+
     _.each(layers, x => { this.artist.drawLayer(x, this.props.selectStaveNotes(x.id)) })
   }
 
-  componentDidUpdate() {
-    this.drawLayers()
+  clearStave() {
+    while (this.staveContainer.firstChild) {
+      this.staveContainer.removeChild(this.staveContainer.firstChild)
+    }
   }
 
-  componentDidMount() {
+  renderStave() {
     const {
       width = 800,
       clef = 'treble',
@@ -89,6 +97,7 @@ export class StaveUnconnected extends Component {
     this.artist = new Artist(10, 10, width, {
       addNote: (position, pitch) => this.addNote(position, pitch),
       selectNote: (note) => this.selectNote(note),
+      clef: clef,
     })
 
     const vextab = new VexTab(this.artist)
@@ -98,6 +107,23 @@ export class StaveUnconnected extends Component {
     this.artist.render(renderer)
 
     this.drawLayers()
+  }
+
+  componentDidUpdate(nextProps: Props) {
+    const clefChanged = nextProps.clef !== this.props.clef
+    const keyChanged = nextProps.keySignature !== this.props.keySignature
+    const timeChanged = nextProps.time !== this.props.time
+
+    if (clefChanged || keyChanged || timeChanged) {
+      this.clearStave()
+      this.renderStave()
+    } else {
+      this.drawLayers()
+    }
+  }
+
+  componentDidMount() {
+    this.renderStave()
   }
 
   addNote(position: number, pitch: string) {

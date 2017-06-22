@@ -254,6 +254,10 @@ export default class Artist {
     this.layers.drawLayer(this.renderer_context, this.staves[0].note, notes, layer)
   }
 
+  clearLayers() {
+    this.layers.clearAllUserLayers()
+  }
+
   isRendered() { return this.rendered; }
 
   draw(renderer) { return this.render(renderer); }
