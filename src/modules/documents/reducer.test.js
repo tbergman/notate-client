@@ -35,6 +35,14 @@ describe('documents reducer', () => {
     expect(newQuestion.keySignature).toEqual('C')
   })
 
+  it('adding a new question saves it immediately', () => {
+    const result = reducer(initialState, { type: NEW_QUESTION, payload: {} })
+
+    const newQuestion = result.editing
+
+    expect(result.questions.toJS()[0]).toEqual(newQuestion)
+  })
+
   it('removes a question', () => {
     const questionToRemove = { ...DefaultQuestion(), id: '1' }
 
