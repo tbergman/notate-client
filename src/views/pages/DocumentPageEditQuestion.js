@@ -174,6 +174,10 @@ class DocumentPageEditQuestion extends Component {
       this.props.selectStaveNotes(this.props.question.answerLayerId).length > 0
     )
 
+    const propsDisabledLabel = (
+      <QuietLabel>Stave properties are disabled when notes are added</QuietLabel>
+    )
+
     return (
       <StaveProperties>
         <StavePropertyColumn>
@@ -263,6 +267,8 @@ class DocumentPageEditQuestion extends Component {
               ]}/>
           </StaveProperty>
         </StavePropertyColumn>
+
+        {propsDisabled ? propsDisabledLabel : null}
       </StaveProperties>
     )
   }
@@ -300,6 +306,11 @@ const StaveProperties = styled.div`
   flex: 1;
   display: inline-block;
   margin-left: 10px;
+`
+const QuietLabel = Label.extend`
+  font-size: 13px;
+  text-align: center;
+  color: ${colors.lightGrey};
 `
 const StavePropertyColumn = styled.div`
   display: inline-block;
