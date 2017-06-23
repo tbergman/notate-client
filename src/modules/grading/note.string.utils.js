@@ -1,6 +1,7 @@
 // @flow
-import { ACCIDENTAL, DURATION } from 'modules/toolbox'
+import { ACCIDENTAL } from 'modules/toolbox'
 import type { StaveNote } from 'modules/types'
+import { DefaultNote } from 'modules/types'
 
 const Utils = {
   stringToNote(input: string): StaveNote{
@@ -34,24 +35,11 @@ const Utils = {
         }
       }
     }
-
-    return Utils.createNote(input.charAt(0) + '/' + input.substring(1 + accidentalString.length), accidental)
-  },
-
-  createNote(pitch: string, accidental: string = ACCIDENTAL.NONE): StaveNote{
-    const note = {
-      id: '',
-      staveLayerId: 'stave-layer-id',
-      pitch: pitch,
-      duration: DURATION.QUARTER,
+    return{
+      ...DefaultNote,
+      pitch: input.charAt(0) + '/' + input.substring(1 + accidentalString.length),
       accidental: accidental,
-      position: 0,
-      isRest: false,
-      isDotted: false,
-      className: 'question',
-      validators: [(() => true)]
     }
-    return note
   }
 }
 
