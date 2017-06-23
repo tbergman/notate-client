@@ -5,10 +5,10 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
-import Layout from './Layout'
+import Layout from 'views/pages/Layout'
 import { Button, Label } from 'views/components'
 import { editQuestion, removeQuestion, newQuestion } from 'modules/documents/actions'
-import EditQuestion from 'views/pages/DocumentPageEditQuestion'
+import EditingQuestion from 'views/pages/Document/EditingQuestion'
 import type { Question } from 'modules/types'
 
 type StateProps = {
@@ -55,7 +55,7 @@ class DocumentPage extends Component {
             />
           </Sidebar>
 
-          <EditQuestion />
+          <EditingQuestion />
 
         </PageContainer>
       </Layout>

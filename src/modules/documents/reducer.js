@@ -4,14 +4,32 @@ import _ from 'lodash'
 import { List } from 'immutable'
 import type { FluxStandardAction } from 'Types'
 import type { DocumentsState } from 'modules/documents'
-import { SAVE_QUESTION, EDIT_QUESTION, NEW_QUESTION, REMOVE_QUESTION } from 'modules/documents/actions'
 import { DefaultQuestion } from 'modules/types'
 import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
 import { VALIDATE_PITCH_ONLY, VALIDATE_DURATION_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
+import {
+  SAVE_QUESTION,
+  EDIT_QUESTION,
+  NEW_QUESTION,
+  REMOVE_QUESTION,
+  SET_SELECTED_DESCRIPTION,
+  SET_SELECTED_CLEF,
+  SET_SELECTED_TIME_SIGNATURE,
+  SET_SELECTED_KEY_SIGNATURE,
+  SET_SELECTED_MEASURES,
+  SET_SELECTED_VALIDATORS,
+} from 'modules/documents/actions'
 
 export const initialState: DocumentsState = {
   questions: List([]),
   editing: DefaultQuestion(),
+
+  selectedDescription: '',
+  selectedClef: 'treble',
+  selectedTimeSignature: '4/4',
+  selectedKeySignature: 'C',
+  selectedMeasures: 4,
+  selectedValidators: VALIDATE_PITCH_DURATION,
 }
 
 export default function reducer(
@@ -51,7 +69,13 @@ export default function reducer(
       }
       return {
         ...state,
-        editing: question
+        editing: question,
+        selectedDescription: question.description,
+        selectedClef: question.clef,
+        selectedTimeSignature: question.timeSignature,
+        selectedKeySignature: question.keySignature,
+        selectedMeasures: question.measures,
+        selectedValidators: question.validators,
       }
     }
 
@@ -63,6 +87,12 @@ export default function reducer(
         ...state,
         editing: question,
         questions: questions,
+        selectedDescription: question.description,
+        selectedClef: question.clef,
+        selectedTimeSignature: question.timeSignature,
+        selectedKeySignature: question.keySignature,
+        selectedMeasures: question.measures,
+        selectedValidators: question.validators,
       }
     }
 
@@ -77,6 +107,30 @@ export default function reducer(
         ...state,
         questions: questions
       }
+    }
+
+    case SET_SELECTED_DESCRIPTION: {
+      return { ...state, selectedDescription: action.payload }
+    }
+
+    case SET_SELECTED_CLEF: {
+      return { ...state, selectedClef: action.payload }
+    }
+
+    case SET_SELECTED_TIME_SIGNATURE: {
+      return { ...state, selectedTimeSignature: action.payload }
+    }
+
+    case SET_SELECTED_KEY_SIGNATURE: {
+      return { ...state, selectedKeySignature: action.payload }
+    }
+
+    case SET_SELECTED_MEASURES: {
+      return { ...state, selectedMeasures: action.payload }
+    }
+
+    case SET_SELECTED_VALIDATORS: {
+      return { ...state, selectedValidators: action.payload }
     }
 
     default:

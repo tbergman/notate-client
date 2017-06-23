@@ -11,7 +11,7 @@ const history = syncHistoryWithStore(createBrowserHistory(), store)
 
 import HomePage from 'views/pages/HomePage'
 import ExamplesPage from 'views/pages/ExamplesPage'
-import DocumentPage from 'views/pages/DocumentPage'
+import DocumentPage from 'views/pages/Document/DocumentPage'
 import QuestionsPage from 'views/pages/QuestionsPage'
 
 export default (

@@ -11,18 +11,17 @@ import Stave from 'views/music/Stave'
 import { Button, Textarea, Label } from 'views/components'
 import Select from 'react-select'
 import { RadioGroup, Radio } from 'react-radio-group'
-import { saveQuestion } from 'modules/documents/actions'
 import { selectStaveNotes } from 'modules/notes/selectors'
 import { VALIDATE_PITCH_ONLY, VALIDATE_DURATION_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
-
-type State = {
-  description: string,
-  clef: string,
-  timeSignature: string,
-  keySignature: string,
-  measures: string,
-  validators: string,
-}
+import {
+  saveQuestion,
+  setSelectedDescription,
+  setSelectedClef,
+  setSelectedTimeSignature,
+  setSelectedKeySignature,
+  setSelectedMeasures,
+  setSelectedValidators,
+} from 'modules/documents/actions'
 
 type OwnProps = {}
 type StateProps = {
@@ -34,34 +33,8 @@ type DispatchProps = {
 }
 type Props = OwnProps & StateProps & DispatchProps
 
-class DocumentPageEditQuestion extends Component {
+class EditingQuestion extends Component {
   props: Props;
-  state: State;
-
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      description: '',
-      clef: 'treble',
-      timeSignature: '4/4',
-      keySignature: 'C',
-      measures: 4,
-      validators: VALIDATE_PITCH_DURATION,
-    }
-  }
-
-  componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.question.id !== this.props.question.id) {
-      this.setState({
-        description: nextProps.question.description,
-        clef: nextProps.question.clef,
-        timeSignature: nextProps.question.timeSignature,
-        keySignature: nextProps.question.keySignature,
-        measures: nextProps.question.measures,
-        validators: nextProps.question.validators,
-      })
-    }
-  }
 
   saveQuestion() {
     this.props.saveQuestion({
@@ -72,39 +45,19 @@ class DocumentPageEditQuestion extends Component {
       studentLayerId: this.props.question.studentLayerId || uuid(),
       questionNotes: this.props.selectStaveNotes(this.props.question.questionLayerId),
       answerNotes: this.props.selectStaveNotes(this.props.question.answerLayerId),
-      description: this.state.description,
-      clef: this.state.clef,
-      keySignature: this.state.keySignature,
-      timeSignature: this.state.timeSignature,
-      measures: this.state.measures,
-      validators: this.state.validators,
+      description: this.props.selectedDescription,
+      clef: this.props.selectedClef,
+      keySignature: this.props.selectedKeySignature,
+      timeSignature: this.props.selectedTimeSignature,
+      measures: this.props.selectedMeasures,
+      validators: this.props.selectedValidators,
     })
   }
 
   onDescriptionChange(e: Event) {
     if (e.target instanceof HTMLTextAreaElement) {
-      this.setState({ description: e.target.value })
+      this.props.setSelectedDescription(e.target.value)
     }
-  }
-
-  changeMeasures(option: any) {
-    this.setState({ measures: option.value })
-  }
-
-  changeClef(option: any) {
-    this.setState({ clef: option.value })
-  }
-
-  changeTimeSignature(option: any) {
-    this.setState({ timeSignature: option.value })
-  }
-
-  changeKeySignature(option: any) {
-    this.setState({ keySignature: option.value })
-  }
-
-  changeValidators(value: string) {
-    this.setState({ validators: value })
   }
 
   render(): React.Element<any> {
@@ -117,17 +70,17 @@ class DocumentPageEditQuestion extends Component {
           <Label>Enter the question text below</Label>
           <QuestionProperties>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <QuestionTextarea value={this.state.description} onChange={(evt) => this.onDescriptionChange(evt)}/>
+              <QuestionTextarea value={this.props.selectedDescription} onChange={(evt) => this.onDescriptionChange(evt)}/>
             </div>
 
             {this.renderStaveProperties()}
           </QuestionProperties>
 
           <Stave
-            clef={this.state.clef}
-            keySignature={this.state.keySignature}
-            time={this.state.timeSignature}
-            measures={this.state.measures}
+            clef={this.props.selectedClef}
+            keySignature={this.props.selectedKeySignature}
+            time={this.props.selectedTimeSignature}
+            measures={this.props.selectedMeasures}
             editingStaveId={this.props.question.questionLayerId}
             layers={[
               { id: this.props.question.questionLayerId, className: 'question' }
@@ -138,18 +91,18 @@ class DocumentPageEditQuestion extends Component {
         <StaveContainer>
           <Label>Enter the answers below</Label>
 
-          <RadioGroup name="validators" selectedValue={this.state.validators}
-            onChange={(value) => this.changeValidators(value)}>
+          <RadioGroup name="validators" selectedValue={this.props.selectedValidators}
+            onChange={(value) => this.props.setSelectedValidators(value)}>
             <div><Radio value={VALIDATE_PITCH_ONLY} />Validate pitch only</div>
             <div><Radio value={VALIDATE_DURATION_ONLY} />Validate duration only</div>
             <div><Radio value={VALIDATE_PITCH_DURATION} />Validate pitch & duration</div>
           </RadioGroup>
 
           <Stave
-            clef={this.state.clef}
-            keySignature={this.state.keySignature}
-            time={this.state.timeSignature}
-            measures={this.state.measures}
+            clef={this.props.selectedClef}
+            keySignature={this.props.selectedKeySignature}
+            time={this.props.selectedTimeSignature}
+            measures={this.props.selectedMeasures}
             editingStaveId={this.props.question.answerLayerId}
             layers={[
               { id: this.props.question.questionLayerId, className: 'question' },
@@ -183,8 +136,8 @@ class DocumentPageEditQuestion extends Component {
         <StavePropertyColumn>
           <StaveProperty>
             <StavePropertyLabel>Measures: </StavePropertyLabel>
-            <StavePropertySelect name="measures" value={this.state.measures}
-              onChange={(option) => this.changeMeasures(option)}
+            <StavePropertySelect name="measures" value={this.props.selectedMeasures}
+              onChange={(option) => this.props.setSelectedMeasures(option.value)}
               clearable={false}
               disabled={propsDisabled}
               options={[
@@ -197,8 +150,8 @@ class DocumentPageEditQuestion extends Component {
 
           <StaveProperty>
             <StavePropertyLabel>Time: </StavePropertyLabel>
-            <StavePropertySelect name="time-signature" value={this.state.timeSignature}
-              onChange={(option) => this.changeTimeSignature(option)}
+            <StavePropertySelect name="time-signature" value={this.props.selectedTimeSignature}
+              onChange={(option) => this.props.setSelectedTimeSignature(option.value)}
               clearable={false}
               disabled={propsDisabled}
               options={[
@@ -215,8 +168,8 @@ class DocumentPageEditQuestion extends Component {
         <StavePropertyColumn>
           <StaveProperty>
             <StavePropertyLabel>Clef: </StavePropertyLabel>
-            <StavePropertySelect name="clef" value={this.state.clef}
-              onChange={(option) => this.changeClef(option)}
+            <StavePropertySelect name="clef" value={this.props.selectedClef}
+              onChange={(option) => this.props.setSelectedClef(option.value)}
               clearable={false}
               disabled={propsDisabled}
               options={[
@@ -229,8 +182,8 @@ class DocumentPageEditQuestion extends Component {
 
           <StaveProperty>
             <StavePropertyLabel>Key: </StavePropertyLabel>
-            <StavePropertySelect name="key-signature" value={this.state.keySignature}
-              onChange={(option) => this.changeKeySignature(option)}
+            <StavePropertySelect name="key-signature" value={this.props.selectedKeySignature}
+              onChange={(option) => this.props.setSelectedKeySignature(option.value)}
               clearable={false}
               disabled={propsDisabled}
               options={[
@@ -346,9 +299,21 @@ const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
     question: state.documents.editing,
+    selectedDescription: state.documents.selectedDescription,
+    selectedClef: state.documents.selectedClef,
+    selectedTimeSignature: state.documents.selectedTimeSignature,
+    selectedKeySignature: state.documents.selectedKeySignature,
+    selectedMeasures: state.documents.selectedMeasures,
+    selectedValidators: state.documents.selectedValidators,
   }
 }
 const mapDispatchToProps = ({
   saveQuestion,
+  setSelectedDescription,
+  setSelectedClef,
+  setSelectedTimeSignature,
+  setSelectedKeySignature,
+  setSelectedMeasures,
+  setSelectedValidators,
 })
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentPageEditQuestion)
+export default connect(mapStateToProps, mapDispatchToProps)(EditingQuestion)
