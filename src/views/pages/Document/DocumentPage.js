@@ -5,10 +5,10 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
-import Layout from './Layout'
+import Layout from 'views/pages/Layout'
 import { Button, Label } from 'views/components'
 import { editQuestion, removeQuestion, newQuestion } from 'modules/documents/actions'
-import EditQuestion from 'views/pages/DocumentPageEditQuestion'
+import EditingQuestion from 'views/pages/Document/EditingQuestion'
 import type { Question } from 'modules/types'
 
 type StateProps = {
@@ -25,10 +25,18 @@ type Props = StateProps & DispatchProps
 class DocumentPage extends Component {
   props: Props
 
+  renderQuestionLabel(description: string): React.Element<any> {
+    if (description) {
+      return (<QuestionItemLabel>{description}</QuestionItemLabel>)
+    } else {
+      return (<QuietLabel>{`< No description provided >`}</QuietLabel>)
+    }
+  }
+
   renderQuestion(question: Question): React.Element<any> {
     return (
       <QuestionItem key={question.id} active={question.id === this.props.question.id}>
-        <QuestionItemLabel>{question.description}</QuestionItemLabel>
+        {this.renderQuestionLabel(question.description)}
 
         <QuestionItemButton type="button" value="Edit"
           onClick={() => this.props.editQuestion(question.id)} />
@@ -55,7 +63,7 @@ class DocumentPage extends Component {
             />
           </Sidebar>
 
-          <EditQuestion />
+          <EditingQuestion />
 
         </PageContainer>
       </Layout>
@@ -103,6 +111,9 @@ const Sidebar = styled.div`
   padding: 30px;
   display: flex;
   flex-direction: column;
+`
+const QuietLabel = QuestionItemLabel.extend`
+  color: ${colors.lightGrey};
 `
 const mapStateToProps = (state) => {
   return {

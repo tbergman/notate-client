@@ -44,7 +44,9 @@ export type Question = {
   studentLayerId: string,
   clef: string,
   timeSignature: string,
+  measures: number,
   keySignature: string,
+  validators: string,
 }
 
 export const DefaultQuestion = () => ({
@@ -58,5 +60,6 @@ export const DefaultQuestion = () => ({
   clef: 'treble',
   timeSignature: '4/4',
   keySignature: 'C',
+  measures: 4,
   validators: VALIDATE_PITCH_DURATION,
 })

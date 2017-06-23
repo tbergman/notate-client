@@ -1,21 +1,44 @@
 // @flow
 
+import { List } from 'immutable'
 import reducer, { initialState } from './reducer'
-import { SAVE_QUESTION, NEW_QUESTION, REMOVE_QUESTION } from 'modules/documents/actions'
 import { DefaultQuestion, DefaultNote } from 'modules/types'
-import { VALIDATE_PITCH_ONLY } from 'modules/grading'
+import { VALIDATE_PITCH_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
 import { PITCH_EQUAL } from 'modules/grading'
+import {
+  SAVE_QUESTION,
+  EDIT_QUESTION,
+  NEW_QUESTION,
+  REMOVE_QUESTION,
+  SET_SELECTED_DESCRIPTION,
+  SET_SELECTED_CLEF,
+  SET_SELECTED_TIME_SIGNATURE,
+  SET_SELECTED_KEY_SIGNATURE,
+  SET_SELECTED_MEASURES,
+  SET_SELECTED_VALIDATORS,
+} from 'modules/documents/actions'
 
 describe('documents reducer', () => {
+  it('should have default question editing state', () => {
+    expect(initialState.selectedDescription).toEqual('')
+    expect(initialState.selectedClef).toEqual('treble')
+    expect(initialState.selectedKeySignature).toEqual('C')
+    expect(initialState.selectedTimeSignature).toEqual('4/4')
+    expect(initialState.selectedMeasures).toEqual(4)
+    expect(initialState.selectedValidators).toEqual(VALIDATE_PITCH_DURATION)
+  })
+
   it('saves a new question', () => {
-    const result = reducer(initialState, { type: SAVE_QUESTION, payload: {
+    const newQuestion = {
       ...DefaultQuestion(),
       description: 'new description'
-    }})
+    }
 
-    const newQuestion = result.questions.toJS()[0]
+    const result = reducer(initialState, { type: SAVE_QUESTION, payload: newQuestion })
 
-    expect(newQuestion.description).toEqual('new description')
+    const newFoundQuestion = result.questions.find(x => x.id === newQuestion.id) || {}
+
+    expect(newFoundQuestion.description).toEqual('new description')
   })
 
   it('sets each answers validators upon question save', () => {
@@ -27,7 +50,7 @@ describe('documents reducer', () => {
 
     const result = reducer(initialState, { type: SAVE_QUESTION, payload: question })
 
-    const newQuestion = result.questions.toJS()[0]
+    const newQuestion = result.questions.find(x => x.id === question.id) || {}
 
     expect(newQuestion.answerNotes[0].validators.length).toEqual(1)
     expect(newQuestion.answerNotes[0].validators[0]).toEqual(PITCH_EQUAL)
@@ -57,7 +80,19 @@ describe('documents reducer', () => {
 
     const newQuestion = result.editing
 
-    expect(result.questions.toJS()[0]).toEqual(newQuestion)
+    expect(result.questions.size).toEqual(2)
+    expect(result.questions.toJS()[1]).toEqual(newQuestion)
+  })
+
+  it('adding a new question sets its selected properties', () => {
+    const result = reducer(initialState, { type: NEW_QUESTION, payload: {} })
+
+    expect(result.selectedDescription).toEqual('')
+    expect(result.selectedClef).toEqual('treble')
+    expect(result.selectedKeySignature).toEqual('C')
+    expect(result.selectedTimeSignature).toEqual('4/4')
+    expect(result.selectedMeasures).toEqual(4)
+    expect(result.selectedValidators).toEqual(VALIDATE_PITCH_DURATION)
   })
 
   it('removes a question', () => {
@@ -70,9 +105,52 @@ describe('documents reducer', () => {
 
     const result = reducer(state, { type: REMOVE_QUESTION, payload: questionToRemove.id })
 
-    const questions = result.questions.toJS()
+    const deletedQuestion = result.questions.find(x => x.id === questionToRemove.id)
 
-    expect(questions.length).toEqual(0)
+    expect(deletedQuestion).toBeUndefined()
+  })
+
+  it('should leave question being edited if diff than question being removed', () => {
+    const questionToRemove = { ...DefaultQuestion(), id: '1' }
+    const anotherQuestion = { ...DefaultQuestion(), id: '2' }
+
+    const state = {
+      ...initialState,
+      questions: initialState.questions.push(questionToRemove).push(anotherQuestion),
+      editing: anotherQuestion
+    }
+
+    const result = reducer(state, { type: REMOVE_QUESTION, payload: questionToRemove.id })
+
+    expect(result.editing).toEqual(anotherQuestion)
+  })
+
+  it('should set next question as being edited if current one being removed', () => {
+    const questionToRemove = { ...DefaultQuestion(), id: '1' }
+    const anotherQuestion = { ...DefaultQuestion(), id: '2' }
+
+    const state = {
+      ...initialState,
+      questions: List([questionToRemove, anotherQuestion]),
+      editing: questionToRemove
+    }
+
+    const result = reducer(state, { type: REMOVE_QUESTION, payload: questionToRemove.id })
+
+    expect(result.editing).toEqual(anotherQuestion)
+  })
+
+  it('selects a question for editing', () => {
+    const questionToEdit = { ...DefaultQuestion(), id: '1' }
+
+    const state = {
+      ...initialState,
+      questions: initialState.questions.push(questionToEdit)
+    }
+
+    const result = reducer(state, { type: EDIT_QUESTION, payload: questionToEdit.id })
+
+    expect(result.editing).toEqual(questionToEdit)
   })
 
   it('edits an existing question', () => {
@@ -88,8 +166,71 @@ describe('documents reducer', () => {
       description: 'new description'
     }})
 
-    const fetchedQuestion = result.questions.toJS()[0]
+    const fetchedQuestion = result.questions.find(x => x.id === questionToEdit.id) || {}
 
     expect(fetchedQuestion.description).toEqual('new description')
+  })
+
+  it('editing a question sets its selected properties', () => {
+    const questionToEdit = {
+      ...DefaultQuestion(),
+      id: '1',
+      description: 'new description',
+      clef: 'bass',
+      keySignature: 'Am',
+      timeSignature: '3/4',
+      measures: 1,
+      validators: VALIDATE_PITCH_ONLY,
+    }
+
+    const state = {
+      ...initialState,
+      questions: initialState.questions.push(questionToEdit)
+    }
+
+    const result = reducer(state, { type: EDIT_QUESTION, payload: questionToEdit.id })
+
+    expect(result.selectedDescription).toEqual('new description')
+    expect(result.selectedClef).toEqual('bass')
+    expect(result.selectedKeySignature).toEqual('Am')
+    expect(result.selectedTimeSignature).toEqual('3/4')
+    expect(result.selectedMeasures).toEqual(1)
+    expect(result.selectedValidators).toEqual(VALIDATE_PITCH_ONLY)
+  })
+
+  it('sets the selected description', () => {
+    const result = reducer(initialState, { type: SET_SELECTED_DESCRIPTION, payload: 'new description' })
+
+    expect(result.selectedDescription).toEqual('new description')
+  })
+
+  it('sets the selected clef', () => {
+    const result = reducer(initialState, { type: SET_SELECTED_CLEF, payload: 'bass' })
+
+    expect(result.selectedClef).toEqual('bass')
+  })
+
+  it('sets the selected time signature', () => {
+    const result = reducer(initialState, { type: SET_SELECTED_TIME_SIGNATURE, payload: '3/4' })
+
+    expect(result.selectedTimeSignature).toEqual('3/4')
+  })
+
+  it('sets the selected key signature', () => {
+    const result = reducer(initialState, { type: SET_SELECTED_KEY_SIGNATURE, payload: 'Am' })
+
+    expect(result.selectedKeySignature).toEqual('Am')
+  })
+
+  it('sets the selected measures', () => {
+    const result = reducer(initialState, { type: SET_SELECTED_MEASURES, payload: 2 })
+
+    expect(result.selectedMeasures).toEqual(2)
+  })
+
+  it('sets the selected validators', () => {
+    const result = reducer(initialState, { type: SET_SELECTED_VALIDATORS, payload: VALIDATE_PITCH_ONLY })
+
+    expect(result.selectedValidators).toEqual(VALIDATE_PITCH_ONLY)
   })
 })

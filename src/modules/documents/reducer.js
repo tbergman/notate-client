@@ -4,14 +4,37 @@ import _ from 'lodash'
 import { List } from 'immutable'
 import type { FluxStandardAction } from 'Types'
 import type { DocumentsState } from 'modules/documents'
-import { SAVE_QUESTION, EDIT_QUESTION, NEW_QUESTION, REMOVE_QUESTION } from 'modules/documents/actions'
 import { DefaultQuestion } from 'modules/types'
 import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
 import { VALIDATE_PITCH_ONLY, VALIDATE_DURATION_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
+import {
+  SAVE_QUESTION,
+  EDIT_QUESTION,
+  NEW_QUESTION,
+  REMOVE_QUESTION,
+  SET_SELECTED_DESCRIPTION,
+  SET_SELECTED_CLEF,
+  SET_SELECTED_TIME_SIGNATURE,
+  SET_SELECTED_KEY_SIGNATURE,
+  SET_SELECTED_MEASURES,
+  SET_SELECTED_VALIDATORS,
+} from 'modules/documents/actions'
+
+const updateSelectedFrom = (question) => ({
+  selectedDescription: question.description,
+  selectedClef: question.clef,
+  selectedTimeSignature: question.timeSignature,
+  selectedKeySignature: question.keySignature,
+  selectedMeasures: question.measures,
+  selectedValidators: question.validators,
+})
+
+const initialStateQuestion = DefaultQuestion()
 
 export const initialState: DocumentsState = {
-  questions: List([]),
-  editing: DefaultQuestion(),
+  questions: List([initialStateQuestion]),
+  editing: initialStateQuestion,
+  ...updateSelectedFrom(initialStateQuestion),
 }
 
 export default function reducer(
@@ -40,7 +63,9 @@ export default function reducer(
 
       return {
         ...state,
-        questions: questions
+        ...updateSelectedFrom(question),
+        questions: questions,
+        editing: question,
       }
     }
 
@@ -49,9 +74,11 @@ export default function reducer(
       if (!question) {
         throw new Error(`Question not found: ${action.payload}`)
       }
+
       return {
         ...state,
-        editing: question
+        ...updateSelectedFrom(question),
+        editing: question,
       }
     }
 
@@ -61,6 +88,7 @@ export default function reducer(
 
       return {
         ...state,
+        ...updateSelectedFrom(question),
         editing: question,
         questions: questions,
       }
@@ -69,14 +97,49 @@ export default function reducer(
     case REMOVE_QUESTION: {
       const questionId = action.payload
       const index = state.questions.findIndex(x => x.id === questionId)
-      const questions = index >= 0
+      let questions = index >= 0
         ? state.questions.remove(index)
         : state.questions
 
+      const newQuestion = DefaultQuestion()
+      if (questions.size === 0) {
+        questions = questions.push(newQuestion)
+      }
+
+      const editing = questionId === state.editing.id
+        ? questions.get(0)
+        : state.editing
+
       return {
         ...state,
-        questions: questions
+        ...updateSelectedFrom(editing),
+        editing: editing,
+        questions: questions,
       }
+    }
+
+    case SET_SELECTED_DESCRIPTION: {
+      return { ...state, selectedDescription: action.payload }
+    }
+
+    case SET_SELECTED_CLEF: {
+      return { ...state, selectedClef: action.payload }
+    }
+
+    case SET_SELECTED_TIME_SIGNATURE: {
+      return { ...state, selectedTimeSignature: action.payload }
+    }
+
+    case SET_SELECTED_KEY_SIGNATURE: {
+      return { ...state, selectedKeySignature: action.payload }
+    }
+
+    case SET_SELECTED_MEASURES: {
+      return { ...state, selectedMeasures: action.payload }
+    }
+
+    case SET_SELECTED_VALIDATORS: {
+      return { ...state, selectedValidators: action.payload }
     }
 
     default:
