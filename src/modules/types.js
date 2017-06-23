@@ -46,6 +46,7 @@ export type Question = {
   timeSignature: string,
   measures: number,
   keySignature: string,
+  validators: string,
 }
 
 export const DefaultQuestion = () => ({
