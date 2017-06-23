@@ -20,16 +20,21 @@ import {
   SET_SELECTED_VALIDATORS,
 } from 'modules/documents/actions'
 
-export const initialState: DocumentsState = {
-  questions: List([]),
-  editing: DefaultQuestion(),
+const updateSelectedFrom = (question) => ({
+  selectedDescription: question.description,
+  selectedClef: question.clef,
+  selectedTimeSignature: question.timeSignature,
+  selectedKeySignature: question.keySignature,
+  selectedMeasures: question.measures,
+  selectedValidators: question.validators,
+})
 
-  selectedDescription: '',
-  selectedClef: 'treble',
-  selectedTimeSignature: '4/4',
-  selectedKeySignature: 'C',
-  selectedMeasures: 4,
-  selectedValidators: VALIDATE_PITCH_DURATION,
+const initialStateQuestion = DefaultQuestion()
+
+export const initialState: DocumentsState = {
+  questions: List([initialStateQuestion]),
+  editing: initialStateQuestion,
+  ...updateSelectedFrom(initialStateQuestion),
 }
 
 export default function reducer(
@@ -58,7 +63,9 @@ export default function reducer(
 
       return {
         ...state,
-        questions: questions
+        ...updateSelectedFrom(question),
+        questions: questions,
+        editing: question,
       }
     }
 
@@ -67,15 +74,11 @@ export default function reducer(
       if (!question) {
         throw new Error(`Question not found: ${action.payload}`)
       }
+
       return {
         ...state,
+        ...updateSelectedFrom(question),
         editing: question,
-        selectedDescription: question.description,
-        selectedClef: question.clef,
-        selectedTimeSignature: question.timeSignature,
-        selectedKeySignature: question.keySignature,
-        selectedMeasures: question.measures,
-        selectedValidators: question.validators,
       }
     }
 
@@ -85,27 +88,33 @@ export default function reducer(
 
       return {
         ...state,
+        ...updateSelectedFrom(question),
         editing: question,
         questions: questions,
-        selectedDescription: question.description,
-        selectedClef: question.clef,
-        selectedTimeSignature: question.timeSignature,
-        selectedKeySignature: question.keySignature,
-        selectedMeasures: question.measures,
-        selectedValidators: question.validators,
       }
     }
 
     case REMOVE_QUESTION: {
       const questionId = action.payload
       const index = state.questions.findIndex(x => x.id === questionId)
-      const questions = index >= 0
+      let questions = index >= 0
         ? state.questions.remove(index)
         : state.questions
 
+      const newQuestion = DefaultQuestion()
+      if (questions.size === 0) {
+        questions = questions.push(newQuestion)
+      }
+
+      const editing = questionId === state.editing.id
+        ? questions.get(0)
+        : state.editing
+
       return {
         ...state,
-        questions: questions
+        ...updateSelectedFrom(editing),
+        editing: editing,
+        questions: questions,
       }
     }
 

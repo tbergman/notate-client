@@ -1,5 +1,6 @@
 // @flow
 
+import { List } from 'immutable'
 import reducer, { initialState } from './reducer'
 import { DefaultQuestion, DefaultNote } from 'modules/types'
 import { VALIDATE_PITCH_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
@@ -28,14 +29,16 @@ describe('documents reducer', () => {
   })
 
   it('saves a new question', () => {
-    const result = reducer(initialState, { type: SAVE_QUESTION, payload: {
+    const newQuestion = {
       ...DefaultQuestion(),
       description: 'new description'
-    }})
+    }
 
-    const newQuestion = result.questions.toJS()[0]
+    const result = reducer(initialState, { type: SAVE_QUESTION, payload: newQuestion })
 
-    expect(newQuestion.description).toEqual('new description')
+    const newFoundQuestion = result.questions.find(x => x.id === newQuestion.id) || {}
+
+    expect(newFoundQuestion.description).toEqual('new description')
   })
 
   it('sets each answers validators upon question save', () => {
@@ -47,7 +50,7 @@ describe('documents reducer', () => {
 
     const result = reducer(initialState, { type: SAVE_QUESTION, payload: question })
 
-    const newQuestion = result.questions.toJS()[0]
+    const newQuestion = result.questions.find(x => x.id === question.id) || {}
 
     expect(newQuestion.answerNotes[0].validators.length).toEqual(1)
     expect(newQuestion.answerNotes[0].validators[0]).toEqual(PITCH_EQUAL)
@@ -77,7 +80,8 @@ describe('documents reducer', () => {
 
     const newQuestion = result.editing
 
-    expect(result.questions.toJS()[0]).toEqual(newQuestion)
+    expect(result.questions.size).toEqual(2)
+    expect(result.questions.toJS()[1]).toEqual(newQuestion)
   })
 
   it('adding a new question sets its selected properties', () => {
@@ -101,9 +105,39 @@ describe('documents reducer', () => {
 
     const result = reducer(state, { type: REMOVE_QUESTION, payload: questionToRemove.id })
 
-    const questions = result.questions.toJS()
+    const deletedQuestion = result.questions.find(x => x.id === questionToRemove.id)
 
-    expect(questions.length).toEqual(0)
+    expect(deletedQuestion).toBeUndefined()
+  })
+
+  it('should leave question being edited if diff than question being removed', () => {
+    const questionToRemove = { ...DefaultQuestion(), id: '1' }
+    const anotherQuestion = { ...DefaultQuestion(), id: '2' }
+
+    const state = {
+      ...initialState,
+      questions: initialState.questions.push(questionToRemove).push(anotherQuestion),
+      editing: anotherQuestion
+    }
+
+    const result = reducer(state, { type: REMOVE_QUESTION, payload: questionToRemove.id })
+
+    expect(result.editing).toEqual(anotherQuestion)
+  })
+
+  it('should set next question as being edited if current one being removed', () => {
+    const questionToRemove = { ...DefaultQuestion(), id: '1' }
+    const anotherQuestion = { ...DefaultQuestion(), id: '2' }
+
+    const state = {
+      ...initialState,
+      questions: List([questionToRemove, anotherQuestion]),
+      editing: questionToRemove
+    }
+
+    const result = reducer(state, { type: REMOVE_QUESTION, payload: questionToRemove.id })
+
+    expect(result.editing).toEqual(anotherQuestion)
   })
 
   it('selects a question for editing', () => {
@@ -132,7 +166,7 @@ describe('documents reducer', () => {
       description: 'new description'
     }})
 
-    const fetchedQuestion = result.questions.toJS()[0]
+    const fetchedQuestion = result.questions.find(x => x.id === questionToEdit.id) || {}
 
     expect(fetchedQuestion.description).toEqual('new description')
   })
