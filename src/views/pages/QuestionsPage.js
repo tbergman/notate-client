@@ -26,7 +26,7 @@ class QuestionsPage extends Component {
     if (grade) {
       return (
         <StyledGrade correct={grade.correct}>
-          {grade.correct ? 'CORRECT' : 'FAIL'}
+          {grade.correct ? 'CORRECT' : 'INCORRECT'}
         </StyledGrade>
       )
     }
