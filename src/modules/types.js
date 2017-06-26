@@ -38,14 +38,19 @@ export const DefaultNote = {
 export type Document = {
   id: string,
   description: string,
-  isAssignment: boolean,
+  documentType: string,
   questions: Array<Question>,
+}
+
+export const DocumentType = {
+  SELF_ASSESSMENT: 'SELF_ASSESSMENT',
+  ASSIGNMENT: 'ASSIGNMENT',
 }
 
 export const DefaultDocument = () => ({
   id: uuid(),
   description: '',
-  isAssignment: true,
+  documentType: DocumentType.ASSIGNMENT,
   questions: List([ DefaultQuestion() ])
 })
 

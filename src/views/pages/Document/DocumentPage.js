@@ -8,9 +8,11 @@ import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
 import Layout from 'views/pages/Layout'
 import { Button, Label, Textarea } from 'views/components'
+import { RadioGroup, Radio } from 'react-radio-group'
 import { editQuestion, removeQuestion, newQuestion, saveDocument } from 'modules/documents/actions'
 import EditingQuestion from 'views/pages/Document/EditingQuestion'
 import type { Question } from 'modules/types'
+import { DocumentType } from 'modules/types'
 import { selectQuestions } from 'modules/documents/selectors'
 
 type StateProps = {
@@ -30,11 +32,21 @@ class DocumentPage extends Component {
 
   constructor(props) {
     super(props)
-    this.state = { description: props.document.description }
+
+    this.state = {
+      description: props.document.description,
+      documentType: props.document.documentType,
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ description: nextProps.document.description })
+    if (nextProps.document.id !== this.props.document.id) {
+      console.log('next prop clearing')
+      this.setState({
+        description: nextProps.document.description,
+        documentType: nextProps.document.documentType,
+      })
+    }
   }
 
   onDescriptionChange(e: Event) {
@@ -43,10 +55,16 @@ class DocumentPage extends Component {
     }
   }
 
+  onDocumentTypeChange(value) {
+    console.log(value)
+    this.setState({ documentType: value })
+  }
+
   saveDocument() {
     this.props.saveDocument({
       ...this.props.document,
       description: this.state.description,
+      documentType: this.state.documentType,
       questions: List(this.props.questions),
     })
   }
@@ -83,6 +101,12 @@ class DocumentPage extends Component {
             <DocumentDescriptionTextarea
               value={this.state.description}
               onChange={(evt) => this.onDescriptionChange(evt)}/>
+
+            <RadioGroup name="document-type" selectedValue={this.state.documentType}
+              onChange={(value) => this.onDocumentTypeChange(value)}>
+              <Radio value={DocumentType.SELF_ASSESSMENT} />Self-Assessment
+              <Radio value={DocumentType.ASSIGNMENT} />Assignment
+            </RadioGroup>
 
             <SaveDocumentButton type="button" value="Save Document"
               onClick={() => this.saveDocument()}
