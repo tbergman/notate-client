@@ -106,6 +106,8 @@ const QuestionContainer = styled.div`
   text-align: left;
   display: flex;
   flex-direction: column;
+  height: 80vh;
+  overflow: auto;
 `
 const StaveContainer = styled.div`
   flex: 1;
