@@ -38,6 +38,9 @@ class StudentsDocument extends Component {
       <PageContainer>
         <ToolboxContainer>
           <Toolbox />
+
+          <DocumentDescriptionLabel>Description:</DocumentDescriptionLabel>
+          <DocumentDescription>{this.props.document.description}</DocumentDescription>
         </ToolboxContainer>
 
         <QuestionContainer>
@@ -100,6 +103,16 @@ const ToolboxContainer = styled.div`
   display: flex;
   flex-direction: column;
 `
+const DocumentDescriptionLabel = Label.extend`
+  margin-top: 30px;
+  margin-bottom: 15px;
+`
+const DocumentDescription = Label.extend`
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  display: inline-block;
+`
 const QuestionContainer = styled.div`
   flex: 7;
   padding: 30px;
@@ -125,7 +138,8 @@ const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
     grade: (gradingId) => { return selectGradingById(state, gradingId) },
-    questions: state.documents.questions.toJS()
+    questions: state.documents.questions.toJS(),
+    document: state.documents.editingDocument,
   }
 }
 const mapDispatchToProps = ({
