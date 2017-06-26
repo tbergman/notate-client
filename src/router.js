@@ -12,7 +12,7 @@ const history = syncHistoryWithStore(createBrowserHistory(), store)
 import DocumentListPage from 'views/pages/Document/DocumentListPage'
 import ExamplesPage from 'views/pages/ExamplesPage'
 import DocumentPage from 'views/pages/Document/DocumentPage'
-import QuestionsPage from 'views/pages/QuestionsPage'
+import PreviewDocumentPage from 'views/pages/PreviewDocumentPage'
 
 export default (
   <Provider store={store}>
@@ -24,7 +24,7 @@ export default (
 
         <Route path="/document" component={DocumentPage} />
 
-        <Route path="/questions" component={QuestionsPage} />
+        <Route path="/preview" component={PreviewDocumentPage} />
       </Switch>
     </BrowserRouter>
   </Provider>

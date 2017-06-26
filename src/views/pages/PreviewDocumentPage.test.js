@@ -5,7 +5,7 @@ import React from 'react'
 import { shallowWithStore } from 'enzyme-redux'
 import { createMockStore } from 'redux-test-utils'
 
-import QuestionsPage from './QuestionsPage'
+import PreviewDocumentPage from './PreviewDocumentPage'
 
 type Setup = {
   props: Object,
@@ -15,7 +15,7 @@ type Setup = {
 function setup(): Setup {
   const props = { }
   const store = createMockStore({ })
-  const enzymeWrapper: ShallowWrapper = shallowWithStore(<QuestionsPage {...props} />, store)
+  const enzymeWrapper: ShallowWrapper = shallowWithStore(<PreviewDocumentPage {...props} />, store)
 
   return {
     props,

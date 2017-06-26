@@ -15,7 +15,7 @@ import { selectGradingById } from 'modules/grading/selectors'
 import { Button, Label } from 'views/components'
 import type { Question } from 'modules/types'
 
-class QuestionsPage extends Component {
+class PreviewDocumentPage extends Component {
   clearStudentLayer(id: string, gradingId: string) {
     this.props.clearLayer(id)
     this.props.clearGrading(gradingId)
@@ -35,7 +35,7 @@ class QuestionsPage extends Component {
 
   render(): React.Element<any> {
     return (
-      <Layout title="Questions">
+      <Layout title="Preview Document">
         <PageContainer>
           <ToolboxContainer>
             <Toolbox />
@@ -133,4 +133,4 @@ const mapDispatchToProps = ({
   clearGrading,
   clearLayer,
 })
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionsPage)
+export default connect(mapStateToProps, mapDispatchToProps)(PreviewDocumentPage)

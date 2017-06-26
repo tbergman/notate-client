@@ -16,7 +16,7 @@ export default class Layout extends Component {
         <Menu>
           <MenuItem to={'/'} exact>Document List</MenuItem>
           <MenuItem to={'/document'}>Document</MenuItem>
-          <MenuItem to={'/questions'}>Questions</MenuItem>
+          <MenuItem to={'/preview'}>Preview</MenuItem>
           <MenuItem to={'/examples'}>Stave Examples</MenuItem>
         </Menu>
 
