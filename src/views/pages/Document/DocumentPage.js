@@ -1,15 +1,17 @@
 // @flow
 
 import _ from 'lodash'
+import { List } from 'immutable'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
 import Layout from 'views/pages/Layout'
 import { Button, Label } from 'views/components'
-import { editQuestion, removeQuestion, newQuestion } from 'modules/documents/actions'
+import { editQuestion, removeQuestion, newQuestion, saveDocument } from 'modules/documents/actions'
 import EditingQuestion from 'views/pages/Document/EditingQuestion'
 import type { Question } from 'modules/types'
+import { selectQuestions } from 'modules/documents/selectors'
 
 type StateProps = {
   questions: any,
@@ -19,11 +21,19 @@ type DispatchProps = {
   editQuestion: any,
   removeQuestion: any,
   newQuestion: any,
+  saveDocument: any,
 }
 type Props = StateProps & DispatchProps
 
 class DocumentPage extends Component {
   props: Props
+
+  saveDocument() {
+    this.props.saveDocument({
+      id: this.props.documentId,
+      questions: List(this.props.questions),
+    })
+  }
 
   renderQuestionLabel(description: string): React.Element<any> {
     if (description) {
@@ -39,10 +49,10 @@ class DocumentPage extends Component {
         {this.renderQuestionLabel(question.description)}
 
         <QuestionItemButton type="button" value="Edit"
-          onClick={() => this.props.editQuestion(question.id)} />
+          onClick={() => this.props.editQuestion(question.id, this.props.documentId)} />
 
         <QuestionItemButton type="button" value="Remove"
-          onClick={() => this.props.removeQuestion(question.id)} />
+          onClick={() => this.props.removeQuestion(question.id, this.props.documentId)} />
       </QuestionItem>
     )
   }
@@ -54,12 +64,16 @@ class DocumentPage extends Component {
           <Sidebar>
             <Label>Document</Label>
 
+            <Button type="button" value="Save Document"
+              onClick={() => this.saveDocument()}
+            />
+
             <QuestionsContainer>
               {_.map(this.props.questions, x => this.renderQuestion(x))}
             </QuestionsContainer>
 
             <Button type="button" value="+ New Question"
-              onClick={() => this.props.newQuestion()}
+              onClick={() => this.props.newQuestion(this.props.documentId)}
             />
           </Sidebar>
 
@@ -117,6 +131,7 @@ const QuietLabel = QuestionItemLabel.extend`
 `
 const mapStateToProps = (state) => {
   return {
+    documentId: state.documents.editingDocumentId,
     questions: state.documents.questions.toJS(),
     question: state.documents.editing,
   }
@@ -125,5 +140,6 @@ const mapDispatchToProps = ({
   editQuestion,
   removeQuestion,
   newQuestion,
+  saveDocument,
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentPage)

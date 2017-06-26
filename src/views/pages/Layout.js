@@ -14,7 +14,7 @@ export default class Layout extends Component {
         </Header>
 
         <Menu>
-          <MenuItem to={'/'} exact>Home</MenuItem>
+          <MenuItem to={'/'} exact>Document List</MenuItem>
           <MenuItem to={'/document'}>Document</MenuItem>
           <MenuItem to={'/questions'}>Questions</MenuItem>
           <MenuItem to={'/examples'}>Stave Examples</MenuItem>

@@ -1,5 +1,6 @@
 // @flow
 
+import { List } from 'immutable'
 import type { AccidentalType, DurationType } from 'modules/toolbox'
 import { ACCIDENTAL, DURATION } from 'modules/toolbox'
 import { VALIDATE_PITCH_DURATION } from 'modules/grading'
@@ -33,6 +34,20 @@ export const DefaultNote = {
   className: 'question',
   validators: []
 }
+
+export type Document = {
+  id: string,
+  description: string,
+  isAssignment: boolean,
+  questions: Array<Question>,
+}
+
+export const DefaultDocument = () => ({
+  id: uuid(),
+  description: '',
+  isAssignment: true,
+  questions: List([ DefaultQuestion() ])
+})
 
 export type Question = {
   id: string,

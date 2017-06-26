@@ -9,7 +9,7 @@ import store from 'modules/store'
 
 const history = syncHistoryWithStore(createBrowserHistory(), store)
 
-import HomePage from 'views/pages/HomePage'
+import DocumentListPage from 'views/pages/Document/DocumentListPage'
 import ExamplesPage from 'views/pages/ExamplesPage'
 import DocumentPage from 'views/pages/Document/DocumentPage'
 import QuestionsPage from 'views/pages/QuestionsPage'
@@ -18,7 +18,7 @@ export default (
   <Provider store={store}>
     <BrowserRouter history={history}>
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/" component={DocumentListPage} />
 
         <Route path="/examples" component={ExamplesPage} />
 
