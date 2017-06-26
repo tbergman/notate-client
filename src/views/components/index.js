@@ -1,8 +1,26 @@
 // @flow
 
 import styled from 'styled-components'
-import { lighten } from 'polished'
+import { lighten, darken } from 'polished'
 import colors from 'views/styles/colors'
+
+export const Badge = styled.div`
+  color: ${props => props.color || colors.grey};
+  border: 1px solid;
+  border-color: ${props => darken(0.1, (props.backgroundColor || colors.eggShell))};
+  background-color: ${props => (props.backgroundColor || colors.eggShell)};
+  display: inline-block;
+  margin-bottom: 0;
+  border-radius: 4px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 10px;
+  padding: 5px 10px;
+  font-weight: 700;
+  line-height: 1;
+`
 
 export const Button = styled.input`
   border-color: ${colors.teal};

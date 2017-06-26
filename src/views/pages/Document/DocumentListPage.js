@@ -7,7 +7,7 @@ import { browserHistory } from 'react-router'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
 import Layout from 'views/pages/Layout'
-import { Button, Label } from 'views/components'
+import { Button, Label, Badge } from 'views/components'
 import { editDocument, removeDocument, newDocument } from 'modules/documents/actions'
 import type { Question, Document } from 'modules/types'
 
@@ -37,9 +37,25 @@ class DocumentListPage extends Component {
     }
   }
 
+  renderDocumentType(type: number): React.Element<any> {
+    let color, bgColor, content
+
+    if (type === DocumentType.SELF_ASSESSMENT) {
+      content = 'SELF-ASSESSMENT'
+      bgColor = colors.mustard
+    } else {
+      content = 'ASSIGNMENT'
+      bgColor = colors.tealDeer
+    }
+
+    return (<DocumentBadge backgroundColor={bgColor}>{content}</DocumentBadge>)
+  }
+
   renderDocument(document: Document): React.Element<any> {
     return (
       <DocumentItem key={document.id}>
+        {this.renderDocumentType(document.documentType)}
+
         {this.renderDocumentLabel(document.description)}
 
         <DocumentItemButton type="button" value="Edit"
@@ -82,7 +98,7 @@ const DocumentItem = styled.div`
   border-bottom: 1px solid ${colors.lightGrey};
   margin-bottom: 20px;
   padding: 10px;
-  min-width: 800px;
+  min-width: 968px;
 `
 const DocumentItemLabel = Label.extend`
   font-weight: 500;
@@ -97,6 +113,9 @@ const DocumentItemButton = Button.extend`
   font-weight: 500;
   line-height: 1;
   float: right;
+`
+const DocumentBadge = Badge.extend`
+  float: left;
 `
 const Sidebar = styled.div`
   flex: 3;
