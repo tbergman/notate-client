@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
 import Layout from 'views/pages/Layout'
-import { Button, Label } from 'views/components'
+import { Button, Label, Textarea } from 'views/components'
 import { editQuestion, removeQuestion, newQuestion, saveDocument } from 'modules/documents/actions'
 import EditingQuestion from 'views/pages/Document/EditingQuestion'
 import type { Question } from 'modules/types'
@@ -28,9 +28,25 @@ type Props = StateProps & DispatchProps
 class DocumentPage extends Component {
   props: Props
 
+  constructor(props) {
+    super(props)
+    this.state = { description: props.document.description }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ description: nextProps.document.description })
+  }
+
+  onDescriptionChange(e: Event) {
+    if (e.target instanceof HTMLTextAreaElement) {
+      this.setState({ description: e.target.value })
+    }
+  }
+
   saveDocument() {
     this.props.saveDocument({
-      id: this.props.documentId,
+      ...this.props.document,
+      description: this.state.description,
       questions: List(this.props.questions),
     })
   }
@@ -49,10 +65,10 @@ class DocumentPage extends Component {
         {this.renderQuestionLabel(question.description)}
 
         <QuestionItemButton type="button" value="Edit"
-          onClick={() => this.props.editQuestion(question.id, this.props.documentId)} />
+          onClick={() => this.props.editQuestion(question.id)} />
 
         <QuestionItemButton type="button" value="Remove"
-          onClick={() => this.props.removeQuestion(question.id, this.props.documentId)} />
+          onClick={() => this.props.removeQuestion(question.id)} />
       </QuestionItem>
     )
   }
@@ -64,16 +80,22 @@ class DocumentPage extends Component {
           <Sidebar>
             <Label>Document</Label>
 
-            <Button type="button" value="Save Document"
+            <DocumentDescriptionTextarea
+              value={this.state.description}
+              onChange={(evt) => this.onDescriptionChange(evt)}/>
+
+            <SaveDocumentButton type="button" value="Save Document"
               onClick={() => this.saveDocument()}
             />
+
+            <Label>Questions</Label>
 
             <QuestionsContainer>
               {_.map(this.props.questions, x => this.renderQuestion(x))}
             </QuestionsContainer>
 
             <Button type="button" value="+ New Question"
-              onClick={() => this.props.newQuestion(this.props.documentId)}
+              onClick={() => this.props.newQuestion()}
             />
           </Sidebar>
 
@@ -94,6 +116,13 @@ const QuestionsContainer = styled.div`
   text-align: left;
   display: flex;
   flex-direction: column;
+`
+const DocumentDescriptionTextarea = styled(Textarea)`
+  display: inline-block;
+  margin-bottom: 15px;
+`
+const SaveDocumentButton = styled(Button)`
+  margin-bottom: 50px;
 `
 const QuestionItem = styled.div`
   border: 1px solid ${colors.lightGrey};
@@ -131,7 +160,7 @@ const QuietLabel = QuestionItemLabel.extend`
 `
 const mapStateToProps = (state) => {
   return {
-    documentId: state.documents.editingDocumentId,
+    document: state.documents.editingDocument,
     questions: state.documents.questions.toJS(),
     question: state.documents.editing,
   }

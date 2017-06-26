@@ -38,9 +38,9 @@ const initialStateDocument = DefaultDocument()
 const initialStateQuestion = initialStateDocument.questions.get(0)
 
 export const initialState: DocumentsState = {
-  documents: List([]),
-  editingDocumentId: '',
-  questions: List([]),
+  documents: List([initialStateDocument]),
+  editingDocument: initialStateDocument,
+  questions: List([initialStateQuestion]),
   editing: initialStateQuestion,
   ...updateSelectedFrom(initialStateQuestion),
 }
@@ -154,7 +154,7 @@ export default function reducer(
       return {
         ...state,
         ...editQuestion(state, document.questions.get(0)),
-        editingDocumentId: document.id,
+        editingDocument: document,
         questions: document.questions,
       }
     }
