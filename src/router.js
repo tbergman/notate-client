@@ -13,6 +13,7 @@ import DocumentListPage from 'views/pages/Document/DocumentListPage'
 import ExamplesPage from 'views/pages/ExamplesPage'
 import DocumentPage from 'views/pages/Document/DocumentPage'
 import PreviewDocumentPage from 'views/pages/PreviewDocumentPage'
+import SelfAssessmentPage from 'views/pages/SelfAssessmentPage'
 
 export default (
   <Provider store={store}>
@@ -25,6 +26,8 @@ export default (
         <Route path="/document" component={DocumentPage} />
 
         <Route path="/preview" component={PreviewDocumentPage} />
+
+        <Route path="/self-assessment" component={SelfAssessmentPage} />
       </Switch>
     </BrowserRouter>
   </Provider>

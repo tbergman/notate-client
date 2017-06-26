@@ -6,6 +6,21 @@ import colors from 'views/styles/colors'
 import { NavLink } from 'react-router-dom'
 
 export default class Layout extends Component {
+  renderMenu(): React.Element<any> {
+    if (this.props.menu) {
+      return(
+        <Menu>
+          <MenuItem to={'/'} exact>Document List</MenuItem>
+          <MenuItem to={'/document'}>Document</MenuItem>
+          <MenuItem to={'/preview'}>Preview</MenuItem>
+          <MenuItem to={'/self-assessment'}>Self-Assessment</MenuItem>
+          <MenuItem to={'/examples'}>Stave Examples</MenuItem>
+        </Menu>
+      )
+    }
+
+    return null
+  }
   render(): React.Element<any> {
     return (
       <Container className="app">
@@ -13,12 +28,7 @@ export default class Layout extends Component {
           {this.props.title}
         </Header>
 
-        <Menu>
-          <MenuItem to={'/'} exact>Document List</MenuItem>
-          <MenuItem to={'/document'}>Document</MenuItem>
-          <MenuItem to={'/preview'}>Preview</MenuItem>
-          <MenuItem to={'/examples'}>Stave Examples</MenuItem>
-        </Menu>
+        {this.renderMenu()}
 
         {this.props.children}
       </Container>
