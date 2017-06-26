@@ -4,11 +4,11 @@ import React, { Component } from 'react'
 import Layout from './Layout'
 import StudentsDocument from 'views/pages/StudentsDocument'
 
-export default class SelfAssessmentPage extends Component {
+export default class Assignment extends Component {
   render(): React.Element<any> {
     return (
-      <Layout title="Self-Assessment" hideMenu={true}>
-        <StudentsDocument gradingAllowed={true}/>
+      <Layout title="Assignment" hideMenu={true}>
+        <StudentsDocument gradingAllowed={false}/>
       </Layout>
     )
   }

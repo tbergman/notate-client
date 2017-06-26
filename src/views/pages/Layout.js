@@ -7,20 +7,22 @@ import { NavLink } from 'react-router-dom'
 
 export default class Layout extends Component {
   renderMenu(): React.Element<any> {
-    if (this.props.menu) {
-      return(
-        <Menu>
-          <MenuItem to={'/'} exact>Document List</MenuItem>
-          <MenuItem to={'/document'}>Document</MenuItem>
-          <MenuItem to={'/preview'}>Preview</MenuItem>
-          <MenuItem to={'/self-assessment'}>Self-Assessment</MenuItem>
-          <MenuItem to={'/examples'}>Stave Examples</MenuItem>
-        </Menu>
-      )
+    if (this.props.hideMenu) {
+      return null
     }
 
-    return null
+    return(
+      <Menu>
+        <MenuItem to={'/'} exact>Document List</MenuItem>
+        <MenuItem to={'/document'}>Document</MenuItem>
+        <MenuItem to={'/preview'}>Preview</MenuItem>
+        <MenuItem to={'/self-assessment'}>Self-Assessment</MenuItem>
+        <MenuItem to={'/assignment'}>Assignment</MenuItem>
+        <MenuItem to={'/examples'}>Stave Examples</MenuItem>
+      </Menu>
+    )
   }
+
   render(): React.Element<any> {
     return (
       <Container className="app">

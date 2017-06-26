@@ -67,17 +67,19 @@ class StudentsDocument extends Component {
           ]}
         />
 
-        <Button type="button" value="Clear Student's Answers"
-          onClick={() => this.clearStudentLayer(studentLayerId, gradingId)}
-        />
+        {this.props.gradingAllowed ? (
+          <Button type="button" value="Clear Student's Answers"
+            onClick={() => this.clearStudentLayer(studentLayerId, gradingId)}
+          />) : null}
 
-        <Button type="button" value="Grade"
-          onClick={() => this.props.gradeLayers(
-            gradingId,
-            this.props.selectStaveNotes(answersLayerId),
-            this.props.selectStaveNotes(studentLayerId),
-          )}
-        />
+        {this.props.gradingAllowed ? (
+          <Button type="button" value="Grade"
+            onClick={() => this.props.gradeLayers(
+              gradingId,
+              this.props.selectStaveNotes(answersLayerId),
+              this.props.selectStaveNotes(studentLayerId),
+            )}
+          />) : null}
 
         {this.renderGrade(question)}
 

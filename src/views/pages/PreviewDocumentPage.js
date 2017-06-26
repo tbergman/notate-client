@@ -8,7 +8,7 @@ export default class PreviewDocumentPage extends Component {
   render(): React.Element<any> {
     return (
       <Layout title="Preview Document" menu={true}>
-        <StudentsDocument />
+        <StudentsDocument  gradingAllowed={true}/>
       </Layout>
     )
   }
