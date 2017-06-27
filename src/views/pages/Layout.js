@@ -48,7 +48,7 @@ const Container = styled.div`
 const Header = styled.div`
   background-color: ${colors.white};
   height: 2rem;
-  padding: 15px;
+  padding: 25px;
   color: ${colors.teal};
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
   font-size: 1.5rem;
@@ -57,7 +57,7 @@ const Header = styled.div`
 const Menu = styled.div`
   position: absolute;
   left: 50px;
-  top: 22px;
+  top: 43px;
 `
 const MenuItem = styled(NavLink)`
   padding: 12px 0;
@@ -66,7 +66,7 @@ const MenuItem = styled(NavLink)`
   border-bottom: 'none';
   bottom: -1px;
   display: inline-block;
-  margin-right: 40px;
+  margin-right: 25px;
 
   font-size: 13px;
   line-height: 16px;

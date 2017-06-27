@@ -102,11 +102,14 @@ class DocumentPage extends Component {
               value={this.state.description}
               onChange={(evt) => this.onDescriptionChange(evt)}/>
 
-            <RadioGroup name="document-type" selectedValue={this.state.documentType}
-              onChange={(value) => this.onDocumentTypeChange(value)}>
-              <Radio value={DocumentType.SELF_ASSESSMENT} />Self-Assessment
-              <Radio value={DocumentType.ASSIGNMENT} />Assignment
-            </RadioGroup>
+            <DocumentPropertyContainer>
+              <DocumentPropertyLabel>Type:</DocumentPropertyLabel>
+              <DocumentTypeRadioGroup name="document-type" selectedValue={this.state.documentType}
+                onChange={(value) => this.onDocumentTypeChange(value)}>
+                <Radio value={DocumentType.SELF_ASSESSMENT} />Self-Assessment
+                <Radio value={DocumentType.ASSIGNMENT} />Assignment
+              </DocumentTypeRadioGroup>
+            </DocumentPropertyContainer>
 
             <SaveDocumentButton type="button" value="Save Document"
               onClick={() => this.saveDocument()}
@@ -157,6 +160,21 @@ const QuestionItem = styled.div`
   border-color: ${props => !!props.active ? colors.mustard : colors.lightGrey};
   box-shadow: ${props => !!props.active ? '0px 0px 7px 0px #FFCF56' : 'none'};
   padding: ${props => !!props.active ? '9px' : '10px'};
+`
+const DocumentPropertyContainer = styled.div`
+  text-align: left;
+`
+const DocumentPropertyLabel = Label.extend`
+  display: inline-block;
+  font-size: 14px;
+`
+const DocumentTypeRadioGroup = styled(RadioGroup)`
+  display: inline-block;
+
+  input {
+    margin-left: 20px;
+    height: 15px;
+  }
 `
 const QuestionItemLabel = Label.extend`
   font-weight: 500;
