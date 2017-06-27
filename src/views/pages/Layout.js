@@ -16,8 +16,6 @@ export default class Layout extends Component {
         <MenuItem to={'/'} exact>Document List</MenuItem>
         <MenuItem to={'/document'}>Document</MenuItem>
         <MenuItem to={'/preview'}>Preview</MenuItem>
-        <MenuItem to={'/self-assessment'}>Self-Assessment</MenuItem>
-        <MenuItem to={'/assignment'}>Assignment</MenuItem>
         <MenuItem to={'/examples'}>Stave Examples</MenuItem>
       </Menu>
     )
@@ -66,7 +64,7 @@ const MenuItem = styled(NavLink)`
   border-bottom: 'none';
   bottom: -1px;
   display: inline-block;
-  margin-right: 25px;
+  margin-right: 40px;
 
   font-size: 13px;
   line-height: 16px;

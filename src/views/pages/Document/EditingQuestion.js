@@ -143,10 +143,7 @@ const StaveContainer = styled.div`
     padding-bottom: 30px;
   }
 `
-const Actions = styled.div`
-  padding: 10px 0;
-  margin-top: 20px;
-`
+const Actions = styled.div``
 const QuestionProperties = styled.div`
   display: flex;
 `

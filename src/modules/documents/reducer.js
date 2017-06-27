@@ -148,7 +148,7 @@ export default function reducer(
       const document = state.documents.find(x => x.id === selectedDocumentId)
 
       if (!document) {
-        throw new Error(`Question not found: ${action.payload}`)
+        throw new Error(`Document not found: ${action.payload}`)
       }
 
       return {

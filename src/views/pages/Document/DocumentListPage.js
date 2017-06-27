@@ -10,6 +10,7 @@ import Layout from 'views/pages/Layout'
 import { Button, Label, Badge } from 'views/components'
 import { editDocument, removeDocument, newDocument } from 'modules/documents/actions'
 import type { Question, Document } from 'modules/types'
+import { DocumentType } from 'modules/types'
 
 type StateProps = {
   documents: any,
@@ -58,11 +59,15 @@ class DocumentListPage extends Component {
 
         {this.renderDocumentLabel(document.description)}
 
+        <DocumentItemButton type="button" value="Student Link"
+          onClick={() => this.props.history.push(`/notate/${document.id}`)} />
+
         <DocumentItemButton type="button" value="Edit"
           onClick={() => this.editDocument(document.id)} />
 
         <DocumentItemButton type="button" value="Remove"
           onClick={() => this.props.removeDocument(document.id)} />
+
       </DocumentItem>
     )
   }
