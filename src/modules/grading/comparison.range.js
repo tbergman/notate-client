@@ -6,9 +6,12 @@ import type { StaveAnswerNote, StaveNote} from  'modules/types'
 
 const RangeComparison = {
 
-  check: (answer: StaveAnswerNote) => {
-    return (student: StaveNote) =>
-    RangeComparison.checkString(answer.validators[0], student)
+  // for now we are not using the answer note, only the range,
+  // but we might. maybe validate duration or something else
+  check: (answer: StaveAnswerNote, range: string) => {
+    return (student: StaveNote) => {
+      return RangeComparison.checkString(range, student)
+    }
   },
 
   checkString(range: string, student: StaveNote): boolean{
