@@ -40,14 +40,18 @@ type Props = OwnProps & StateProps & DispatchProps
 class DocumentPageEditQuestion extends Component {
   props: Props;
 
+  renderPropsDisabledLabel(disabled: boolean): React.Element<any>  {
+    if (disabled) {
+      return (<QuietLabel>Stave properties are disabled when notes are added</QuietLabel>)
+    }
+
+    return (<QuietLabel>&nbsp;</QuietLabel>)
+  }
+
   render(): React.Element<any> {
     const propsDisabled = (
       this.props.selectStaveNotes(this.props.question.questionLayerId).length > 0 ||
       this.props.selectStaveNotes(this.props.question.answerLayerId).length > 0
-    )
-
-    const propsDisabledLabel = (
-      <QuietLabel>Stave properties are disabled when notes are added</QuietLabel>
     )
 
     return (
@@ -140,7 +144,7 @@ class DocumentPageEditQuestion extends Component {
           </StaveProperty>
         </StavePropertyColumn>
 
-        {propsDisabled ? propsDisabledLabel : null}
+        {this.renderPropsDisabledLabel(propsDisabled)}
       </StaveProperties>
     )
   }

@@ -1,29 +1,78 @@
 // @flow
 
 import _ from 'lodash'
+import { List } from 'immutable'
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
 import Layout from 'views/pages/Layout'
-import { Button, Label } from 'views/components'
-import { editQuestion, removeQuestion, newQuestion } from 'modules/documents/actions'
+import { Button, Label, Textarea } from 'views/components'
+import { RadioGroup, Radio } from 'react-radio-group'
+import { editQuestion, removeQuestion, newQuestion, saveDocument } from 'modules/documents/actions'
 import EditingQuestion from 'views/pages/Document/EditingQuestion'
-import type { Question } from 'modules/types'
+import type { Question, Document } from 'modules/types'
+import { DocumentType } from 'modules/types'
 
 type StateProps = {
-  questions: any,
-  question: any,
+  questions: Array<Question>,
+  question: Question,
+  document: Document
 }
 type DispatchProps = {
   editQuestion: any,
   removeQuestion: any,
   newQuestion: any,
+  saveDocument: any,
 }
 type Props = StateProps & DispatchProps
 
+type State = {
+  description: string,
+  documentType: string,
+}
+
 class DocumentPage extends Component {
   props: Props
+  state: State
+
+  constructor(props: Props) {
+    super(props)
+
+    this.state = {
+      description: props.document.description,
+      documentType: props.document.documentType,
+    }
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.document.id !== this.props.document.id) {
+      console.log('next prop clearing')
+      this.setState({
+        description: nextProps.document.description,
+        documentType: nextProps.document.documentType,
+      })
+    }
+  }
+
+  onDescriptionChange(e: Event) {
+    if (e.target instanceof HTMLTextAreaElement) {
+      this.setState({ description: e.target.value })
+    }
+  }
+
+  onDocumentTypeChange(value: string) {
+    this.setState({ documentType: value })
+  }
+
+  saveDocument() {
+    this.props.saveDocument({
+      ...this.props.document,
+      description: this.state.description,
+      documentType: this.state.documentType,
+      questions: List(this.props.questions),
+    })
+  }
 
   renderQuestionLabel(description: string): React.Element<any> {
     if (description) {
@@ -54,6 +103,25 @@ class DocumentPage extends Component {
           <Sidebar>
             <Label>Document</Label>
 
+            <DocumentDescriptionTextarea
+              value={this.state.description}
+              onChange={(evt) => this.onDescriptionChange(evt)}/>
+
+            <DocumentPropertyContainer>
+              <DocumentPropertyLabel>Type:</DocumentPropertyLabel>
+              <DocumentTypeRadioGroup name="document-type" selectedValue={this.state.documentType}
+                onChange={(value) => this.onDocumentTypeChange(value)}>
+                <Radio value={DocumentType.SELF_ASSESSMENT} />Self-Assessment
+                <Radio value={DocumentType.ASSIGNMENT} />Assignment
+              </DocumentTypeRadioGroup>
+            </DocumentPropertyContainer>
+
+            <SaveDocumentButton type="button" value="Save Document"
+              onClick={() => this.saveDocument()}
+            />
+
+            <Label>Questions</Label>
+
             <QuestionsContainer>
               {_.map(this.props.questions, x => this.renderQuestion(x))}
             </QuestionsContainer>
@@ -81,6 +149,13 @@ const QuestionsContainer = styled.div`
   display: flex;
   flex-direction: column;
 `
+const DocumentDescriptionTextarea = styled(Textarea)`
+  display: inline-block;
+  margin-bottom: 15px;
+`
+const SaveDocumentButton = styled(Button)`
+  margin-bottom: 50px;
+`
 const QuestionItem = styled.div`
   border: 1px solid ${colors.lightGrey};
   border-radius: 5px;
@@ -90,6 +165,21 @@ const QuestionItem = styled.div`
   border-color: ${props => !!props.active ? colors.mustard : colors.lightGrey};
   box-shadow: ${props => !!props.active ? '0px 0px 7px 0px #FFCF56' : 'none'};
   padding: ${props => !!props.active ? '9px' : '10px'};
+`
+const DocumentPropertyContainer = styled.div`
+  text-align: left;
+`
+const DocumentPropertyLabel = Label.extend`
+  display: inline-block;
+  font-size: 14px;
+`
+const DocumentTypeRadioGroup = styled(RadioGroup)`
+  display: inline-block;
+
+  input {
+    margin-left: 20px;
+    height: 15px;
+  }
 `
 const QuestionItemLabel = Label.extend`
   font-weight: 500;
@@ -117,6 +207,7 @@ const QuietLabel = QuestionItemLabel.extend`
 `
 const mapStateToProps = (state) => {
   return {
+    document: state.documents.editingDocument,
     questions: state.documents.questions.toJS(),
     question: state.documents.editing,
   }
@@ -125,5 +216,6 @@ const mapDispatchToProps = ({
   editQuestion,
   removeQuestion,
   newQuestion,
+  saveDocument,
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentPage)

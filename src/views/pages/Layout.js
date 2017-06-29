@@ -6,6 +6,21 @@ import colors from 'views/styles/colors'
 import { NavLink } from 'react-router-dom'
 
 export default class Layout extends Component {
+  renderMenu(): React.Element<any>|null {
+    if (this.props.hideMenu) {
+      return null
+    }
+
+    return(
+      <Menu>
+        <MenuItem to={'/'} exact>Document List</MenuItem>
+        <MenuItem to={'/document'}>Document</MenuItem>
+        <MenuItem to={'/preview'}>Preview</MenuItem>
+        <MenuItem to={'/examples'}>Stave Examples</MenuItem>
+      </Menu>
+    )
+  }
+
   render(): React.Element<any> {
     return (
       <Container className="app">
@@ -13,12 +28,7 @@ export default class Layout extends Component {
           {this.props.title}
         </Header>
 
-        <Menu>
-          <MenuItem to={'/'} exact>Home</MenuItem>
-          <MenuItem to={'/document'}>Document</MenuItem>
-          <MenuItem to={'/questions'}>Questions</MenuItem>
-          <MenuItem to={'/examples'}>Stave Examples</MenuItem>
-        </Menu>
+        {this.renderMenu()}
 
         {this.props.children}
       </Container>
@@ -36,7 +46,7 @@ const Container = styled.div`
 const Header = styled.div`
   background-color: ${colors.white};
   height: 2rem;
-  padding: 15px;
+  padding: 25px;
   color: ${colors.teal};
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
   font-size: 1.5rem;
@@ -45,7 +55,7 @@ const Header = styled.div`
 const Menu = styled.div`
   position: absolute;
   left: 50px;
-  top: 22px;
+  top: 43px;
 `
 const MenuItem = styled(NavLink)`
   padding: 12px 0;

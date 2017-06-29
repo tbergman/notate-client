@@ -5,7 +5,6 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
-import Layout from './Layout'
 import Toolbox from 'views/toolbox/Toolbox'
 import Stave from 'views/music/Stave'
 import { gradeLayers, clearGrading } from 'modules/grading/actions'
@@ -15,7 +14,7 @@ import { selectGradingById } from 'modules/grading/selectors'
 import { Button, Label } from 'views/components'
 import type { Question } from 'modules/types'
 
-class QuestionsPage extends Component {
+class StudentsDocument extends Component {
   clearStudentLayer(id: string, gradingId: string) {
     this.props.clearLayer(id)
     this.props.clearGrading(gradingId)
@@ -26,7 +25,7 @@ class QuestionsPage extends Component {
     if (grade) {
       return (
         <StyledGrade correct={grade.correct}>
-          {grade.correct ? 'CORRECT' : 'FAIL'}
+          {grade.correct ? 'CORRECT' : 'INCORRECT'}
         </StyledGrade>
       )
     }
@@ -35,17 +34,18 @@ class QuestionsPage extends Component {
 
   render(): React.Element<any> {
     return (
-      <Layout title="Questions">
-        <PageContainer>
-          <ToolboxContainer>
-            <Toolbox />
-          </ToolboxContainer>
+      <PageContainer>
+        <ToolboxContainer>
+          <Toolbox />
 
-          <QuestionContainer>
-            {_.map(this.props.questions, x => this.renderQuestion(x))}
-          </QuestionContainer>
-        </PageContainer>
-      </Layout>
+          <DocumentDescriptionLabel>Description:</DocumentDescriptionLabel>
+          <DocumentDescription>{this.props.document.description}</DocumentDescription>
+        </ToolboxContainer>
+
+        <QuestionContainer>
+          {_.map(this.props.questions, x => this.renderQuestion(x))}
+        </QuestionContainer>
+      </PageContainer>
     )
   }
 
@@ -69,17 +69,19 @@ class QuestionsPage extends Component {
           ]}
         />
 
-        <Button type="button" value="Clear Student's Answers"
-          onClick={() => this.clearStudentLayer(studentLayerId, gradingId)}
-        />
+        {this.props.gradingAllowed ? (
+          <Button type="button" value="Clear Student's Answers"
+            onClick={() => this.clearStudentLayer(studentLayerId, gradingId)}
+          />) : null}
 
-        <Button type="button" value="Grade"
-          onClick={() => this.props.gradeLayers(
-            gradingId,
-            this.props.selectStaveNotes(answersLayerId),
-            this.props.selectStaveNotes(studentLayerId),
-          )}
-        />
+        {this.props.gradingAllowed ? (
+          <Button type="button" value="Grade"
+            onClick={() => this.props.gradeLayers(
+              gradingId,
+              this.props.selectStaveNotes(answersLayerId),
+              this.props.selectStaveNotes(studentLayerId),
+            )}
+          />) : null}
 
         {this.renderGrade(question)}
 
@@ -100,12 +102,24 @@ const ToolboxContainer = styled.div`
   display: flex;
   flex-direction: column;
 `
+const DocumentDescriptionLabel = Label.extend`
+  margin-top: 30px;
+  margin-bottom: 15px;
+`
+const DocumentDescription = Label.extend`
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  display: inline-block;
+`
 const QuestionContainer = styled.div`
   flex: 7;
   padding: 30px;
   text-align: left;
   display: flex;
   flex-direction: column;
+  height: 80vh;
+  overflow: auto;
 `
 const StaveContainer = styled.div`
   flex: 1;
@@ -123,7 +137,8 @@ const mapStateToProps = (state) => {
   return {
     selectStaveNotes: selectStaveNotes(state),
     grade: (gradingId) => { return selectGradingById(state, gradingId) },
-    questions: state.documents.questions.toJS()
+    questions: state.documents.questions.toJS(),
+    document: state.documents.editingDocument,
   }
 }
 const mapDispatchToProps = ({
@@ -131,4 +146,4 @@ const mapDispatchToProps = ({
   clearGrading,
   clearLayer,
 })
-export default connect(mapStateToProps, mapDispatchToProps)(QuestionsPage)
+export default connect(mapStateToProps, mapDispatchToProps)(StudentsDocument)
