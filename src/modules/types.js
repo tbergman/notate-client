@@ -35,25 +35,6 @@ export const DefaultNote = {
   validators: []
 }
 
-export type Document = {
-  id: string,
-  description: string,
-  documentType: string,
-  questions: Array<Question>,
-}
-
-export const DocumentType = {
-  SELF_ASSESSMENT: 'SELF_ASSESSMENT',
-  ASSIGNMENT: 'ASSIGNMENT',
-}
-
-export const DefaultDocument = () => ({
-  id: uuid(),
-  description: '',
-  documentType: DocumentType.ASSIGNMENT,
-  questions: List([ DefaultQuestion() ])
-})
-
 export type Question = {
   id: string,
   description: string,
@@ -82,4 +63,23 @@ export const DefaultQuestion = () => ({
   keySignature: 'C',
   measures: 4,
   validators: VALIDATE_PITCH_DURATION,
+})
+
+export type Document = {
+  id: string,
+  description: string,
+  documentType: string,
+  questions: List<Question>,
+}
+
+export const DocumentType = {
+  SELF_ASSESSMENT: 'SELF_ASSESSMENT',
+  ASSIGNMENT: 'ASSIGNMENT',
+}
+
+export const DefaultDocument = () => ({
+  id: uuid(),
+  description: '',
+  documentType: DocumentType.ASSIGNMENT,
+  questions: List([ DefaultQuestion() ])
 })

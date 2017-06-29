@@ -3,13 +3,12 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { browserHistory } from 'react-router'
 import colors from 'views/styles/colors'
 import { connect } from 'react-redux'
 import Layout from 'views/pages/Layout'
 import { Button, Label, Badge } from 'views/components'
 import { editDocument, removeDocument, newDocument } from 'modules/documents/actions'
-import type { Question, Document } from 'modules/types'
+import type { Document } from 'modules/types'
 import { DocumentType } from 'modules/types'
 
 type StateProps = {
@@ -20,12 +19,15 @@ type DispatchProps = {
   removeDocument: any,
   newDocument: any,
 }
-type Props = StateProps & DispatchProps
+type RouterProps = {
+  history: any,
+}
+type Props = StateProps & DispatchProps & RouterProps
 
 class DocumentListPage extends Component {
   props: Props
 
-  editDocument(id) {
+  editDocument(id: string) {
     this.props.editDocument(id)
     this.props.history.push('/document')
   }
@@ -38,8 +40,8 @@ class DocumentListPage extends Component {
     }
   }
 
-  renderDocumentType(type: number): React.Element<any> {
-    let color, bgColor, content
+  renderDocumentType(type: string): React.Element<any> {
+    let bgColor, content
 
     if (type === DocumentType.SELF_ASSESSMENT) {
       content = 'SELF-ASSESSMENT'
@@ -121,13 +123,6 @@ const DocumentItemButton = Button.extend`
 `
 const DocumentBadge = Badge.extend`
   float: left;
-`
-const Sidebar = styled.div`
-  flex: 3;
-  box-shadow: 2px 0 5px -2px rgba(0, 0, 0, 0.2);
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
 `
 const QuietLabel = DocumentItemLabel.extend`
   color: ${colors.lightGrey};

@@ -6,7 +6,7 @@ import colors from 'views/styles/colors'
 import { NavLink } from 'react-router-dom'
 
 export default class Layout extends Component {
-  renderMenu(): React.Element<any> {
+  renderMenu(): React.Element<any>|null {
     if (this.props.hideMenu) {
       return null
     }

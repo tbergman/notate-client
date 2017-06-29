@@ -6,16 +6,30 @@ import SelfAssessmentPage from 'views/pages/SelfAssessmentPage'
 import AssignmentPage from 'views/pages/AssignmentPage'
 import { editDocument } from 'modules/documents/actions'
 import { DocumentType } from 'modules/types'
+import type { Document } from 'modules/types'
+
+type StateProps = {
+  document: Document,
+}
+type DispatchProps = {
+  editDocument: any,
+}
+type RouterProps = {
+  match: any,
+}
+type Props = StateProps & DispatchProps & RouterProps
 
 class SharedDocument extends Component {
-  constructor(props) {
+  props: Props
+
+  constructor(props: Props) {
     super(props)
 
     const documentId = this.props.match.params.id
     this.props.editDocument(documentId)
   }
 
-  render(): React.Element<any> {
+  render(): React.Element<any>|null {
     if (!this.props.document) {
       return null
     }

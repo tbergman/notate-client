@@ -2,7 +2,7 @@
 
 import { List } from 'immutable'
 import reducer, { initialState } from './reducer'
-import { DefaultQuestion, DefaultNote } from 'modules/types'
+import { DefaultQuestion, DefaultNote, DefaultDocument } from 'modules/types'
 import { VALIDATE_PITCH_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
 import { PITCH_EQUAL } from 'modules/grading'
 import {
@@ -10,6 +10,9 @@ import {
   EDIT_QUESTION,
   NEW_QUESTION,
   REMOVE_QUESTION,
+  SAVE_DOCUMENT,
+  NEW_DOCUMENT,
+  REMOVE_DOCUMENT,
   SET_SELECTED_DESCRIPTION,
   SET_SELECTED_CLEF,
   SET_SELECTED_TIME_SIGNATURE,
@@ -232,5 +235,61 @@ describe('documents reducer', () => {
     const result = reducer(initialState, { type: SET_SELECTED_VALIDATORS, payload: VALIDATE_PITCH_ONLY })
 
     expect(result.selectedValidators).toEqual(VALIDATE_PITCH_ONLY)
+  })
+
+  it('saves a new document', () => {
+    const newDocument = {
+      ...DefaultDocument(),
+      description: 'new description'
+    }
+
+    const result = reducer(initialState, { type: SAVE_DOCUMENT, payload: newDocument })
+
+    const newFoundDocument = result.documents.find(x => x.id === newDocument.id) || {}
+
+    expect(newFoundDocument.description).toEqual('new description')
+  })
+
+  it('edits an existing document', () => {
+    const documentToEdit = { ...DefaultDocument(), id: '1' }
+
+    const state = {
+      ...initialState,
+      documents: initialState.documents.push(documentToEdit)
+    }
+
+    const result = reducer(state, { type: SAVE_DOCUMENT, payload: {
+      ...documentToEdit,
+      description: 'new description'
+    }})
+
+    const fetchedDocument = result.documents.find(x => x.id === documentToEdit.id) || {}
+
+    expect(fetchedDocument.description).toEqual('new description')
+  })
+
+  it('removes a document', () => {
+    const documentToRemove = { ...DefaultDocument(), id: '1' }
+
+    const state = {
+      ...initialState,
+      documents: initialState.documents.push(documentToRemove)
+    }
+
+    const result = reducer(state, { type: REMOVE_DOCUMENT, payload: documentToRemove.id })
+
+    const deletedDocument = result.documents.find(x => x.id === documentToRemove.id)
+
+    expect(deletedDocument).toBeUndefined()
+  })
+
+  it('adding a new question sets its selected properties', () => {
+    const initialLength = initialState.documents.size
+
+    const result = reducer(initialState, { type: NEW_DOCUMENT, payload: {} })
+
+    const newLength = result.documents.size
+
+    expect(newLength).toEqual(initialLength + 1)
   })
 })

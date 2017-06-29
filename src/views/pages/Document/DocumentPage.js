@@ -11,13 +11,13 @@ import { Button, Label, Textarea } from 'views/components'
 import { RadioGroup, Radio } from 'react-radio-group'
 import { editQuestion, removeQuestion, newQuestion, saveDocument } from 'modules/documents/actions'
 import EditingQuestion from 'views/pages/Document/EditingQuestion'
-import type { Question } from 'modules/types'
+import type { Question, Document } from 'modules/types'
 import { DocumentType } from 'modules/types'
-import { selectQuestions } from 'modules/documents/selectors'
 
 type StateProps = {
-  questions: any,
-  question: any,
+  questions: Array<Question>,
+  question: Question,
+  document: Document
 }
 type DispatchProps = {
   editQuestion: any,
@@ -27,10 +27,16 @@ type DispatchProps = {
 }
 type Props = StateProps & DispatchProps
 
+type State = {
+  description: string,
+  documentType: string,
+}
+
 class DocumentPage extends Component {
   props: Props
+  state: State
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
 
     this.state = {
@@ -39,7 +45,7 @@ class DocumentPage extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.document.id !== this.props.document.id) {
       console.log('next prop clearing')
       this.setState({
@@ -55,8 +61,7 @@ class DocumentPage extends Component {
     }
   }
 
-  onDocumentTypeChange(value) {
-    console.log(value)
+  onDocumentTypeChange(value: string) {
     this.setState({ documentType: value })
   }
 

@@ -5,7 +5,6 @@ import { List } from 'immutable'
 import type { FluxStandardAction } from 'Types'
 import type { DocumentsState } from 'modules/documents'
 import { DefaultDocument, DefaultQuestion } from 'modules/types'
-import { selectQuestions } from 'modules/documents/selectors'
 import { PITCH_EQUAL, DURATION_EQUAL } from 'modules/grading'
 import { VALIDATE_PITCH_ONLY, VALIDATE_DURATION_ONLY, VALIDATE_PITCH_DURATION } from 'modules/grading'
 import {

@@ -13,8 +13,6 @@ import DocumentListPage from 'views/pages/Document/DocumentListPage'
 import ExamplesPage from 'views/pages/ExamplesPage'
 import DocumentPage from 'views/pages/Document/DocumentPage'
 import PreviewDocumentPage from 'views/pages/PreviewDocumentPage'
-import SelfAssessmentPage from 'views/pages/SelfAssessmentPage'
-import AssignmentPage from 'views/pages/AssignmentPage'
 import SharedDocument from 'views/pages/SharedDocument'
 
 export default (

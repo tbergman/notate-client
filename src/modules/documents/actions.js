@@ -50,11 +50,9 @@ export const removeQuestion: (questionId: string) => RemoveQuestionAction = (que
 // NEW QUESTION
 export type NewQuestionAction = {
   type: 'documents/NEW_QUESTION',
-  payload: { documentId: string }
 }
-export const newQuestion: (payload) => NewQuestionAction = (payload) => ({
+export const newQuestion: () => NewQuestionAction = () => ({
   type: NEW_QUESTION,
-  payload: payload,
 })
 
 // SAVE DOCUMENT
@@ -69,7 +67,7 @@ export const saveDocument: (document: Document) => SaveDocumentAction = (documen
 
 // EDIT DOCUMENT
 export type EditDocumentAction = {
-  type: 'documents/EDIT_QUESTION',
+  type: 'documents/EDIT_DOCUMENT',
   payload: string
 }
 export const editDocument: (documentId: string) => EditDocumentAction = (documentId) => ({
@@ -89,7 +87,7 @@ export const removeDocument: (documentId: string) => RemoveDocumentAction = (doc
 
 // NEW DOCUMENT
 export type NewDocumentAction = {
-  type: 'documents/DOCUMENT'
+  type: 'documents/NEW_DOCUMENT'
 }
 export const newDocument: () => NewDocumentAction = () => ({
   type: NEW_DOCUMENT,

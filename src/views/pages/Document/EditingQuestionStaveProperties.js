@@ -40,7 +40,7 @@ type Props = OwnProps & StateProps & DispatchProps
 class DocumentPageEditQuestion extends Component {
   props: Props;
 
-  renderPropsDisabledLabel(disabled) {
+  renderPropsDisabledLabel(disabled: boolean): React.Element<any>  {
     if (disabled) {
       return (<QuietLabel>Stave properties are disabled when notes are added</QuietLabel>)
     }
